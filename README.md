@@ -4,66 +4,7 @@
 
 A single-file, client-side web app for practicing sales conversations against an AI-simulated prospect at one of the **5 stages of awareness** (Eugene Schwartz, *Breakthrough Advertising*, 1966) — without knowing in advance which stage you're talking to.
 
-**[Deutsch](#deutsch) · [English](#english)**
-
----
-
-## Deutsch
-
-### Was ist das?
-
-Ein Trainingstool für Verkaufs-/Sales-Gespräche: Du übst gegen einen von einer KI simulierten Interessenten, der sich zufällig (oder gezielt wählbar) auf einer von 5 Bewusstseinsstufen befindet — unbewusst, problem-bewusst, lösungs-bewusst, produkt-bewusst oder entscheidungsbereit. Die Stufe wird dir vorher nicht verraten. Deine Aufgabe: durch Fragen herausfinden, wo dein Gegenüber steht, statt zu pitchen.
-
-Nach dem Gespräch bewertet dieselbe KI dein Gespräch anhand eines Leitfadens (u. a. Redeanteil, Füllwörter, Sprechtempo, Discovery-Tiefe, Umgang mit Einwänden) und gibt dir einen konkreten nächsten Schritt.
-
-### Schnellstart
-
-<p align="center">
-  <img src="assets/screenshot-start.png" width="31%" alt="Start-Screen: Gespräch konfigurieren und starten">
-  <img src="assets/screenshot-chat.png" width="31%" alt="Laufendes Gespräch mit dem simulierten Interessenten">
-  <img src="assets/screenshot-result.png" width="31%" alt="Auswertung nach dem Gespräch">
-</p>
-
-1. `index.html` im Browser öffnen (oder per GitHub Pages hosten) — kein Server, kein Build, keine Installation.
-2. Kostenlosen [OpenRouter](https://openrouter.ai/)-API-Key anlegen und unter **Zugang** eintragen (Details unten).
-3. **Gespräch starten** klicken — die Stufe wird zufällig gewählt und bleibt verdeckt, bis du auswertest.
-4. Nach dem Gespräch auswerten lassen: Redeanteil, Füllwörter, Tempo, Discovery-Tiefe, Einwandbehandlung und ein konkreter nächster Schritt.
-
-### Funktionen
-
-- 5 Bewusstseinsstufen als Rollenspiel-Szenarien, zufällig oder gezielt wählbar (Trainer-Modus)
-- Zusätzliche Verhaltens-Varianten pro Stufe (defensiv/offen)
-- **Konfiguration**: Stufen, Personas und das Produkt-Briefing sind vollständig anpassbar — du kannst das Tool auf dein eigenes Produkt/Angebot umstellen
-- Sprachmodus (Mikrofon-Eingabe, gesprochene Antwort) oder Tastatur
-- Automatische Auswertung nach jedem Gespräch inkl. Redeanteil-Tracking (30/70-Regel)
-- Trainingsverlauf mit Dashboard, PDF-Export, CSV/JSON-Export/Import
-- Deutsch/Englisch umschaltbar (UI, Rollenspiel-Inhalte und Prompts)
-
-### Voraussetzung: OpenRouter-Account
-
-Das Tool ruft KI-Modelle über [OpenRouter](https://openrouter.ai/) auf. Du brauchst dafür:
-
-1. Einen kostenlosen Account auf [openrouter.ai](https://openrouter.ai/) anlegen
-2. Im Dashboard unter **Keys** einen neuen API-Key erzeugen (beginnt mit `sk-or-v1-…`)
-3. Diesen Key im Tool unter **Zugang** eintragen und speichern
-
-OpenRouter berechnet die Nutzung pay-as-you-go direkt über deinen Account (übliche Kosten pro Gespräch: Cent-Bereich, je nach gewähltem Modell). Es gibt keinen eigenen Server dieses Tools — der Key bleibt ausschließlich lokal in deinem Browser (`localStorage`) und alle Anfragen gehen direkt von deinem Browser an OpenRouter, sonst nirgendwohin.
-
-### Nutzung
-
-Einfach `index.html` im Browser öffnen (Doppelklick oder per GitHub Pages hosten). Kein Server, kein Build, keine Installation nötig.
-
-### Datenschutz
-
-Alle Daten (API-Key, Einstellungen, Trainingsverlauf) bleiben ausschließlich lokal in deinem Browser (`localStorage`). Es gibt keine eigene Server-Komponente, keine Analyse-/Tracking-Skripte. KI-Anfragen (Text, Sprachein-/ausgabe) gehen direkt an OpenRouter — es gilt deren [Datenschutzerklärung](https://openrouter.ai/privacy).
-
-### Lizenz
-
-[MIT](LICENSE) — frei nutzbar, veränderbar und weiterverbreitbar.
-
-### Impressum
-
-Anbieter dieses Repositories: Falko Guderian. Impressum: [falkoguderian.github.io/BuchTutorLegal](https://falkoguderian.github.io/BuchTutorLegal/)
+**[English](#english) · [Deutsch](#deutsch)**
 
 ---
 
@@ -125,3 +66,62 @@ All data (API key, settings, training history) stays exclusively local in your b
 ### Imprint
 
 Provider of this repository: Falko Guderian. Imprint: [falkoguderian.github.io/BuchTutorLegal](https://falkoguderian.github.io/BuchTutorLegal/)
+
+---
+
+## Deutsch
+
+### Was ist das?
+
+Ein Trainingstool für Verkaufs-/Sales-Gespräche: Du übst gegen einen von einer KI simulierten Interessenten, der sich zufällig (oder gezielt wählbar) auf einer von 5 Bewusstseinsstufen befindet — unbewusst, problem-bewusst, lösungs-bewusst, produkt-bewusst oder entscheidungsbereit. Die Stufe wird dir vorher nicht verraten. Deine Aufgabe: durch Fragen herausfinden, wo dein Gegenüber steht, statt zu pitchen.
+
+Nach dem Gespräch bewertet dieselbe KI dein Gespräch anhand eines Leitfadens (u. a. Redeanteil, Füllwörter, Sprechtempo, Discovery-Tiefe, Umgang mit Einwänden) und gibt dir einen konkreten nächsten Schritt.
+
+### Schnellstart
+
+<p align="center">
+  <img src="assets/screenshot-start.png" width="31%" alt="Start-Screen: Gespräch konfigurieren und starten">
+  <img src="assets/screenshot-chat.png" width="31%" alt="Laufendes Gespräch mit dem simulierten Interessenten">
+  <img src="assets/screenshot-result.png" width="31%" alt="Auswertung nach dem Gespräch">
+</p>
+
+1. `index.html` im Browser öffnen (oder per GitHub Pages hosten) — kein Server, kein Build, keine Installation.
+2. Kostenlosen [OpenRouter](https://openrouter.ai/)-API-Key anlegen und unter **Zugang** eintragen (Details unten).
+3. **Gespräch starten** klicken — die Stufe wird zufällig gewählt und bleibt verdeckt, bis du auswertest.
+4. Nach dem Gespräch auswerten lassen: Redeanteil, Füllwörter, Tempo, Discovery-Tiefe, Einwandbehandlung und ein konkreter nächster Schritt.
+
+### Funktionen
+
+- 5 Bewusstseinsstufen als Rollenspiel-Szenarien, zufällig oder gezielt wählbar (Trainer-Modus)
+- Zusätzliche Verhaltens-Varianten pro Stufe (defensiv/offen)
+- **Konfiguration**: Stufen, Personas und das Produkt-Briefing sind vollständig anpassbar — du kannst das Tool auf dein eigenes Produkt/Angebot umstellen
+- Sprachmodus (Mikrofon-Eingabe, gesprochene Antwort) oder Tastatur
+- Automatische Auswertung nach jedem Gespräch inkl. Redeanteil-Tracking (30/70-Regel)
+- Trainingsverlauf mit Dashboard, PDF-Export, CSV/JSON-Export/Import
+- Deutsch/Englisch umschaltbar (UI, Rollenspiel-Inhalte und Prompts)
+
+### Voraussetzung: OpenRouter-Account
+
+Das Tool ruft KI-Modelle über [OpenRouter](https://openrouter.ai/) auf. Du brauchst dafür:
+
+1. Einen kostenlosen Account auf [openrouter.ai](https://openrouter.ai/) anlegen
+2. Im Dashboard unter **Keys** einen neuen API-Key erzeugen (beginnt mit `sk-or-v1-…`)
+3. Diesen Key im Tool unter **Zugang** eintragen und speichern
+
+OpenRouter berechnet die Nutzung pay-as-you-go direkt über deinen Account (übliche Kosten pro Gespräch: Cent-Bereich, je nach gewähltem Modell). Es gibt keinen eigenen Server dieses Tools — der Key bleibt ausschließlich lokal in deinem Browser (`localStorage`) und alle Anfragen gehen direkt von deinem Browser an OpenRouter, sonst nirgendwohin.
+
+### Nutzung
+
+Einfach `index.html` im Browser öffnen (Doppelklick oder per GitHub Pages hosten). Kein Server, kein Build, keine Installation nötig.
+
+### Datenschutz
+
+Alle Daten (API-Key, Einstellungen, Trainingsverlauf) bleiben ausschließlich lokal in deinem Browser (`localStorage`). Es gibt keine eigene Server-Komponente, keine Analyse-/Tracking-Skripte. KI-Anfragen (Text, Sprachein-/ausgabe) gehen direkt an OpenRouter — es gilt deren [Datenschutzerklärung](https://openrouter.ai/privacy).
+
+### Lizenz
+
+[MIT](LICENSE) — frei nutzbar, veränderbar und weiterverbreitbar.
+
+### Impressum
+
+Anbieter dieses Repositories: Falko Guderian. Impressum: [falkoguderian.github.io/BuchTutorLegal](https://falkoguderian.github.io/BuchTutorLegal/)
