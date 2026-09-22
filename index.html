@@ -2383,6 +2383,13 @@ function verdictCard(kind, title, text){
 }
 function escapeHtml(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]; }); }
 
+// Uebersetzt die vom LLM gelieferten Enum-Werte (discovery_tiefe/einwand_qualitaet/produkt_timing)
+// in lesbare Labels; von showResult() und buildPrintHtml() gemeinsam genutzt, damit PDF/Modal
+// nicht die rohen Keys anzeigen.
+function mapDiscovery(v, lang){ return v === 'tief' ? t('vc_discovery_tief', null, lang) : (v === 'mittel' ? t('vc_discovery_mittel', null, lang) : (v === 'oberflaechlich' ? t('vc_discovery_flach', null, lang) : '')); }
+function mapEinwand(v, lang){ return v === 'gut_behandelt' ? t('vc_einwand_gut', null, lang) : (v === 'keine_einwaende' ? t('vc_einwand_keine', null, lang) : (v === 'schwach_behandelt' ? t('vc_einwand_schwach', null, lang) : '')); }
+function mapProduktTiming(v, lang){ return v === 'passend' ? t('vc_produkt_passend', null, lang) : (v === 'zu_frueh' ? t('vc_produkt_frueh', null, lang) : (v === 'gar_nicht_erwaehnt' ? t('vc_produkt_nie', null, lang) : '')); }
+
 function showResult(stage, persona, data, pct, behavioral){
   chatSection.style.display = 'none';
   resultSection.style.display = 'block';
@@ -2406,19 +2413,14 @@ function showResult(stage, persona, data, pct, behavioral){
     data.problem_erkannt ? t('vc_problem_ok') : t('vc_problem_bad'),
     data.problem_kommentar || ''));
   var discKind = data.discovery_tiefe === 'tief' ? 'ok' : (data.discovery_tiefe === 'mittel' ? 'warn' : 'bad');
-  var discLabel = data.discovery_tiefe === 'tief' ? t('vc_discovery_tief') : (data.discovery_tiefe === 'mittel' ? t('vc_discovery_mittel') : t('vc_discovery_flach'));
-  list.appendChild(verdictCard(discKind, t('vc_discovery_title', { label: discLabel }), data.discovery_kommentar || ''));
+  list.appendChild(verdictCard(discKind, t('vc_discovery_title', { label: mapDiscovery(data.discovery_tiefe) }), data.discovery_kommentar || ''));
   var objKind = data.einwand_qualitaet === 'gut_behandelt' ? 'ok' : (data.einwand_qualitaet === 'keine_einwaende' ? 'warn' : 'bad');
-  var objTitle = data.einwand_qualitaet === 'gut_behandelt' ? t('vc_einwand_gut')
-    : (data.einwand_qualitaet === 'keine_einwaende' ? t('vc_einwand_keine') : t('vc_einwand_schwach'));
-  list.appendChild(verdictCard(objKind, objTitle, data.einwand_kommentar || ''));
+  list.appendChild(verdictCard(objKind, mapEinwand(data.einwand_qualitaet), data.einwand_kommentar || ''));
   list.appendChild(verdictCard(data.stufe_hochgefuehrt ? 'ok' : 'warn',
     data.stufe_hochgefuehrt ? t('vc_stufe_ok') : t('vc_stufe_bad'),
     data.stufe_kommentar || ''));
   var timingKind = data.produkt_timing === 'passend' ? 'ok' : (data.produkt_timing === 'zu_frueh' ? 'bad' : 'warn');
-  var timingTitle = data.produkt_timing === 'passend' ? t('vc_produkt_passend')
-    : (data.produkt_timing === 'zu_frueh' ? t('vc_produkt_frueh') : t('vc_produkt_nie'));
-  list.appendChild(verdictCard(timingKind, timingTitle, data.produkt_kommentar || ''));
+  list.appendChild(verdictCard(timingKind, mapProduktTiming(data.produkt_timing), data.produkt_kommentar || ''));
 
   fillList('list-staerken', data.staerken);
   fillList('list-verbesserungen', data.verbesserungen);
@@ -2793,10 +2795,10 @@ function buildPrintHtml(entry){
     pvRow(t('pv_tempo_row', { wpm: entry.paceWpm || 0 }, lang), entry.tempoKommentar, empty) +
     '<h2>' + escapeHtml(t('pv_h2_gespraechsfuehrung', null, lang)) + '</h2>' +
     pvRow(t('pv_problem_row', { v: yesNo(entry.problemErkannt) }, lang), entry.problemKommentar, empty) +
-    pvRow(t('pv_discovery_row', { v: entry.discoveryTiefe || empty }, lang), entry.discoveryKommentar, empty) +
-    pvRow(t('pv_einwand_row', { v: entry.einwandQualitaet || empty }, lang), entry.einwandKommentar, empty) +
+    pvRow(t('pv_discovery_row', { v: mapDiscovery(entry.discoveryTiefe, lang) || empty }, lang), entry.discoveryKommentar, empty) +
+    pvRow(t('pv_einwand_row', { v: mapEinwand(entry.einwandQualitaet, lang) || empty }, lang), entry.einwandKommentar, empty) +
     pvRow(t('pv_stufe_row', { v: yesNo(entry.stufeHochgefuehrt) }, lang), entry.stufeKommentar, empty) +
-    pvRow(t('pv_produkt_row', { v: entry.produktTiming || empty }, lang), entry.produktKommentar, empty) +
+    pvRow(t('pv_produkt_row', { v: mapProduktTiming(entry.produktTiming, lang) || empty }, lang), entry.produktKommentar, empty) +
     pvList(t('staerken_h3', null, lang), entry.staerken, empty) +
     pvList(t('verbesserungen_h3', null, lang), entry.verbesserungen, empty) +
     '<h2>' + escapeHtml(t('pv_h2_naechster', null, lang)) + '</h2><div class="pv-row">' + escapeHtml(entry.naechsterSchritt || empty) + '</div>' +
