@@ -4,7 +4,7 @@
 
 A single-file, client-side web app for practicing sales conversations against an AI-simulated prospect at one of the **5 stages of awareness** (Eugene Schwartz, *Breakthrough Advertising*, 1966) — without knowing in advance which stage you're talking to.
 
-**[English](#english) · [Deutsch](#deutsch)**
+**[Try it out](https://falkoguderian.github.io/sales-awareness-trainer/)** · [English](#english) · [Deutsch](#deutsch)
 
 ---
 
