@@ -1820,6 +1820,7 @@ function transModelId(){ return transModelInput.value.trim() || DEFAULT_TRANS_MO
 function callLLM(messages, asJson){
   var body = { model: modelId(), messages: messages };
   if (asJson) body.response_format = { type: 'json_object' };
+  body.max_tokens = asJson ? 1600 : 1000;
   return fetchWithTimeout('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey() },
@@ -2636,7 +2637,9 @@ function continueFromHistory(idx){
   resultSection.style.display = 'none';
   chatSection.style.display = 'block';
   setAvatarForStage(stage);
-  setTextMode(true);
+  // Uebernimmt die Sprachmodus-Praeferenz aus "Neues Gespraech" statt immer auf Tastatur
+  // zu erzwingen (voiceModeToggle bleibt der Nutzer-Einstellung treu).
+  setTextMode(!voiceModeToggle.checked);
   setVoiceStatus('idle');
   hideError(chatError);
   setBusy(false);
@@ -2698,7 +2701,9 @@ function continueFromDraft(idx){
   resultSection.style.display = 'none';
   chatSection.style.display = 'block';
   setAvatarForStage(stage);
-  setTextMode(true);
+  // Uebernimmt die Sprachmodus-Praeferenz aus "Neues Gespraech" statt immer auf Tastatur
+  // zu erzwingen (voiceModeToggle bleibt der Nutzer-Einstellung treu).
+  setTextMode(!voiceModeToggle.checked);
   setVoiceStatus('idle');
   hideError(chatError);
   setBusy(false);
