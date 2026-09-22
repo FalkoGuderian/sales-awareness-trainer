@@ -363,6 +363,7 @@ footer{margin-top:40px; padding-top:18px; border-top:1px solid var(--line); font
     </div>
   </div>
   <p class="hint" data-i18n="trans_model_hint">Das Transkriptionsmodell muss Audio nativ verstehen (wie das voreingestellte Gemini-Modell) – reine Text-Modelle oder „kostenlose“ Alias-Modelle (z. B. openrouter/free) scheitern meist mit einem Dekodierungsfehler.</p>
+  <p class="hint" data-i18n="tts_model_hint">Bei einem anderen TTS-Modell als dem voreingestellten Grok-TTS scheitert die Sprachausgabe mit „Unknown voice“, weil die Stimmennamen (Rex/Sal/Eve/Leo/Ara) modellspezifisch sind – im Tab „Konfiguration“ lassen sich die Stimmennamen pro Stufe anpassen.</p>
   <div class="field">
     <label for="audio-source" data-i18n="audio_source_label">Audioquelle (Sprachausgabe)</label>
     <select id="audio-source">
@@ -645,6 +646,7 @@ var I18N = {
     tts_model_label: 'Modell (TTS, Sprachausgabe)',
     trans_model_label: 'Modell (Transkription, Spracherkennung)',
     trans_model_hint: 'Das Transkriptionsmodell muss Audio nativ verstehen (wie das voreingestellte Gemini-Modell) – reine Text-Modelle oder „kostenlose“ Alias-Modelle (z. B. openrouter/free) scheitern meist mit einem Dekodierungsfehler.',
+    tts_model_hint: 'Bei einem anderen TTS-Modell als dem voreingestellten Grok-TTS scheitert die Sprachausgabe mit „Unknown voice“, weil die Stimmennamen (Rex/Sal/Eve/Leo/Ara) modellspezifisch sind – im Tab „Konfiguration“ lassen sich die Stimmennamen pro Stufe anpassen.',
     audio_source_label: 'Audioquelle (Sprachausgabe)',
     audio_source_opt_gpt: 'KI Stimme (obiges TTS-Modell, kostenpflichtig über OpenRouter)',
     audio_source_opt_browser: 'Gerät (kostenlose Sprachausgabe des Browsers/Betriebssystems)',
@@ -679,6 +681,7 @@ var I18N = {
     config_field_name: 'Name',
     config_field_label: 'Kurzbezeichnung',
     config_field_voice: 'Stimme',
+    config_field_voice_hint: 'Die Stimmennamen sind auf das gewählte TTS-Modell abgestimmt (Standard: Grok-TTS mit Rex/Sal/Eve/Leo/Ara). Bei einem anderen TTS-Modell hier die dort gültigen Stimmennamen eintragen, sonst schlägt die Sprachausgabe mit „Unknown voice“ fehl.',
     config_field_zustand: 'Zustand des Interessenten',
     config_field_rolle: 'Rolle (wer spielt das simulierte Gegenüber)',
     config_field_verhalten: 'Verhalten im Gespräch',
@@ -842,6 +845,7 @@ var I18N = {
     tts_model_label: 'Model (TTS, voice output)',
     trans_model_label: 'Model (transcription, speech recognition)',
     trans_model_hint: 'The transcription model must understand audio natively (like the pre-filled Gemini model) – text-only models or "free" alias models (e.g. openrouter/free) usually fail with a decoding error.',
+    tts_model_hint: 'With a TTS model other than the pre-filled Grok TTS, voice output fails with "Unknown voice" because the voice names (Rex/Sal/Eve/Leo/Ara) are model-specific – the voice name per stage can be adjusted in the "Konfiguration" tab.',
     audio_source_label: 'Audio source (voice output)',
     audio_source_opt_gpt: 'AI voice (TTS model above, paid via OpenRouter)',
     audio_source_opt_browser: 'Device (free browser/OS text-to-speech)',
@@ -876,6 +880,7 @@ var I18N = {
     config_field_name: 'Name',
     config_field_label: 'Short label',
     config_field_voice: 'Voice',
+    config_field_voice_hint: 'Voice names are tied to the selected TTS model (default: Grok TTS with Rex/Sal/Eve/Leo/Ara). With a different TTS model, enter the voice names valid for that model here, otherwise voice output fails with "Unknown voice".',
     config_field_zustand: "Prospect's state",
     config_field_rolle: 'Role (who the simulated counterpart plays)',
     config_field_verhalten: 'Behavior in the conversation',
@@ -2879,11 +2884,13 @@ function renderConfigPanel(){
   var html = '<section class="card"><h2>' + escapeHtml(t('config_h2')) + '</h2>' +
     '<p class="thesis" style="max-width:none">' + escapeHtml(t('config_intro')) + '</p></section>';
 
-  html += '<section class="card"><h2>' + escapeHtml(t('config_stages_h3')) + '</h2>';
+  html += '<section class="card"><h2>' + escapeHtml(t('config_stages_h3')) + '</h2>' +
+    '<p class="hint" style="margin:-4px 0 12px">' + escapeHtml(t('config_field_voice_hint')) + '</p>';
   stages.forEach(function(s){
     html += '<div class="config-stage-card" data-stage-id="' + escapeHtml(s.id) + '"><h3>' + s.num + '. ' + escapeHtml(s.name) + ' (' + escapeHtml(s.label) + ')</h3>' +
       configField('config_field_name', s.name, 'input', 'data-field="name"') +
       configField('config_field_label', s.label, 'input', 'data-field="label"') +
+      configField('config_field_voice', s.voice, 'input', 'data-field="voice"') +
       configField('config_field_zustand', s.zustand, 'textarea', 'data-field="zustand"') +
       configField('config_field_rolle', s.rolle, 'textarea', 'data-field="rolle"') +
       configField('config_field_verhalten', s.verhalten, 'textarea', 'data-field="verhalten"') +
