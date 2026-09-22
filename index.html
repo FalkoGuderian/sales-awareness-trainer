@@ -2213,7 +2213,7 @@ async function toggleRecording(){
       var hadSound = voiceState.silenceDet ? voiceState.silenceDet.hadSound() : false;
       if (voiceState.silenceDet){ try{ voiceState.silenceDet.stop(); }catch(_){} voiceState.silenceDet = null; }
       if (voiceState.cancelPending){ voiceState.cancelPending = false; setVoiceStatus('idle'); return; }
-      var blob = new Blob(voiceState.audioChunks, { type: voiceState.mediaRecorder.mimeType });
+      var blob = new Blob(voiceState.audioChunks, { type: voiceState.mediaRecorder.mimeType || 'audio/webm' });
       if (blob.size < 2000 || !hadSound){
         setVoiceStatus('idle');
         if (voiceState.liveOn) startListening();
