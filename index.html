@@ -782,6 +782,7 @@ var I18N = {
     draft_continue_btn: 'Fortsetzen', draft_discard_btn: 'Verwerfen',
     confirm_delete_entry: 'Diesen Eintrag wirklich löschen?',
     confirm_clear_history: 'Trainingsverlauf wirklich löschen?',
+    confirm_discard_draft: 'Dieses pausierte Gespräch wirklich verwerfen?',
     alert_invalid_json: 'Datei ist kein gültiges JSON.',
     alert_expected_list: 'Erwartet wird eine JSON-Liste, wie sie "Als JSON herunterladen" erzeugt.',
     alert_file_read_failed: 'Datei konnte nicht gelesen werden.',
@@ -983,6 +984,7 @@ var I18N = {
     draft_continue_btn: 'Continue', draft_discard_btn: 'Discard',
     confirm_delete_entry: 'Really delete this entry?',
     confirm_clear_history: 'Really clear the training history?',
+    confirm_discard_draft: 'Really discard this paused conversation?',
     alert_invalid_json: 'File is not valid JSON.',
     alert_expected_list: 'A JSON list is expected, as produced by "Download as JSON".',
     alert_file_read_failed: 'File could not be read.',
@@ -2669,6 +2671,7 @@ document.getElementById('drafts-body').addEventListener('click', function(e){
   if (contBtn){ continueFromDraft(parseInt(contBtn.dataset.idx, 10)); return; }
   var delBtn = e.target.closest ? e.target.closest('.draft-discard-btn') : null;
   if (delBtn){
+    if (!confirm(t('confirm_discard_draft'))) return;
     var list = loadDrafts();
     list.splice(parseInt(delBtn.dataset.idx, 10), 1);
     saveDrafts(list);
@@ -2913,12 +2916,12 @@ document.getElementById('download-csv-btn').addEventListener('click', function()
       csvField(h.naechsterSchritt), csvField(h.transcript)
     ].join(';'));
   });
-  triggerDownload('docworm-sales-training-verlauf.csv', '﻿' + lines.join('\r\n'), 'text/csv;charset=utf-8');
+  triggerDownload('sales-awareness-training-verlauf.csv', '﻿' + lines.join('\r\n'), 'text/csv;charset=utf-8');
 });
 document.getElementById('download-json-btn').addEventListener('click', function(){
   var list = loadHistory();
   if (!list.length) return;
-  triggerDownload('docworm-sales-training-verlauf.json', JSON.stringify(list, null, 2), 'application/json;charset=utf-8');
+  triggerDownload('sales-awareness-training-verlauf.json', JSON.stringify(list, null, 2), 'application/json;charset=utf-8');
 });
 // CSV-Spaltennamen bleiben absichtlich fixe deutsche Feldbezeichner (wie die JSON-Keys im
 // Verlauf) statt sprachabhaengig - stabiles Datenschema fuer den Re-Import, unabhaengig
