@@ -335,12 +335,15 @@ footer{margin-top:40px; padding-top:18px; border-top:1px solid var(--line); font
 
 <div class="panel" id="panel-zugang" data-panel="zugang">
 <section class="card" id="setup-section">
-  <h2 data-i18n="zugang_h2">Zugang</h2>
+  <h2 data-i18n="ki_zugang_h2">KI-Zugang</h2>
   <div class="field">
     <label for="api-key" data-i18n="api_key_label">OpenRouter API-Key</label>
     <input type="password" id="api-key" placeholder="sk-or-v1-…" autocomplete="off">
     <p class="hint" data-i18n="api_key_hint">Bleibt nur lokal in diesem Browser (localStorage) und geht direkt an OpenRouter, sonst nirgendwohin.</p>
   </div>
+</section>
+<section class="card" id="setup-models-section">
+  <h2 data-i18n="ki_modelle_h2">KI-Modelle</h2>
   <div class="row-inline">
     <div class="field">
       <label for="model-id" data-i18n="model_label">Modell (LLM, Gesprächspartner + Auswertung)</label>
@@ -600,7 +603,7 @@ if (currentLang !== 'de' && currentLang !== 'en') currentLang = 'de';
 
 var I18N = {
   de: {
-    menu_leitfaden: 'Leitfaden', menu_stufen: 'Stufen erklärt', menu_zugang: 'Zugang',
+    menu_leitfaden: 'Leitfaden', menu_stufen: 'Stufen erklärt', menu_zugang: 'Zugang & KI-Modelle',
     menu_konfiguration: 'Konfiguration', menu_neues_gespraech: 'Neues Gespräch',
     menu_verlauf: 'Trainingsverlauf', menu_dashboard: 'Dashboard',
     menu_toggle_aria: 'Menü öffnen',
@@ -627,7 +630,9 @@ var I18N = {
       'In der Marketing-/Vertriebspraxis seither breit adaptiert (u. a. durch Eugene Schwartz\' Nachfolger wie Ryan Deiss, Justin Goff u. a.).',
     stufen_practice_label: 'In diesem Training als Rollenspiel-Szenario:',
 
-    zugang_h2: 'Zugang',
+    zugang_h2: 'Zugang & KI-Modelle',
+    ki_zugang_h2: 'KI-Zugang',
+    ki_modelle_h2: 'KI-Modelle',
     api_key_label: 'OpenRouter API-Key',
     api_key_hint: 'Bleibt nur lokal in diesem Browser (localStorage) und geht direkt an OpenRouter, sonst nirgendwohin.',
     model_label: 'Modell (LLM, Gesprächspartner + Auswertung)',
@@ -790,7 +795,7 @@ var I18N = {
     lang_name_de: 'DE', lang_name_en: 'EN'
   },
   en: {
-    menu_leitfaden: 'Guide', menu_stufen: 'Awareness Stages', menu_zugang: 'Access',
+    menu_leitfaden: 'Guide', menu_stufen: 'Awareness Stages', menu_zugang: 'Access & AI Models',
     menu_konfiguration: 'Configuration', menu_neues_gespraech: 'New Conversation',
     menu_verlauf: 'Training History', menu_dashboard: 'Dashboard',
     menu_toggle_aria: 'Open menu',
@@ -816,7 +821,9 @@ var I18N = {
       'Widely adapted since in marketing/sales practice (e.g. by later writers such as Ryan Deiss, Justin Goff, and others).',
     stufen_practice_label: 'Used in this training as a roleplay scenario:',
 
-    zugang_h2: 'Access',
+    zugang_h2: 'Access & AI Models',
+    ki_zugang_h2: 'AI Access',
+    ki_modelle_h2: 'AI Models',
     api_key_label: 'OpenRouter API key',
     api_key_hint: 'Stays only locally in this browser (localStorage) and goes directly to OpenRouter, nowhere else.',
     model_label: 'Model (LLM, conversation partner + evaluation)',
