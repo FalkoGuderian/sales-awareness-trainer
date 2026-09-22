@@ -326,7 +326,7 @@ footer{margin-top:40px; padding-top:18px; border-top:1px solid var(--line); font
       höchstens 10&nbsp;% des Gesprächs, und nur, wenn vorher alle Einwände geklärt sind und klar ist,
       wo der Interessent steht.</p>
     <div class="bar"><div class="fill"><i></i></div><span data-i18n="rules_bar_label">Verkäufer max. 30 %</span></div>
-    <blockquote data-i18n="rules_quote">„Keine Sau will dein Produkt, sie wollen eine Lösung für ihr Problem.“</blockquote>
+    <blockquote data-i18n="rules_quote">„Niemand will dein Produkt, sie wollen eine Lösung für ihr Problem.“</blockquote>
   </div>
 </section>
 </div>
@@ -615,7 +615,7 @@ var I18N = {
       'höchstens 10&nbsp;% des Gesprächs, und nur, wenn vorher alle Einwände geklärt sind und klar ist, ' +
       'wo der Interessent steht.',
     rules_bar_label: 'Verkäufer max. 30 %',
-    rules_quote: '„Keine Sau will dein Produkt, sie wollen eine Lösung für ihr Problem.“',
+    rules_quote: '„Niemand will dein Produkt, sie wollen eine Lösung für ihr Problem.“',
 
     stufen_h2: 'Die 5 Bewusstseinsstufen',
     stufen_intro: 'Dieses Training geht von fünf Stufen aus, auf denen ein Interessent stehen kann, je nachdem ' +
@@ -2841,15 +2841,22 @@ function renderConfigPanel(){
   wireConfigPanel();
 }
 // Export/Import der Konfiguration ueber beide Sprachen hinweg (nicht nur die aktuell
-// gewaehlte), damit eine exportierte Datei ein vollstaendiges Produkt-Profil ist.
+// gewaehlte), damit eine exportierte Datei ein vollstaendiges Produkt-Profil ist. Exportiert
+// wird bewusst die WIRKSAME Konfiguration (stagesForLang()/personasForLang(), also Default
+// gemergt mit Override), nicht nur der rohe Override-Diff - sonst waere die Datei leer, solange
+// noch nichts angepasst und gespeichert wurde, obwohl das Tool laengst nutzbare Inhalte zeigt.
 function exportConfigData(){
   var data = { version: 1 };
   ['de', 'en'].forEach(function(lang){
-    data[lang] = {
-      stages: loadStageOverrides(lang),
-      personas: loadPersonaOverrides(lang),
-      brief: loadBriefOverride(lang)
-    };
+    var stagesObj = {};
+    stagesForLang(lang).forEach(function(s){
+      stagesObj[s.id] = { name: s.name, label: s.label, zustand: s.zustand, rolle: s.rolle, verhalten: s.verhalten, aufgabe: s.aufgabe, einstieg: s.einstieg };
+    });
+    var personasObj = {};
+    personasForLang(lang).filter(function(p){ return p.id !== 'neutral'; }).forEach(function(p){
+      personasObj[p.id] = { label: p.label, hinweis: p.hinweis };
+    });
+    data[lang] = { stages: stagesObj, personas: personasObj, brief: briefForLang(lang) };
   });
   return data;
 }
