@@ -69,6 +69,8 @@ Anbieter dieses Repositories: Falko Guderian. Impressum: [falkoguderian.github.i
 
 ## English
 
+![Sales Awareness Trainer](assets/cover-en.png)
+
 ### What is this?
 
 A training tool for sales conversations: you practice against an AI-simulated prospect who is randomly (or deliberately) placed at one of 5 stages of awareness — unaware, problem-aware, solution-aware, product-aware, or ready to decide. The stage is not revealed to you beforehand. Your task: find out through questions where your counterpart stands, instead of pitching.
@@ -78,9 +80,9 @@ After the conversation, the same AI evaluates your call against a guide (talk sh
 ### Quick Start
 
 <p align="center">
-  <img src="assets/screenshot-start.png" width="31%" alt="Start screen: configure and start a conversation">
-  <img src="assets/screenshot-chat.png" width="31%" alt="Live conversation with the simulated prospect">
-  <img src="assets/screenshot-result.png" width="31%" alt="Evaluation after the conversation">
+  <img src="assets/screenshot-start-en.png" width="31%" alt="Start screen: configure and start a conversation">
+  <img src="assets/screenshot-chat-en.png" width="31%" alt="Live conversation with the simulated prospect">
+  <img src="assets/screenshot-result-en.png" width="31%" alt="Evaluation after the conversation">
 </p>
 
 1. Open `index.html` in your browser (or host it via GitHub Pages) — no server, no build, no install.
