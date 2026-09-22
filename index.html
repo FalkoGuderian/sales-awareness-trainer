@@ -1229,8 +1229,13 @@ function randomPersonas(){ return currentPersonas().filter(function(p){ return p
  * -------------------------------------------------------------------------------- */
 // TTS-/Transkriptionsmodell kommen aus den Setup-Feldern (ttsModelId()/transModelId()),
 // Standardwerte: Grok-TTS bzw. Gemini-Flash-Lite fuer Transkription.
-function transPrompt(){
-  return currentLang === 'en'
+// Sprache der laufenden Session (falls vorhanden) hat Vorrang vor der UI-Sprache, damit ein
+// Sprachwechsel im Menue waehrend eines laufenden Gespraechs Transkription/Geraete-TTS nicht
+// mitten im Gespraech umschaltet (siehe session.lang in startSession()).
+function activeLang(){ return (session && session.lang) || currentLang; }
+function transPrompt(lang){
+  lang = lang || currentLang;
+  return lang === 'en'
     ? 'Transcribe the following audio precisely in English. Respond ONLY with the recognized text, ' +
       'without quotation marks, without introductory sentences, and without explanations.'
     : 'Transkribiere das folgende Audio präzise auf Deutsch. Antworte AUSSCHLIESSLICH mit dem ' +
@@ -1289,7 +1294,7 @@ function transcribeAudio(blob){
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey() },
         body: JSON.stringify({
           model: transModelId(),
-          messages: [{ role: 'user', content: [{ type: 'text', text: transPrompt() }, { type: 'image_url', image_url: { url: reader.result } }] }]
+          messages: [{ role: 'user', content: [{ type: 'text', text: transPrompt(activeLang()) }, { type: 'image_url', image_url: { url: reader.result } }] }]
         })
       }).then(function(r){ return r.json(); }).then(function(data){
         if (data.error) throw new Error(data.error.message || t('err_api_generic'));
@@ -1333,8 +1338,8 @@ function stopAgentSpeech(){
 var VOICE_GENDER_BY_STAGE_VOICE = { Rex: 'male', Sal: 'male', Leo: 'male', Eve: 'female', Ara: 'female' };
 var FEMALE_VOICE_NAME_HINTS = ['female', 'weiblich', 'frau', 'anna', 'petra', 'martina', 'katja', 'vicki', 'marlene', 'helena', 'samantha', 'karen', 'victoria', 'susan', 'zira'];
 var MALE_VOICE_NAME_HINTS = ['male', 'männlich', 'maennlich', 'mann', 'stefan', 'yannick', 'conrad', 'markus', 'daniel', 'klaus', 'alex', 'james', 'david', 'mark', 'george'];
-function deviceVoiceLangPrefix(){ return currentLang === 'en' ? 'en' : 'de'; }
-function deviceVoiceLangTag(){ return currentLang === 'en' ? 'en-US' : 'de-DE'; }
+function deviceVoiceLangPrefix(lang){ lang = lang || currentLang; return lang === 'en' ? 'en' : 'de'; }
+function deviceVoiceLangTag(lang){ lang = lang || currentLang; return lang === 'en' ? 'en-US' : 'de-DE'; }
 var _cachedDeviceVoices = null;
 function getDeviceVoicesAsync(){
   if (!('speechSynthesis' in window)) return Promise.resolve([]);
@@ -1369,7 +1374,7 @@ function deviceRateForGender(gender){
   var n = parseFloat(raw);
   return (isFinite(n) && n >= 0.5 && n <= 2) ? n : 1;
 }
-function pickDeviceVoiceForGender(voices, gender){
+function pickDeviceVoiceForGender(voices, gender, lang){
   // Manuelle Zuordnung (Zugang-Panel) geht vor: viele Geräte-TTS-Engines (v.a. Android)
   // liefern mehrere Stimmen ohne jedes Geschlechts-Merkmal im Namen, die Namens-Heuristik
   // greift dort ins Leere.
@@ -1378,7 +1383,7 @@ function pickDeviceVoiceForGender(voices, gender){
     var manual = voices.find(function(v){ return v.voiceURI === manualURI; });
     if (manual) return manual;
   }
-  var langPrefix = deviceVoiceLangPrefix();
+  var langPrefix = deviceVoiceLangPrefix(lang);
   var deVoices = voices.filter(function(v){ return new RegExp('^' + langPrefix, 'i').test(v.lang); });
   if (deVoices.length === 0) return null;
   var hints = gender === 'female' ? FEMALE_VOICE_NAME_HINTS : MALE_VOICE_NAME_HINTS;
@@ -1397,10 +1402,10 @@ function speakTextBrowser(text, stageVoiceName){
       if (agentSpeechCancelled || !('speechSynthesis' in window)){ avatarSpeakingStop(); resolve(); return; }
       window.speechSynthesis.cancel();
       var utter = new SpeechSynthesisUtterance(text);
-      utter.lang = deviceVoiceLangTag();
+      utter.lang = deviceVoiceLangTag(activeLang());
       var gender = VOICE_GENDER_BY_STAGE_VOICE[stageVoiceName];
       if (gender){
-        var match = pickDeviceVoiceForGender(voices, gender);
+        var match = pickDeviceVoiceForGender(voices, gender, activeLang());
         if (match) utter.voice = match;
         // Manche Android-Chrome-Versionen liefern ueber die Web-Speech-API nur eine
         // einzige Systemstimme, egal wie viele in den Geräte-Einstellungen installiert
@@ -1643,6 +1648,8 @@ document.getElementById('reset-models-btn').addEventListener('click', function()
  * SpeechSynthesisVoice kein Gender-Feld liefert (siehe pickDeviceVoiceForGender()).
  * -------------------------------------------------------------------------------- */
 function populateDeviceVoiceSelects(){
+  // Bewusst currentLang (nicht activeLang()): laeuft im Setup-Panel, unabhaengig von einer
+  // evtl. aktiven Session.
   getDeviceVoicesAsync().then(function(voices){
     var langPrefix = deviceVoiceLangPrefix();
     var deVoices = voices.filter(function(v){ return new RegExp('^' + langPrefix, 'i').test(v.lang); });
@@ -1683,6 +1690,8 @@ function populateDeviceVoiceSelects(){
   });
 }
 function testDeviceVoice(sel, gender){
+  // Bewusst currentLang (nicht activeLang()): Stimmtest im Setup-Panel, unabhaengig von einer
+  // evtl. aktiven Session.
   if (!('speechSynthesis' in window)) return;
   getDeviceVoicesAsync().then(function(voices){
     window.speechSynthesis.cancel();
