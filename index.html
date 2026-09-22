@@ -405,7 +405,7 @@ footer{margin-top:40px; padding-top:18px; border-top:1px solid var(--line); font
     </div>
     <p class="hint"><span data-i18n="device_voice_hint">Die Geräte-Sprachausgabe liefert kein Geschlecht pro Stimme mit, teils auch keinen unterscheidbaren Namen (mehrere Einträge heißen dann alle „Deutsch #1/#2/…“) – per ▶ vorher anhören und passend zuordnen. Wo alle Stimmen gleich klingen (manche Android-Browser zeigen nur eine einzige), per Regler Tonhöhe und Tempo einstellen.</span> <button class="ghost" id="refresh-device-voices-btn" type="button" style="padding:3px 9px; font-size:11.5px" data-i18n="refresh_voices_btn">Stimmen neu laden</button></p>
   </div>
-  <p class="hint" data-i18n="setup_hint">Voreingestellt sind dieselben Modelle, die DocWorm standardmäßig verwendet (Sprinter-Textmodell, Grok-TTS, Gemini-Transkription). Wie in der App selbst lässt sich die Sprachausgabe auf die Geräteausgabe umstellen statt der KI-Stimme.</p>
+  <p class="hint" data-i18n="setup_hint">Voreingestellt sind bewährte Standardmodelle (schnelles Textmodell, Grok-TTS, Gemini-Transkription). Die Sprachausgabe lässt sich auf die Geräteausgabe umstellen statt auf die KI-Stimme.</p>
   <div class="btn-row">
     <button class="ghost" id="save-setup-btn" type="button" data-i18n="save_setup_btn">Speichern</button>
   </div>
@@ -651,13 +651,13 @@ var I18N = {
       '(mehrere Einträge heißen dann alle „Deutsch #1/#2/…“) – per ▶ vorher anhören und passend zuordnen. Wo alle Stimmen ' +
       'gleich klingen (manche Android-Browser zeigen nur eine einzige), per Regler Tonhöhe und Tempo einstellen.',
     refresh_voices_btn: 'Stimmen neu laden',
-    setup_hint: 'Voreingestellt sind dieselben Modelle, die DocWorm standardmäßig verwendet (Sprinter-Textmodell, Grok-TTS, ' +
-      'Gemini-Transkription). Wie in der App selbst lässt sich die Sprachausgabe auf die Geräteausgabe umstellen statt der KI-Stimme.',
+    setup_hint: 'Voreingestellt sind bewährte Standardmodelle (schnelles Textmodell, Grok-TTS, Gemini-Transkription). ' +
+      'Die Sprachausgabe lässt sich auf die Geräteausgabe umstellen statt auf die KI-Stimme.',
     save_setup_btn: 'Speichern',
     setup_status_saved: 'Key gespeichert.',
     setup_status_missing: 'Ohne Key kein Gespräch möglich.',
     test_voice_title: 'Stimme anhören',
-    test_voice_text: 'Hallo, das ist eine Testansage von DocWorm.',
+    test_voice_text: 'Hallo, das ist eine Testansage.',
 
     config_h2: 'Konfiguration',
     config_intro: 'Hier lassen sich die Rollenspiel-Stufen, Verhaltens-Varianten und das Produkt-Briefing anpassen, ' +
@@ -842,13 +842,13 @@ var I18N = {
       'name (several entries may all be called "English #1/#2/…") – listen with ▶ first and assign accordingly. Where all ' +
       'voices sound the same (some Android browsers expose only a single one), use the sliders to adjust pitch and rate.',
     refresh_voices_btn: 'Reload voices',
-    setup_hint: 'Pre-filled with the same models DocWorm uses by default (sprinter text model, Grok TTS, Gemini transcription). ' +
-      'Just like in the app itself, voice output can be switched to the device output instead of the AI voice.',
+    setup_hint: 'Pre-filled with proven default models (a fast text model, Grok TTS, Gemini transcription). ' +
+      'Voice output can be switched to the device output instead of the AI voice.',
     save_setup_btn: 'Save',
     setup_status_saved: 'Key saved.',
     setup_status_missing: 'No conversation possible without a key.',
     test_voice_title: 'Listen to voice',
-    test_voice_text: 'Hello, this is a test message from DocWorm.',
+    test_voice_text: 'Hello, this is a test message.',
 
     config_h2: 'Configuration',
     config_intro: 'Here you can adjust the roleplay stages, behavior variants, and the product briefing that ' +
@@ -1203,7 +1203,7 @@ function randomPersonas(){ return currentPersonas().filter(function(p){ return p
  * _ttsReadAloudStream()/speakAgentText() in app.html).
  * -------------------------------------------------------------------------------- */
 // TTS-/Transkriptionsmodell kommen aus den Setup-Feldern (ttsModelId()/transModelId()),
-// Standardwerte wie DocWorm: Grok-TTS bzw. Gemini-Flash-Lite fuer Transkription.
+// Standardwerte: Grok-TTS bzw. Gemini-Flash-Lite fuer Transkription.
 function transPrompt(){
   return currentLang === 'en'
     ? 'Transcribe the following audio precisely in English. Respond ONLY with the recognized text, ' +
@@ -1712,8 +1712,8 @@ function parseJsonLoose(text){
 function buildSystemPrompt(stage, persona, lang){
   var brief = briefForLang(lang);
   if (lang === 'en'){
-    return 'You are playing a prospect for the learning app DocWorm on the phone in a sales roleplay training. ' +
-      'BACKGROUND ON DOCWORM (for you only, so you can react authentically, you do not mention it unprompted): ' + brief +
+    return 'You are playing a prospect on the phone in a sales roleplay training, for the product described in the background below. ' +
+      'BACKGROUND (for you only, so you can react authentically, you do not mention it unprompted): ' + brief +
       '\n\nYOUR ROLE: ' + stage.rolle +
       '\nYOUR STATE: ' + stage.zustand +
       '\nYOUR BEHAVIOR IN THE CONVERSATION: ' + stage.verhalten +
@@ -1727,8 +1727,8 @@ function buildSystemPrompt(stage, persona, lang){
       '\n- Your first message is your reaction right after the caller has briefly introduced themselves. Phrase it in the spirit of this example, but not word for word (free variation, same meaning and tone): "' + stage.einstieg + '"' +
       '\n- Reply ONLY with your character\'s spoken text, nothing else.';
   }
-  return 'Du spielst in einem Verkaufs-Rollenspiel-Training einen Interessenten fuer die Lern-App DocWorm am Telefon. ' +
-    'HINTERGRUND ZU DOCWORM (nur fuer dich, damit du authentisch reagieren kannst, du erwaehnst es nicht ungefragt): ' + brief +
+  return 'Du spielst in einem Verkaufs-Rollenspiel-Training am Telefon einen Interessenten fuer das im Hintergrundwissen beschriebene Produkt. ' +
+    'HINTERGRUNDWISSEN (nur fuer dich, damit du authentisch reagieren kannst, du erwaehnst es nicht ungefragt): ' + brief +
     '\n\nDEINE ROLLE: ' + stage.rolle +
     '\nDEIN ZUSTAND: ' + stage.zustand +
     '\nDEIN VERHALTEN IM GESPRAECH: ' + stage.verhalten +
@@ -1751,7 +1751,7 @@ function transcriptRolePrefix(lang, role){
 function buildEvalPrompt(stage, persona, lang, transcriptText, sellerWords, totalWords, pct, behavioral){
   var pctStr = totalWords ? pct.toFixed(0) : '0';
   if (lang === 'en'){
-    return 'You are evaluating a sales roleplay training. A solo founder sells the learning app DocWorm and practices ' +
+    return 'You are evaluating a sales roleplay training. A solo founder practices ' +
       'sales conversations against a simulated prospect at one of 5 awareness stages (Eugene Schwartz).' +
       '\n\nPRACTICED STAGE: ' + stage.num + '. ' + stage.name + ' (' + stage.label + ')' +
       '\nSTATE OF THE PROSPECT AT THIS STAGE: ' + stage.zustand +
@@ -1779,7 +1779,7 @@ function buildEvalPrompt(stage, persona, lang, transcriptText, sellerWords, tota
       '\n "naechster_schritt": "one concrete, actionable tip for the next real call"}' +
       '\nResponse language: English. Quote briefly from the transcript where helpful. Be concrete, no filler phrases.';
   }
-  return 'Du wertest ein Verkaufs-Rollenspiel-Training aus. Ein Solo-Gruender vertreibt die Lern-App DocWorm und uebt ' +
+  return 'Du wertest ein Verkaufs-Rollenspiel-Training aus. Ein Solo-Gruender uebt ' +
     'Verkaufsgespraeche gegen einen simulierten Interessenten auf einer von 5 Bewusstseinsstufen (Eugene Schwartz).' +
     '\n\nGEUEBTE STUFE: ' + stage.num + '. ' + stage.name + ' (' + stage.label + ')' +
     '\nZUSTAND DES INTERESSENTEN AUF DIESER STUFE: ' + stage.zustand +
@@ -1886,8 +1886,8 @@ function startSession(stage, persona, useVoice){
   var mySession = session;
   var thinkingBubble = addBubble('customer', '…', true);
   var openerPrompt = session.lang === 'en'
-    ? '[You just picked up, the caller has briefly introduced themselves as DocWorm sales and asked for two minutes. React now.]'
-    : '[Du hast gerade abgehoben, die anrufende Person hat sich kurz als DocWorm-Vertrieb vorgestellt und um zwei Minuten gebeten. Reagiere jetzt.]';
+    ? '[You just picked up, the caller has briefly introduced themselves as sales and asked for two minutes. React now.]'
+    : '[Du hast gerade abgehoben, die anrufende Person hat sich kurz als Vertrieb vorgestellt und um zwei Minuten gebeten. Reagiere jetzt.]';
   callLLM([
     { role: 'system', content: buildSystemPrompt(stage, persona, session.lang) },
     { role: 'user', content: openerPrompt }
