@@ -1984,7 +1984,7 @@ function setTextMode(v){
 modeSwitchBtn.addEventListener('click', function(){ setTextMode(!voiceState.textMode); });
 
 function startSession(stage, persona, useVoice){
-  session = { stage: stage, persona: persona, lang: currentLang, messages: [], startedAt: Date.now() };
+  session = { stage: stage, persona: persona, lang: currentLang, messages: [], startedAt: Date.now(), elapsedMs: 0 };
   logEl.innerHTML = '';
   startSection.style.display = 'none';
   resultSection.style.display = 'none';
@@ -2315,7 +2315,7 @@ endBtn.addEventListener('click', function(){
     // gesagt hat (nur die Eroeffnungszeile des Interessenten steht bereits im Log).
     if (session.messages.length){
       var drafts = loadDrafts();
-      drafts.push({ date: new Date().toISOString(), stageId: session.stage.id, personaId: session.persona ? session.persona.id : 'neutral', lang: session.lang || 'de', messages: session.messages.slice() });
+      drafts.push({ date: new Date().toISOString(), stageId: session.stage.id, personaId: session.persona ? session.persona.id : 'neutral', lang: session.lang || 'de', messages: session.messages.slice(), elapsedMs: (session.elapsedMs || 0) + (Date.now() - session.startedAt) });
       saveDrafts(drafts);
       renderDrafts();
     }
@@ -2356,7 +2356,7 @@ endBtn.addEventListener('click', function(){
   var fillerPer100 = sellerWords ? (fillerCount / sellerWords * 100) : 0;
   var fillerTopList = Object.keys(fillerFound).sort(function(a, b){ return fillerFound[b] - fillerFound[a]; })
     .slice(0, 5).map(function(k){ return k + ' (' + fillerFound[k] + '×)'; }).join(', ');
-  var durationMin = Math.max(0.1, (Date.now() - session.startedAt) / 60000);
+  var durationMin = Math.max(0.1, ((Date.now() - mySession.startedAt) + (mySession.elapsedMs || 0)) / 60000);
   var paceWpm = Math.round(sellerWords / durationMin);
   var behavioral = { fillerCount: fillerCount, fillerPer100: fillerPer100, fillerTopList: fillerTopList, paceWpm: paceWpm, durationMin: durationMin };
 
@@ -2447,6 +2447,8 @@ document.getElementById('continue-btn').addEventListener('click', function(){
   chatSection.style.display = 'block';
   hideError(chatError);
   setBusy(false);
+  session.elapsedMs = (session.elapsedMs || 0) + (Date.now() - session.startedAt);
+  session.startedAt = Date.now();
   startTimer();
 });
 
@@ -2474,6 +2476,7 @@ function pushHistory(stage, persona, lang, data, pct, sellerWords, totalWords, t
     fillerCount: behavioral ? behavioral.fillerCount : 0,
     fillerPer100: behavioral ? behavioral.fillerPer100 : 0,
     paceWpm: behavioral ? behavioral.paceWpm : 0,
+    elapsedMs: behavioral ? Math.round(behavioral.durationMin * 60000) : 0,
     messages: messages ? messages.slice() : [],
     redeanteilOk: !!data.redeanteil_ok,
     redeanteilKommentar: data.redeanteil_kommentar || '',
@@ -2582,7 +2585,7 @@ function continueFromHistory(idx){
   if (!stage) return;
   var persona = personasForLang(entryLang).filter(function(p){ return p.id === entry.personaId; })[0] || personasForLang(entryLang)[0];
   if (timerHandle) clearInterval(timerHandle);
-  session = { stage: stage, persona: persona, lang: entryLang, messages: entry.messages.slice(), startedAt: Date.now() };
+  session = { stage: stage, persona: persona, lang: entryLang, messages: entry.messages.slice(), startedAt: Date.now(), elapsedMs: entry.elapsedMs || 0 };
   logEl.innerHTML = '';
   session.messages.forEach(function(m){ addBubble(m.role, m.text); });
   showPanel('neues-gespraech');
@@ -2642,7 +2645,7 @@ function continueFromDraft(idx){
   saveDrafts(list);
   renderDrafts();
   if (timerHandle) clearInterval(timerHandle);
-  session = { stage: stage, persona: persona, lang: entryLang, messages: entry.messages.slice(), startedAt: Date.now() };
+  session = { stage: stage, persona: persona, lang: entryLang, messages: entry.messages.slice(), startedAt: Date.now(), elapsedMs: entry.elapsedMs || 0 };
   logEl.innerHTML = '';
   session.messages.forEach(function(m){ addBubble(m.role, m.text); });
   showPanel('neues-gespraech');
