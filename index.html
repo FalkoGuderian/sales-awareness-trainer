@@ -1502,6 +1502,12 @@ audioSourceSelect.value = loadLocal(LS_KEY_AUDIO_SOURCE, 'gpt');
 
 updateSetupStatus();
 
+// Ohne gespeicherten Key ist jeder andere Tab ohnehin nicht nutzbar (kein Gespraech moeglich)
+// - direkt beim Laden in den Zugang-Tab springen, statt das zuletzt gemerkte Panel zu zeigen.
+// Nur visuell (applyActivePanel), damit die Panel-Praeferenz in localStorage unangetastet
+// bleibt und nach dem Eintragen des Keys wieder das gewohnte Panel erscheint.
+if (!apiKeyInput.value.trim()) applyActivePanel('zugang');
+
 document.getElementById('save-setup-btn').addEventListener('click', function(){
   saveLocal(LS_KEY_API, apiKeyInput.value.trim());
   saveLocal(LS_KEY_MODEL, modelInput.value.trim() || 'google/gemini-2.5-flash-lite');
