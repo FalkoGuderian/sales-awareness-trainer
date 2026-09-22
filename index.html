@@ -358,6 +358,7 @@ footer{margin-top:40px; padding-top:18px; border-top:1px solid var(--line); font
       <input type="text" id="trans-model-id" value="google/gemini-3.1-flash-lite-preview" placeholder="z. B. google/gemini-3.1-flash-lite-preview">
     </div>
   </div>
+  <p class="hint" data-i18n="trans_model_hint">Das Transkriptionsmodell muss Audio nativ verstehen (wie das voreingestellte Gemini-Modell) – reine Text-Modelle oder „kostenlose“ Alias-Modelle (z. B. openrouter/free) scheitern meist mit einem Dekodierungsfehler.</p>
   <div class="field">
     <label for="audio-source" data-i18n="audio_source_label">Audioquelle (Sprachausgabe)</label>
     <select id="audio-source">
@@ -638,6 +639,7 @@ var I18N = {
     model_label: 'Modell (LLM, Gesprächspartner + Auswertung)',
     tts_model_label: 'Modell (TTS, Sprachausgabe)',
     trans_model_label: 'Modell (Transkription, Spracherkennung)',
+    trans_model_hint: 'Das Transkriptionsmodell muss Audio nativ verstehen (wie das voreingestellte Gemini-Modell) – reine Text-Modelle oder „kostenlose“ Alias-Modelle (z. B. openrouter/free) scheitern meist mit einem Dekodierungsfehler.',
     audio_source_label: 'Audioquelle (Sprachausgabe)',
     audio_source_opt_gpt: 'KI Stimme (obiges TTS-Modell, kostenpflichtig über OpenRouter)',
     audio_source_opt_browser: 'Gerät (kostenlose Sprachausgabe des Browsers/Betriebssystems)',
@@ -829,6 +831,7 @@ var I18N = {
     model_label: 'Model (LLM, conversation partner + evaluation)',
     tts_model_label: 'Model (TTS, voice output)',
     trans_model_label: 'Model (transcription, speech recognition)',
+    trans_model_hint: 'The transcription model must understand audio natively (like the pre-filled Gemini model) – text-only models or "free" alias models (e.g. openrouter/free) usually fail with a decoding error.',
     audio_source_label: 'Audio source (voice output)',
     audio_source_opt_gpt: 'AI voice (TTS model above, paid via OpenRouter)',
     audio_source_opt_browser: 'Device (free browser/OS text-to-speech)',
