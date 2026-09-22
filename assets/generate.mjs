@@ -1,6 +1,6 @@
 /**
- * Erzeugt cover.png (Social-Preview/README-Banner) und die drei mobilen
- * Quickstart-Screenshots (screenshot-start/-chat/-result.png) neu.
+ * Erzeugt cover.png (Social-Preview/README-Banner, nur Deutsch) und die mobilen
+ * Quickstart-Screenshots (screenshot-start/-chat/-result[-en].png) neu.
  *
  * Faehrt eine lokale, bereits laufende Chrome-Instanz per DevTools-Protocol (CDP) fern -
  * keine npm-Abhaengigkeiten (playwright/puppeteer) noetig, nur Node >=18 (natives
@@ -13,10 +13,15 @@
  * Deshalb wird der App-Zustand hier bewusst per direkter DOM-Manipulation (classList,
  * innerHTML, createElement) nachgebaut statt interne Funktionen aufzurufen.
  *
+ * Die Cover-Illustration (assets/cover-art.png, 5 Silhouetten von blass/unsicher bis
+ * solide/kaufbereit) kommt per xAI Grok Imagine (gleiche Pipeline wie avatars/generate.mjs)
+ * und wird nur bei gesetztem XAI_API_KEY neu generiert - ohne Key wird die vorhandene
+ * Datei weiterverwendet.
+ *
  * Usage:
  *   1. Chrome headless mit Remote-Debugging-Port starten, z.B.:
  *      chrome --headless=new --remote-debugging-port=9333 --user-data-dir=<tmp-dir>
- *   2. node assets/generate.mjs
+ *   2. node assets/generate.mjs [--skip-art]   (--skip-art: cover-art.png nicht neu generieren)
  */
 import { writeFile, readFile, mkdir } from "node:fs/promises";
 import { resolve as resolvePath, join as joinPath } from "node:path";
@@ -74,6 +79,43 @@ async function withTab(url, fn) {
   const c = cdpClient(ws);
   try { return await fn(c); }
   finally { ws.close(); await closeTab(tab.id); }
+}
+
+/* ---------------- Cover-Illustration per xAI Grok Imagine (5 Silhouetten) ---------------- */
+
+const XAI_IMG_URL = "https://api.x.ai/v1/images/generations";
+const XAI_IMG_MODEL = "grok-imagine-image-quality";
+const COVER_ART_PROMPT = "Abstract minimalist vector illustration for a modern B2B SaaS product banner. " +
+  "A horizontal row of five simple, rounded human silhouette icons, evenly spaced, representing a " +
+  "customer's journey: the leftmost silhouette is faint, translucent, and slightly blurred as if " +
+  "surrounded by a soft question-mark shaped fog; each following silhouette becomes progressively " +
+  "more solid, sharp, and confident; the rightmost silhouette is a fully solid, deep indigo-violet " +
+  "filled shape with a subtle upward arrow beside it. A thin dashed line connects all five along the " +
+  "bottom. Clean flat vector design, generous negative space, soft rounded geometric shapes, no gradients " +
+  "besides a very subtle glow. Color palette strictly: deep indigo-violet #4a3bbd, pale lavender #ecebfa, " +
+  "light neutral grey-white #f4f5f8 background, dark charcoal #171a24 accents only if needed. " +
+  "Absolutely no text, no letters, no numbers, no words, no logos, no UI elements. Professional, " +
+  "minimal, contemporary startup aesthetic, lots of empty background space on the left side of the frame.";
+
+async function genCoverArt(outFile) {
+  const apiKey = process.env.XAI_API_KEY;
+  if (!apiKey) { console.log("XAI_API_KEY nicht gesetzt - behalte vorhandenes cover-art.png"); return; }
+  const body = { model: XAI_IMG_MODEL, prompt: COVER_ART_PROMPT, n: 1, aspect_ratio: "16:9", response_format: "b64_json" };
+  const r = await fetch(XAI_IMG_URL, {
+    method: "POST",
+    headers: { Authorization: "Bearer " + apiKey, "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const txt = await r.text();
+  if (!r.ok) throw new Error("cover-art HTTP " + r.status + ": " + txt.slice(0, 400));
+  const j = JSON.parse(txt);
+  const d = (j.data || [])[0] || {};
+  let bytes;
+  if (d.b64_json) bytes = Buffer.from(d.b64_json, "base64");
+  else if (d.url) { const ir = await fetch(d.url); bytes = Buffer.from(await ir.arrayBuffer()); }
+  else throw new Error("cover-art: weder b64_json noch url in Antwort: " + txt.slice(0, 300));
+  await writeFile(outFile, bytes);
+  console.log("written:", outFile);
 }
 
 /* ---------------- Cover (1200x630, Social-Preview + README-Banner) ---------------- */
@@ -293,8 +335,8 @@ async function generateResult(outFile, lang) {
 async function main() {
   await mkdir(DIR, { recursive: true });
 
+  if (!process.argv.includes("--skip-art")) await genCoverArt(joinPath(DIR, "cover-art.png"));
   await renderCover("cover-src.html", joinPath(DIR, "cover.png"));
-  await renderCover("cover-src-en.html", joinPath(DIR, "cover-en.png"));
 
   await shot(joinPath(DIR, "_shot-start.png"), `${hideScrollbarJs}\n${clickDeJs}\n${setActivePanel("neues-gespraech")}`);
   await shot(joinPath(DIR, "_shot-start-en.png"), `${hideScrollbarJs}\n${clickEnJs}\n${setActivePanel("neues-gespraech")}`);

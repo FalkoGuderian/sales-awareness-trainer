@@ -10,8 +10,6 @@ A single-file, client-side web app for practicing sales conversations against an
 
 ## English
 
-![Sales Awareness Trainer](assets/cover-en.png)
-
 ### What is this?
 
 A training tool for sales conversations: you practice against an AI-simulated prospect who is randomly (or deliberately) placed at one of 5 stages of awareness — unaware, problem-aware, solution-aware, product-aware, or ready to decide. The stage is not revealed to you beforehand. Your task: find out through questions where your counterpart stands, instead of pitching.
