@@ -1,0 +1,2944 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DocWorm Vertrieb, Awareness-Training</title>
+<style>
+:root{
+  --ground:#f4f5f8; --surface:#ffffff; --surface-2:#eceef4;
+  --ink:#171a24; --ink-2:#454b5c; --ink-3:#6d7488;
+  --line:#dcdfe8; --line-strong:#c3c7d4;
+  --accent:#4a3bbd; --accent-soft:#ecebfa; --accent-ink:#4a3bbd;
+  --ok:#1f7a4d; --ok-soft:#e2f2e9;
+  --warn:#8a6410; --warn-soft:#f8efd9;
+  --bad:#a3312b; --bad-soft:#fbe9e8;
+  --cold:#5c6479; --cold-soft:#e7e9ef;
+  --bubble-seller:#4a3bbd; --bubble-seller-ink:#ffffff;
+  --bubble-customer:#eceef4; --bubble-customer-ink:#171a24;
+  --shadow:0 1px 2px rgba(20,24,38,.06), 0 4px 14px rgba(20,24,38,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --ground:#101219; --surface:#181b25; --surface-2:#20242f;
+    --ink:#eef0f6; --ink-2:#b3b9c9; --ink-3:#858da3;
+    --line:#2b303d; --line-strong:#3b4152;
+    --accent:#a99cff; --accent-soft:#252247; --accent-ink:#bdb2ff;
+    --ok:#63c795; --ok-soft:#163024;
+    --warn:#e0b054; --warn-soft:#33280f;
+    --bad:#e2837c; --bad-soft:#341c1a;
+    --cold:#8b93a8; --cold-soft:#232733;
+    --bubble-seller:#4a3bbd; --bubble-seller-ink:#ffffff;
+    --bubble-customer:#20242f; --bubble-customer-ink:#eef0f6;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="light"]{
+  --ground:#f4f5f8; --surface:#ffffff; --surface-2:#eceef4;
+  --ink:#171a24; --ink-2:#454b5c; --ink-3:#6d7488;
+  --line:#dcdfe8; --line-strong:#c3c7d4;
+  --accent:#4a3bbd; --accent-soft:#ecebfa; --accent-ink:#4a3bbd;
+}
+:root[data-theme="dark"]{
+  --ground:#101219; --surface:#181b25; --surface-2:#20242f;
+  --ink:#eef0f6; --ink-2:#b3b9c9; --ink-3:#858da3;
+  --line:#2b303d; --line-strong:#3b4152;
+  --accent:#a99cff; --accent-soft:#252247; --accent-ink:#bdb2ff;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+  font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:"Cascadia Mono",Consolas,"SF Mono",Menlo,monospace}
+.wrap{max-width:760px; margin:0 auto; padding:72px 18px 90px}
+
+/* ---- Seitenmenue ---- */
+.menu-toggle{
+  position:fixed; top:16px; left:16px; z-index:60; width:34px; height:34px; border-radius:8px; padding:0;
+  background:var(--surface); border:1px solid var(--line); color:var(--ink-2); box-shadow:var(--shadow);
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+}
+.menu-toggle svg{flex-shrink:0}
+.menu-toggle:hover{background:var(--surface-2)}
+.menu-backdrop{
+  position:fixed; inset:0; background:rgba(10,12,20,.4); opacity:0; pointer-events:none;
+  transition:opacity .2s; z-index:55;
+}
+.menu-backdrop.open{opacity:1; pointer-events:auto}
+.side-menu{
+  position:fixed; top:0; left:0; height:100%; width:240px; background:var(--surface);
+  border-right:1px solid var(--line); box-shadow:var(--shadow); z-index:56;
+  transform:translateX(-100%); transition:transform .22s ease; display:flex; flex-direction:column;
+  padding:66px 0 18px;
+}
+.side-menu.open{transform:translateX(0)}
+.side-menu-item{
+  display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer;
+  font-family:inherit; font-size:14.5px; font-weight:600; color:var(--ink-2); padding:14px 20px;
+  border-left:3px solid transparent;
+}
+.side-menu-item:hover{background:var(--surface-2); color:var(--ink)}
+.side-menu-item.active{color:var(--accent-ink); background:var(--accent-soft); border-left-color:var(--accent)}
+
+.panel{display:none}
+.panel.active{display:block}
+
+header{border-bottom:1px solid var(--line); padding-bottom:20px; margin-bottom:26px}
+.eyebrow{font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); font-weight:600; margin:0 0 10px}
+h1{font-size:clamp(24px,4vw,32px); line-height:1.15; margin:0 0 10px; letter-spacing:-.02em; text-wrap:balance}
+.thesis{max-width:64ch; color:var(--ink-2); margin:0; font-size:15px}
+.thesis b{color:var(--ink); font-weight:600}
+
+section{margin-bottom:26px}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:18px; box-shadow:var(--shadow)}
+h2{font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); font-weight:600; margin:0 0 12px}
+
+/* ---- Leitfaden-Karte ---- */
+.rules-body{font-size:13.5px; color:var(--ink-2)}
+.rules-body .bar{display:flex; align-items:center; gap:10px; margin:10px 0}
+.rules-body .bar .fill{flex:1; height:8px; background:var(--surface-2); border-radius:99px; overflow:hidden}
+.rules-body .bar .fill i{display:block; height:100%; background:var(--accent); width:30%}
+.rules-body .bar span{font-size:12px; color:var(--ink-3); white-space:nowrap; font-variant-numeric:tabular-nums}
+.rules-body blockquote{margin:12px 0 0; padding:10px 12px; background:var(--accent-soft); border-radius:8px; font-style:italic; color:var(--ink)}
+
+/* ---- Setup ---- */
+.field{margin-bottom:12px}
+.field label{display:block; font-size:12.5px; font-weight:600; color:var(--ink-2); margin-bottom:5px}
+.field input[type=password], .field input[type=text], .field select{
+  width:100%; padding:9px 11px; border:1px solid var(--line); border-radius:8px; font-size:14px;
+  background:var(--surface); color:var(--ink); font-family:inherit;
+}
+.field .hint{font-size:11.5px; color:var(--ink-3); margin-top:5px}
+.row-inline{display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap}
+.row-inline .field{flex:1; min-width:180px; margin-bottom:0}
+
+button{
+  border:none; border-radius:8px; padding:10px 18px; font-weight:650; font-size:14px; cursor:pointer;
+  font-family:inherit;
+}
+button.primary{background:var(--accent); color:#fff}
+button.primary:hover{filter:brightness(1.06)}
+button.ghost{background:var(--surface-2); color:var(--ink)}
+button.ghost:hover{background:var(--line)}
+button:disabled{opacity:.5; cursor:not-allowed}
+.btn-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
+
+.toggle-row{display:flex; align-items:center; gap:8px; margin-top:14px; font-size:13.5px; color:var(--ink-2)}
+.toggle-row input{accent-color:var(--accent)}
+select.stage-pick{padding:8px 10px; border:1px solid var(--line); border-radius:8px; background:var(--surface); color:var(--ink); font-family:inherit; font-size:13.5px}
+
+/* ---- Chat ---- */
+#chat-section{display:none}
+.avatar-row{display:flex; align-items:center; gap:14px; margin-bottom:10px}
+.avatar-pip{
+  position:relative; width:76px; height:101px; flex:none; border-radius:12px; overflow:hidden;
+  background:var(--surface-2); box-shadow:var(--shadow); transition:opacity .3s, filter .3s;
+}
+.avatar-pip video{width:100%; height:100%; object-fit:cover; display:block; background:var(--surface-2)}
+.avatar-pip.idle{opacity:.62; filter:grayscale(.4)}
+.avatar-ring{position:absolute; inset:0; border-radius:12px; border:2px solid var(--accent); opacity:0; transition:opacity .2s; pointer-events:none}
+.avatar-pip.speaking .avatar-ring{opacity:1}
+.chat-meta{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; flex-wrap:wrap}
+.chat-meta .stat{font-size:12px; color:var(--ink-3)}
+.chat-meta .stat b{color:var(--ink); font-variant-numeric:tabular-nums}
+.redeanteil-bar{width:100%; height:6px; background:var(--surface-2); border-radius:99px; overflow:hidden; margin-bottom:14px}
+.redeanteil-bar i{display:block; height:100%; background:var(--ok); width:0%; transition:width .3s, background .3s}
+.redeanteil-bar.over i{background:var(--bad)}
+
+#log{display:flex; flex-direction:column; gap:10px; max-height:52vh; overflow-y:auto; padding:4px 2px 10px}
+.bubble{max-width:82%; padding:10px 13px; border-radius:14px; font-size:14.5px; white-space:pre-wrap; word-wrap:break-word}
+.bubble.seller{align-self:flex-end; background:var(--bubble-seller); color:var(--bubble-seller-ink); border-bottom-right-radius:4px}
+.bubble.customer{align-self:flex-start; background:var(--bubble-customer); color:var(--bubble-customer-ink); border-bottom-left-radius:4px}
+.bubble.customer.thinking{color:var(--ink-3); font-style:italic}
+.bubble-label{font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-3); margin:2px 4px}
+.bubble-wrap{display:flex; flex-direction:column}
+.bubble-wrap.seller{align-items:flex-end}
+.bubble-wrap.customer{align-items:flex-start}
+
+.composer{display:flex; gap:8px; margin-top:14px}
+.composer textarea{
+  flex:1; resize:none; padding:10px 12px; border:1px solid var(--line); border-radius:10px;
+  font-family:inherit; font-size:14.5px; background:var(--surface); color:var(--ink); min-height:44px; max-height:140px;
+}
+.composer textarea:focus{outline:2px solid var(--accent); outline-offset:1px}
+.end-row{display:flex; justify-content:flex-end; gap:10px; margin-top:14px}
+.error-banner{background:var(--bad-soft); color:var(--bad); border-radius:8px; padding:9px 12px; font-size:13px; margin-top:10px}
+
+/* ---- Sprachmodus ---- */
+.mode-switch-row{display:flex; justify-content:flex-end; margin-top:2px}
+.mode-switch-row button{background:none; border:none; color:var(--accent-ink); font-size:12.5px; font-weight:600; cursor:pointer; padding:4px 2px}
+.voicebar{display:flex; align-items:center; gap:14px; margin-top:14px; padding:6px 2px}
+.mic-btn{
+  width:60px; height:60px; border-radius:50%; border:none; background:var(--accent); color:#fff;
+  display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:var(--shadow); flex:none;
+}
+.mic-btn.recording{background:var(--bad); animation:mic-pulse 1.4s ease-in-out infinite}
+.mic-btn.speaking{background:var(--ok)}
+.mic-btn:disabled{opacity:.55; cursor:not-allowed; animation:none}
+@keyframes mic-pulse{0%,100%{box-shadow:0 0 0 0 rgba(163,49,43,.45)}50%{box-shadow:0 0 0 13px rgba(163,49,43,0)}}
+.spinner{width:20px; height:20px; border:3px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.voice-status{flex:1; font-size:13.5px; color:var(--ink-2)}
+.voice-stop-btn{
+  width:48px; height:48px; border-radius:50%; background:var(--surface-2); color:var(--bad);
+  display:flex; align-items:center; justify-content:center; border:none; cursor:pointer; flex:none;
+}
+.voice-stop-btn:disabled{opacity:.6; cursor:not-allowed}
+
+/* ---- Auswertung ---- */
+#result-section{display:none}
+.reveal{display:flex; align-items:center; gap:12px; margin-bottom:16px}
+.reveal .num{font-size:26px; font-weight:700; color:var(--accent-ink); font-variant-numeric:tabular-nums}
+.reveal .name{font-size:17px; font-weight:650}
+.reveal .state{font-size:13px; color:var(--ink-2)}
+
+.verdicts{display:grid; grid-template-columns:1fr; gap:10px; margin-bottom:18px}
+.verdict-card{border:1px solid var(--line); border-radius:10px; padding:12px 14px; display:flex; gap:10px; align-items:flex-start}
+.verdict-card .icon{width:20px; height:20px; flex:none; margin-top:1px}
+.verdict-card.ok{background:var(--ok-soft)}
+.verdict-card.ok .icon{color:var(--ok)}
+.verdict-card.warn{background:var(--warn-soft)}
+.verdict-card.warn .icon{color:var(--warn)}
+.verdict-card.bad{background:var(--bad-soft)}
+.verdict-card.bad .icon{color:var(--bad)}
+.verdict-card .t{font-size:13.5px}
+.verdict-card .t b{display:block; font-size:13px; margin-bottom:2px}
+
+.list-block{margin-bottom:16px}
+.list-block h3{font-size:12.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-3); margin:0 0 8px}
+.list-block ul{margin:0; padding-left:18px; font-size:14px; color:var(--ink-2)}
+.list-block ul li{margin-bottom:5px}
+.next-step{background:var(--accent-soft); border-radius:10px; padding:12px 14px; font-size:14px; color:var(--ink)}
+
+/* ---- Verlauf ---- */
+#history-section{margin-top:30px}
+table.hist{width:100%; border-collapse:collapse; font-size:13px}
+table.hist th{text-align:left; color:var(--ink-3); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.06em; padding:0 8px 8px 0; border-bottom:1px solid var(--line)}
+table.hist td{padding:8px 8px 8px 0; border-bottom:1px solid var(--line); vertical-align:top}
+.hist-actions{display:flex; flex-wrap:wrap; gap:6px}
+.hist-actions button{padding:5px 10px; font-size:12px; font-weight:600}
+table.hist tr:last-child td{border-bottom:none}
+.pill{display:inline-block; padding:2px 8px; border-radius:99px; font-size:11px; font-weight:600}
+.pill.ok{background:var(--ok-soft); color:var(--ok)}
+.pill.warn{background:var(--warn-soft); color:var(--warn)}
+.empty-hint{color:var(--ink-3); font-size:13px}
+
+footer{margin-top:40px; padding-top:18px; border-top:1px solid var(--line); font-size:12px; color:var(--ink-3)}
+
+/* ---- Dashboard ---- */
+.dash-tiles{display:grid; grid-template-columns:repeat(auto-fit, minmax(130px,1fr)); gap:10px; margin-bottom:8px}
+.dash-tile{background:var(--surface-2); border-radius:10px; padding:12px 14px}
+.dash-tile .v{font-size:22px; font-weight:700; color:var(--accent-ink); font-variant-numeric:tabular-nums}
+.dash-tile .l{font-size:11px; color:var(--ink-3); text-transform:uppercase; letter-spacing:.06em; margin-top:2px}
+
+/* ---- Druckansicht (PDF-Export via window.print) ---- */
+/* ---- Auswertung-Modal (Bildschirm-Ansicht eines Verlaufs-Eintrags) ---- */
+.modal-overlay{position:fixed; inset:0; background:rgba(10,12,20,.5); z-index:70; display:none; align-items:flex-start; justify-content:center; padding:40px 16px; overflow-y:auto}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--surface); border-radius:12px; max-width:600px; width:100%; padding:24px; position:relative; box-shadow:var(--shadow)}
+.modal-close{position:absolute; top:14px; right:14px; width:32px; height:32px; border-radius:50%; background:var(--surface-2); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--ink); font-size:16px}
+.pv-content h1{font-size:19px; margin:0 0 4px}
+.pv-content h2{font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-3); margin:16px 0 6px; border-bottom:1px solid var(--line); padding-bottom:3px}
+.pv-content .pv-meta{font-size:12px; color:var(--ink-3); margin-bottom:10px}
+.pv-content .pv-row{margin:0 0 8px; font-size:13px; color:var(--ink)}
+.pv-content .pv-row b{display:block; font-size:13px}
+.pv-content ul{margin:0 0 10px; padding-left:18px; font-size:13px; color:var(--ink-2)}
+.pv-content .pv-transcript{white-space:pre-wrap; font-size:12.5px; margin-top:4px; color:var(--ink-2)}
+
+#print-view{display:none}
+@media print{
+  body > *:not(#print-view){display:none !important}
+  #print-view{display:block !important; padding:0; color:#000}
+  #print-view h1{font-size:19px; margin:0 0 4px}
+  #print-view h2{font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:#555; margin:16px 0 6px; border-bottom:1px solid #ccc; padding-bottom:3px}
+  #print-view .pv-meta{font-size:12px; color:#555; margin-bottom:10px}
+  #print-view .pv-row{margin:0 0 8px; font-size:12.5px}
+  #print-view .pv-row b{display:block; font-size:12.5px}
+  #print-view ul{margin:0 0 10px; padding-left:18px; font-size:12.5px}
+  #print-view .pv-transcript{white-space:pre-wrap; font-size:11.5px; margin-top:4px}
+}
+
+@media (max-width:480px){
+  .wrap{padding:72px 14px 70px}
+  .bubble{max-width:90%}
+  .side-menu{width:82vw; max-width:280px}
+}
+
+/* ---- Sprachumschalter (Seitenmenue) ---- */
+.lang-switch{display:flex; gap:4px; margin:0 20px 14px}
+.lang-switch button{
+  flex:1; padding:7px 0; font-size:12.5px; font-weight:650; border-radius:7px;
+  background:var(--surface-2); color:var(--ink-2); border:none; cursor:pointer; font-family:inherit;
+}
+.lang-switch button.active{background:var(--accent); color:#fff}
+.side-menu-sep{height:1px; background:var(--line); margin:6px 20px 10px}
+
+/* ---- Konfiguration ---- */
+.config-stage-card, .config-persona-card{border:1px solid var(--line); border-radius:10px; padding:14px; margin-bottom:14px}
+.config-stage-card h3{font-size:13.5px; margin:0 0 10px; color:var(--ink)}
+.config-field{margin-bottom:10px}
+.config-field label{display:block; font-size:12px; font-weight:600; color:var(--ink-2); margin-bottom:4px}
+.config-field textarea, .config-field input[type=text]{
+  width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:8px; font-size:13.5px;
+  background:var(--surface); color:var(--ink); font-family:inherit; resize:vertical;
+}
+.config-field textarea{min-height:58px}
+</style>
+</head>
+<body>
+<button class="menu-toggle" id="menu-toggle-btn" type="button" data-i18n-aria-label="menu_toggle_aria" aria-label="Menü öffnen" aria-expanded="false">
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg>
+</button>
+<div class="menu-backdrop" id="menu-backdrop"></div>
+<nav class="side-menu" id="side-menu" aria-label="Hauptmenü">
+  <div class="lang-switch">
+    <button type="button" data-lang="de">DE</button>
+    <button type="button" data-lang="en">EN</button>
+  </div>
+  <button class="side-menu-item" data-panel="leitfaden" type="button" data-i18n="menu_leitfaden">Leitfaden</button>
+  <button class="side-menu-item" data-panel="stufen-erklaert" type="button" data-i18n="menu_stufen">Stufen erklärt</button>
+  <button class="side-menu-item" data-panel="zugang" type="button" data-i18n="menu_zugang">Zugang</button>
+  <button class="side-menu-item" data-panel="konfiguration" type="button" data-i18n="menu_konfiguration">Konfiguration</button>
+  <div class="side-menu-sep"></div>
+  <button class="side-menu-item active" data-panel="neues-gespraech" type="button" data-i18n="menu_neues_gespraech">Neues Gespräch</button>
+  <button class="side-menu-item" data-panel="verlauf" type="button" data-i18n="menu_verlauf">Trainingsverlauf</button>
+  <button class="side-menu-item" data-panel="dashboard" type="button" data-i18n="menu_dashboard">Dashboard</button>
+</nav>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow" data-i18n="eyebrow">DocWorm · Vertrieb · Übungstool</p>
+  <h1 data-i18n="h1">Awareness-Training</h1>
+  <p class="thesis" data-i18n-html="thesis_html">Du übst ein Verkaufsgespräch gegen einen simulierten Interessenten auf einer von
+    <b>5 Bewusstseinsstufen</b> (Eugene Schwartz). Die Stufe wird dir vorher nicht verraten.
+    Deine Aufgabe: durch Fragen herausfinden, wo dein Gegenüber steht, statt zu pitchen.</p>
+</header>
+
+<div class="panel" id="panel-leitfaden" data-panel="leitfaden">
+<section class="card">
+  <h2 data-i18n="rules_h2">Leitfaden: die 30/70-Regel</h2>
+  <div class="rules-body">
+    <p data-i18n-html="rules_p">Max. 30&nbsp;% Redeanteil, mindestens 70&nbsp;% Zuhören und gezielte Fragen. Produktpräsentation
+      höchstens 10&nbsp;% des Gesprächs, und nur, wenn vorher alle Einwände geklärt sind und klar ist,
+      wo der Interessent steht.</p>
+    <div class="bar"><div class="fill"><i></i></div><span data-i18n="rules_bar_label">Verkäufer max. 30 %</span></div>
+    <blockquote data-i18n="rules_quote">„Keine Sau will dein Produkt, sie wollen eine Lösung für ihr Problem.“</blockquote>
+  </div>
+</section>
+</div>
+
+<div class="panel" id="panel-stufen-erklaert" data-panel="stufen-erklaert"></div>
+
+<div class="panel" id="panel-zugang" data-panel="zugang">
+<section class="card" id="setup-section">
+  <h2 data-i18n="zugang_h2">Zugang</h2>
+  <div class="field">
+    <label for="api-key" data-i18n="api_key_label">OpenRouter API-Key</label>
+    <input type="password" id="api-key" placeholder="sk-or-v1-…" autocomplete="off">
+    <p class="hint" data-i18n="api_key_hint">Bleibt nur lokal in diesem Browser (localStorage) und geht direkt an OpenRouter, sonst nirgendwohin.</p>
+  </div>
+  <div class="row-inline">
+    <div class="field">
+      <label for="model-id" data-i18n="model_label">Modell (LLM, Gesprächspartner + Auswertung)</label>
+      <input type="text" id="model-id" value="google/gemini-2.5-flash-lite" placeholder="z. B. google/gemini-2.5-flash-lite">
+    </div>
+    <div class="field">
+      <label for="tts-model-id" data-i18n="tts_model_label">Modell (TTS, Sprachausgabe)</label>
+      <input type="text" id="tts-model-id" value="x-ai/grok-voice-tts-1.0" placeholder="z. B. x-ai/grok-voice-tts-1.0">
+    </div>
+    <div class="field">
+      <label for="trans-model-id" data-i18n="trans_model_label">Modell (Transkription, Spracherkennung)</label>
+      <input type="text" id="trans-model-id" value="google/gemini-3.1-flash-lite-preview" placeholder="z. B. google/gemini-3.1-flash-lite-preview">
+    </div>
+  </div>
+  <div class="field">
+    <label for="audio-source" data-i18n="audio_source_label">Audioquelle (Sprachausgabe)</label>
+    <select id="audio-source">
+      <option value="gpt" data-i18n="audio_source_opt_gpt">KI Stimme (obiges TTS-Modell, kostenpflichtig über OpenRouter)</option>
+      <option value="browser" data-i18n="audio_source_opt_browser">Gerät (kostenlose Sprachausgabe des Browsers/Betriebssystems)</option>
+    </select>
+  </div>
+  <div class="field" id="device-voice-row" style="display:none">
+    <label data-i18n="device_voice_label">Geräte-Stimmen zuordnen</label>
+    <div class="row-inline" style="gap:10px">
+      <div class="field" style="flex:1; min-width:160px; margin-bottom:0">
+        <label for="device-voice-male" style="font-weight:400; font-size:11.5px" data-i18n="device_voice_male_label">Männliche Rollen (Rex/Sal/Leo)</label>
+        <div style="display:flex; gap:6px">
+          <select id="device-voice-male" style="flex:1"><option value="" data-i18n="device_voice_auto">Automatisch/Standard</option></select>
+          <button class="ghost" id="test-device-voice-male-btn" type="button" style="padding:6px 10px; font-size:12px" data-i18n-title="test_voice_title" title="Stimme anhören">▶</button>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px; margin-top:6px">
+          <label for="device-pitch-male" style="font-size:11px; color:var(--ink-3); min-width:56px" data-i18n="pitch_label">Tonhöhe</label>
+          <input type="range" id="device-pitch-male" min="0" max="2" step="0.05" value="0.85" style="flex:1">
+          <span id="device-pitch-male-val" style="font-size:11px; color:var(--ink-3); min-width:32px; text-align:right">0.85</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px; margin-top:4px">
+          <label for="device-rate-male" style="font-size:11px; color:var(--ink-3); min-width:56px" data-i18n="rate_label">Tempo</label>
+          <input type="range" id="device-rate-male" min="0.5" max="2" step="0.05" value="1" style="flex:1">
+          <span id="device-rate-male-val" style="font-size:11px; color:var(--ink-3); min-width:32px; text-align:right">1</span>
+        </div>
+      </div>
+      <div class="field" style="flex:1; min-width:160px; margin-bottom:0">
+        <label for="device-voice-female" style="font-weight:400; font-size:11.5px" data-i18n="device_voice_female_label">Weibliche Rollen (Eve/Ara)</label>
+        <div style="display:flex; gap:6px">
+          <select id="device-voice-female" style="flex:1"><option value="" data-i18n="device_voice_auto">Automatisch/Standard</option></select>
+          <button class="ghost" id="test-device-voice-female-btn" type="button" style="padding:6px 10px; font-size:12px" data-i18n-title="test_voice_title" title="Stimme anhören">▶</button>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px; margin-top:6px">
+          <label for="device-pitch-female" style="font-size:11px; color:var(--ink-3); min-width:56px" data-i18n="pitch_label">Tonhöhe</label>
+          <input type="range" id="device-pitch-female" min="0" max="2" step="0.05" value="1.3" style="flex:1">
+          <span id="device-pitch-female-val" style="font-size:11px; color:var(--ink-3); min-width:32px; text-align:right">1.3</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px; margin-top:4px">
+          <label for="device-rate-female" style="font-size:11px; color:var(--ink-3); min-width:56px" data-i18n="rate_label">Tempo</label>
+          <input type="range" id="device-rate-female" min="0.5" max="2" step="0.05" value="1" style="flex:1">
+          <span id="device-rate-female-val" style="font-size:11px; color:var(--ink-3); min-width:32px; text-align:right">1</span>
+        </div>
+      </div>
+    </div>
+    <p class="hint"><span data-i18n="device_voice_hint">Die Geräte-Sprachausgabe liefert kein Geschlecht pro Stimme mit, teils auch keinen unterscheidbaren Namen (mehrere Einträge heißen dann alle „Deutsch #1/#2/…“) – per ▶ vorher anhören und passend zuordnen. Wo alle Stimmen gleich klingen (manche Android-Browser zeigen nur eine einzige), per Regler Tonhöhe und Tempo einstellen.</span> <button class="ghost" id="refresh-device-voices-btn" type="button" style="padding:3px 9px; font-size:11.5px" data-i18n="refresh_voices_btn">Stimmen neu laden</button></p>
+  </div>
+  <p class="hint" data-i18n="setup_hint">Voreingestellt sind dieselben Modelle, die DocWorm standardmäßig verwendet (Sprinter-Textmodell, Grok-TTS, Gemini-Transkription). Wie in der App selbst lässt sich die Sprachausgabe auf die Geräteausgabe umstellen statt der KI-Stimme.</p>
+  <div class="btn-row">
+    <button class="ghost" id="save-setup-btn" type="button" data-i18n="save_setup_btn">Speichern</button>
+  </div>
+  <p class="hint" id="setup-status"></p>
+</section>
+</div>
+
+<div class="panel" id="panel-konfiguration" data-panel="konfiguration"></div>
+
+<div class="panel active" id="panel-neues-gespraech" data-panel="neues-gespraech">
+<section class="card" id="start-section">
+  <h2 data-i18n="start_h2">Neues Gespräch</h2>
+  <p class="thesis" style="max-width:none" data-i18n="start_thesis">Ein Klick, die Stufe wird zufällig gewählt und bleibt verdeckt, bis
+    du auswertest.</p>
+  <div class="toggle-row">
+    <input type="checkbox" id="trainer-toggle">
+    <label for="trainer-toggle" data-i18n="trainer_toggle_label">Stufe stattdessen selbst wählen, um gezielt eine bestimmte zu üben</label>
+  </div>
+  <div class="toggle-row" id="stage-pick-row" style="display:none">
+    <label for="stage-pick" style="margin:0" data-i18n="stage_pick_label">Stufe:</label>
+    <select class="stage-pick" id="stage-pick"></select>
+  </div>
+  <div class="toggle-row" id="persona-pick-row" style="display:none">
+    <label for="persona-pick" style="margin:0" data-i18n="persona_pick_label">Variante:</label>
+    <select class="stage-pick" id="persona-pick"></select>
+  </div>
+  <div class="toggle-row">
+    <input type="checkbox" id="voice-mode-toggle" checked>
+    <label for="voice-mode-toggle" data-i18n="voice_mode_label">Sprachmodus (Mikrofon-Eingabe, gesprochene Antwort), sonst Tastatur</label>
+  </div>
+  <div class="btn-row">
+    <button class="primary" id="start-btn" type="button" data-i18n="start_btn">Gespräch starten</button>
+  </div>
+  <div class="error-banner" id="start-error" style="display:none"></div>
+</section>
+
+<section class="card" id="chat-section">
+  <h2 data-i18n="chat_h2">Gespräch</h2>
+  <div class="avatar-row">
+    <div class="avatar-pip idle" id="avatar-pip">
+      <video id="avatar-video" muted loop playsinline></video>
+      <div class="avatar-ring" id="avatar-ring"></div>
+    </div>
+    <div class="chat-meta" style="flex:1">
+      <span class="stat"><span data-i18n="stat_time_label">Zeit:</span> <b id="stat-time">0:00</b></span>
+      <span class="stat"><span data-i18n="stat_pct_label">Redeanteil du:</span> <b id="stat-pct">–</b></span>
+      <span class="stat"><span data-i18n="stat_words_label">Wörter du / Gegenüber:</span> <b id="stat-words">0 / 0</b></span>
+    </div>
+  </div>
+  <div class="redeanteil-bar"><i id="pct-fill"></i></div>
+  <div id="log"></div>
+  <div class="mode-switch-row">
+    <button type="button" id="mode-switch-btn" data-i18n="mode_switch_to_keyboard">Tastatur verwenden</button>
+  </div>
+  <div class="composer" id="composer-row" style="display:none">
+    <textarea id="composer-input" data-i18n-placeholder="composer_placeholder" placeholder="Deine nächste Frage oder Antwort …" rows="2"></textarea>
+    <button class="primary" id="send-btn" type="button" data-i18n="send_btn">Senden</button>
+  </div>
+  <div class="voicebar" id="voicebar">
+    <button class="mic-btn" id="mic-btn" type="button" data-i18n-aria-label="mic_aria" aria-label="Mikrofon"></button>
+    <div class="voice-status" id="voice-status" data-i18n="voice_status_idle">Zum Sprechen tippen</div>
+    <button class="voice-stop-btn" id="voice-stop-btn" type="button" data-i18n-aria-label="stop_aria" aria-label="Stopp" disabled></button>
+  </div>
+  <div class="error-banner" id="chat-error" style="display:none"></div>
+  <div class="toggle-row" style="margin-top:14px; margin-bottom:0">
+    <input type="checkbox" id="evaluate-toggle" checked>
+    <label for="evaluate-toggle" data-i18n="evaluate_toggle_label">Auswerten</label>
+  </div>
+  <div class="end-row">
+    <button class="ghost" id="cancel-btn" type="button" data-i18n="cancel_btn">Verwerfen</button>
+    <button class="ghost" id="end-btn" type="button" data-i18n="end_btn_evaluate">Gespräch beenden &amp; auswerten</button>
+  </div>
+</section>
+
+<section class="card" id="result-section">
+  <h2 data-i18n="result_h2">Auswertung</h2>
+  <div class="reveal">
+    <div class="num" id="reveal-num">1</div>
+    <div>
+      <div class="name" id="reveal-name">–</div>
+      <div class="state" id="reveal-state">–</div>
+    </div>
+  </div>
+  <div class="verdicts" id="verdict-list"></div>
+  <div class="list-block">
+    <h3 data-i18n="staerken_h3">Stärken</h3>
+    <ul id="list-staerken"></ul>
+  </div>
+  <div class="list-block">
+    <h3 data-i18n="verbesserungen_h3">Verbesserungen</h3>
+    <ul id="list-verbesserungen"></ul>
+  </div>
+  <div class="next-step" id="next-step"></div>
+  <div class="btn-row">
+    <button class="ghost" id="continue-btn" type="button" data-i18n="continue_btn">Gespräch fortsetzen</button>
+    <button class="ghost" id="pdf-btn" type="button" data-i18n="pdf_btn">Als PDF speichern</button>
+    <button class="primary" id="again-btn" type="button" data-i18n="again_btn">Neues Gespräch</button>
+  </div>
+</section>
+</div>
+
+<div class="panel" id="panel-verlauf" data-panel="verlauf">
+<section id="history-section">
+  <h2 style="padding:0 2px" data-i18n="drafts_h2">Pausierte Gespräche</h2>
+  <div class="card" style="margin-bottom:26px">
+    <p class="hint" style="margin:0 0 12px" data-i18n="drafts_hint">Ohne Auswertung beendete Gespräche, zum späteren Fortsetzen. Die Stufe bleibt
+      absichtlich verdeckt, bis du auswertest.</p>
+    <div id="drafts-body"><p class="empty-hint" data-i18n="drafts_empty">Keine pausierten Gespräche.</p></div>
+  </div>
+  <h2 style="padding:0 2px" data-i18n="verlauf_h2">Trainingsverlauf</h2>
+  <div class="card">
+    <div class="btn-row" id="hist-select-toolbar" style="display:none; margin-top:0; margin-bottom:14px">
+      <button class="ghost" id="hist-toolbar-continue" type="button" disabled data-i18n="hist_toolbar_continue">Fortsetzen</button>
+      <button class="ghost" id="hist-toolbar-view" type="button" disabled data-i18n="hist_toolbar_view">Auswertung</button>
+      <button class="ghost" id="hist-toolbar-pdf" type="button" disabled>PDF</button>
+      <button class="ghost" id="hist-toolbar-delete" type="button" disabled data-i18n="hist_toolbar_delete">Löschen</button>
+    </div>
+    <div id="history-body"><p class="empty-hint">Noch keine ausgewerteten Gespräche.</p></div>
+    <div class="btn-row" id="history-clear-row" style="display:none">
+      <button class="ghost" id="download-csv-btn" type="button" data-i18n="csv_btn">Als CSV herunterladen</button>
+      <button class="ghost" id="download-json-btn" type="button" data-i18n="json_btn">Als JSON herunterladen</button>
+      <button class="ghost" id="clear-history-btn" type="button" data-i18n="clear_history_btn">Verlauf löschen</button>
+    </div>
+    <div class="btn-row">
+      <input type="file" id="upload-json-input" accept="application/json" style="display:none">
+      <button class="ghost" id="upload-json-btn" type="button" data-i18n="upload_json_btn">Verlauf hochladen (JSON)</button>
+    </div>
+  </div>
+</section>
+</div>
+</div>
+
+<div class="panel" id="panel-dashboard" data-panel="dashboard">
+<section class="card" id="dashboard-section">
+  <h2 data-i18n="dash_h2">Überblick</h2>
+  <div class="dash-tiles" id="dash-tiles"></div>
+  <div class="next-step" id="dash-recommendation" style="display:none"></div>
+  <h2 style="margin-top:22px" data-i18n="dash_stage_h2">Pro Bewusstseinsstufe</h2>
+  <div id="dash-stage-table"></div>
+</section>
+</div>
+</div>
+
+<div id="print-view"></div>
+
+<div class="modal-overlay" id="eval-modal">
+  <div class="modal-box">
+    <button class="modal-close" id="eval-modal-close" type="button" aria-label="Schließen">✕</button>
+    <div class="pv-content" id="eval-modal-content"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---- Seitenmenue: aufklappbares Menue links, zeigt rechts nur den aktiven Bereich ---- */
+var menuToggleBtn = document.getElementById('menu-toggle-btn');
+var sideMenuEl = document.getElementById('side-menu');
+var menuBackdrop = document.getElementById('menu-backdrop');
+function openMenu(){ sideMenuEl.classList.add('open'); menuBackdrop.classList.add('open'); menuToggleBtn.setAttribute('aria-expanded', 'true'); }
+function closeMenu(){ sideMenuEl.classList.remove('open'); menuBackdrop.classList.remove('open'); menuToggleBtn.setAttribute('aria-expanded', 'false'); }
+menuToggleBtn.addEventListener('click', function(){ sideMenuEl.classList.contains('open') ? closeMenu() : openMenu(); });
+menuBackdrop.addEventListener('click', closeMenu);
+var LS_KEY_PANEL = 'docworm_st_panel';
+function applyActivePanel(name){
+  Array.prototype.forEach.call(document.querySelectorAll('.panel'), function(p){ p.classList.toggle('active', p.dataset.panel === name); });
+  Array.prototype.forEach.call(document.querySelectorAll('.side-menu-item'), function(b){ b.classList.toggle('active', b.dataset.panel === name); });
+}
+function showPanel(name){
+  applyActivePanel(name);
+  saveLocal(LS_KEY_PANEL, name);
+  closeMenu();
+  window.scrollTo(0, 0);
+}
+Array.prototype.forEach.call(document.querySelectorAll('.side-menu-item'), function(b){
+  b.addEventListener('click', function(){ showPanel(b.dataset.panel); });
+});
+// Zuletzt aktives Panel merken (localStorage), damit man beim Neuladen nicht immer
+// wieder bei "Neues Gespraech" landet. loadLocal/saveLocal sind weiter unten als
+// function-Deklarationen definiert und daher schon jetzt per Hoisting aufrufbar.
+var storedPanelName = loadLocal(LS_KEY_PANEL, 'neues-gespraech');
+if (document.querySelector('.panel[data-panel="' + storedPanelName + '"]')) applyActivePanel(storedPanelName);
+
+/* -------------------------------------------------------------------------------- *
+ * Sprache (DE/EN): steuert sowohl die statische UI (i18n-Wörterbuch weiter unten) als
+ * auch, welche Sprachvariante der Stufen/Personas/Produkt-Briefings (siehe STAGES_BY_LANG
+ * etc.) fuer neue Gespraeche, die Konfiguration und die Prompts verwendet wird. Bereits
+ * gefuehrte Gespraeche (Verlauf/Entwuerfe) merken sich ihre eigene Sprache (session.lang),
+ * damit ein spaeterer Sprachwechsel laufende/gespeicherte Inhalte nicht verfaelscht.
+ * -------------------------------------------------------------------------------- */
+var LS_KEY_LANG = 'docworm_st_lang';
+var currentLang = loadLocal(LS_KEY_LANG, 'de');
+if (currentLang !== 'de' && currentLang !== 'en') currentLang = 'de';
+
+var I18N = {
+  de: {
+    menu_leitfaden: 'Leitfaden', menu_stufen: 'Stufen erklärt', menu_zugang: 'Zugang',
+    menu_konfiguration: 'Konfiguration', menu_neues_gespraech: 'Neues Gespräch',
+    menu_verlauf: 'Trainingsverlauf', menu_dashboard: 'Dashboard',
+    menu_toggle_aria: 'Menü öffnen',
+    eyebrow: 'DocWorm · Vertrieb · Übungstool',
+    h1: 'Awareness-Training',
+    thesis_html: 'Du übst ein Verkaufsgespräch gegen einen simulierten Interessenten auf einer von ' +
+      '<b>5 Bewusstseinsstufen</b> (Eugene Schwartz). Die Stufe wird dir vorher nicht verraten. ' +
+      'Deine Aufgabe: durch Fragen herausfinden, wo dein Gegenüber steht, statt zu pitchen.',
+
+    rules_h2: 'Leitfaden: die 30/70-Regel',
+    rules_p: 'Max. 30&nbsp;% Redeanteil, mindestens 70&nbsp;% Zuhören und gezielte Fragen. Produktpräsentation ' +
+      'höchstens 10&nbsp;% des Gesprächs, und nur, wenn vorher alle Einwände geklärt sind und klar ist, ' +
+      'wo der Interessent steht.',
+    rules_bar_label: 'Verkäufer max. 30 %',
+    rules_quote: '„Keine Sau will dein Produkt, sie wollen eine Lösung für ihr Problem.“',
+
+    stufen_h2: 'Die 5 Bewusstseinsstufen',
+    stufen_intro: 'Das Modell, auf dem dieses Training aufbaut: jeder Interessent befindet sich gegenüber ' +
+      'seinem Problem und dessen Lösung auf einer von fünf Stufen. Zu früh pitchen (z. B. Produktdetails bei ' +
+      'einem noch unbewussten Interessenten) verpufft; zu spät (bei einem bereits kaufbereiten Interessenten ' +
+      'noch grundsätzliche Aufklärung) wirkt bevormundend und kostet Vertrauen. Die Kunst ist, die aktuelle ' +
+      'Stufe zu erkennen und genau den nächsten Schritt zu gehen.',
+    stufen_source: 'Quelle: Eugene Schwartz, <i>Breakthrough Advertising</i> (1966), Konzept der „Stages of Market Awareness“. ' +
+      'In der Marketing-/Vertriebspraxis seither breit adaptiert (u. a. durch Eugene Schwartz\' Nachfolger wie Ryan Deiss, Justin Goff u. a.).',
+    stufen_practice_label: 'In diesem Training als Rollenspiel-Szenario:',
+
+    zugang_h2: 'Zugang',
+    api_key_label: 'OpenRouter API-Key',
+    api_key_hint: 'Bleibt nur lokal in diesem Browser (localStorage) und geht direkt an OpenRouter, sonst nirgendwohin.',
+    model_label: 'Modell (LLM, Gesprächspartner + Auswertung)',
+    tts_model_label: 'Modell (TTS, Sprachausgabe)',
+    trans_model_label: 'Modell (Transkription, Spracherkennung)',
+    audio_source_label: 'Audioquelle (Sprachausgabe)',
+    audio_source_opt_gpt: 'KI Stimme (obiges TTS-Modell, kostenpflichtig über OpenRouter)',
+    audio_source_opt_browser: 'Gerät (kostenlose Sprachausgabe des Browsers/Betriebssystems)',
+    device_voice_label: 'Geräte-Stimmen zuordnen',
+    device_voice_male_label: 'Männliche Rollen (Rex/Sal/Leo)',
+    device_voice_female_label: 'Weibliche Rollen (Eve/Ara)',
+    device_voice_auto: 'Automatisch/Standard',
+    pitch_label: 'Tonhöhe',
+    rate_label: 'Tempo',
+    device_voice_hint: 'Die Geräte-Sprachausgabe liefert kein Geschlecht pro Stimme mit, teils auch keinen unterscheidbaren Namen ' +
+      '(mehrere Einträge heißen dann alle „Deutsch #1/#2/…“) – per ▶ vorher anhören und passend zuordnen. Wo alle Stimmen ' +
+      'gleich klingen (manche Android-Browser zeigen nur eine einzige), per Regler Tonhöhe und Tempo einstellen.',
+    refresh_voices_btn: 'Stimmen neu laden',
+    setup_hint: 'Voreingestellt sind dieselben Modelle, die DocWorm standardmäßig verwendet (Sprinter-Textmodell, Grok-TTS, ' +
+      'Gemini-Transkription). Wie in der App selbst lässt sich die Sprachausgabe auf die Geräteausgabe umstellen statt der KI-Stimme.',
+    save_setup_btn: 'Speichern',
+    setup_status_saved: 'Key gespeichert.',
+    setup_status_missing: 'Ohne Key kein Gespräch möglich.',
+    test_voice_title: 'Stimme anhören',
+    test_voice_text: 'Hallo, das ist eine Testansage von DocWorm.',
+
+    config_h2: 'Konfiguration',
+    config_intro: 'Hier lassen sich die Rollenspiel-Stufen, Verhaltens-Varianten und das Produkt-Briefing anpassen, ' +
+      'das in den Rollenspiel-Prompt für das simulierte Gegenüber einfließt. Änderungen gelten sofort für neue ' +
+      'Gespräche und nur für die aktuell gewählte Sprache (' + 'DE/EN getrennt).',
+    config_lang_note: 'Aktuell bearbeitete Sprache:',
+    config_stages_h3: 'Bewusstseinsstufen (Rollenspiel-Inhalt)',
+    config_field_name: 'Name',
+    config_field_label: 'Kurzbezeichnung',
+    config_field_voice: 'Stimme',
+    config_field_zustand: 'Zustand des Interessenten',
+    config_field_rolle: 'Rolle (wer spielt das simulierte Gegenüber)',
+    config_field_verhalten: 'Verhalten im Gespräch',
+    config_field_aufgabe: 'Aufgabe des Verkäufers auf dieser Stufe',
+    config_field_einstieg: 'Einstiegssatz (Beispiel, wird bei jedem Gespräch frei variiert)',
+    config_reset_stage_btn: 'Diese Stufe zurücksetzen',
+    config_personas_h3: 'Verhaltens-Varianten',
+    config_field_persona_label: 'Bezeichnung',
+    config_field_persona_hinweis: 'Zusätzliche Verhaltens-Anweisung für das Rollenspiel',
+    config_reset_persona_btn: 'Zurücksetzen',
+    config_brief_h3: 'Produkt-Briefing',
+    config_field_brief: 'Fließt als Hintergrundwissen in den Rollenspiel-Prompt ein (der Interessent erwähnt es nicht ungefragt)',
+    config_reset_brief_btn: 'Zurücksetzen',
+    config_save_btn: 'Speichern',
+    config_reset_all_btn: 'Alles zurücksetzen (' + '' + ')',
+    config_saved_status: 'Gespeichert.',
+    confirm_reset_all: 'Wirklich alle Anpassungen für diese Sprache zurücksetzen?',
+
+    start_h2: 'Neues Gespräch',
+    start_thesis: 'Ein Klick, die Stufe wird zufällig gewählt und bleibt verdeckt, bis du auswertest.',
+    trainer_toggle_label: 'Stufe stattdessen selbst wählen, um gezielt eine bestimmte zu üben',
+    stage_pick_label: 'Stufe:',
+    persona_pick_label: 'Variante:',
+    voice_mode_label: 'Sprachmodus (Mikrofon-Eingabe, gesprochene Antwort), sonst Tastatur',
+    start_btn: 'Gespräch starten',
+    err_no_key: 'Erst OpenRouter-Key eintragen und speichern.',
+
+    chat_h2: 'Gespräch',
+    stat_time_label: 'Zeit:',
+    stat_pct_label: 'Redeanteil du:',
+    stat_words_label: 'Wörter du / Gegenüber:',
+    mode_switch_to_keyboard: 'Tastatur verwenden',
+    mode_switch_to_voice: 'Sprachmodus verwenden',
+    composer_placeholder: 'Deine nächste Frage oder Antwort …',
+    send_btn: 'Senden',
+    voice_status_idle: 'Zum Sprechen tippen',
+    voice_status_recording: 'Hört zu, kurze Pause beendet die Aufnahme automatisch',
+    voice_status_loading: 'Verstehe …',
+    voice_status_speaking: 'Interessent spricht …',
+    evaluate_toggle_label: 'Auswerten',
+    cancel_btn: 'Verwerfen',
+    end_btn_evaluate: 'Gespräch beenden & auswerten',
+    end_btn_pause: 'Pausieren',
+    mic_aria: 'Mikrofon',
+    stop_aria: 'Stopp',
+    err_start_failed: 'Gespräch konnte nicht gestartet werden: ',
+    err_reply_failed: 'Antwort fehlgeschlagen: ',
+    err_transcribe_failed: 'Transkription fehlgeschlagen: ',
+    err_mic_unsupported: 'Mikrofon wird von diesem Browser nicht unterstützt.',
+    err_mic_failed: 'Mikrofonzugriff fehlgeschlagen: ',
+    err_api_generic: 'API-Fehler',
+    err_empty_response: 'Leere Antwort vom Modell.',
+    err_json_parse: 'Antwort ließ sich nicht als JSON lesen.',
+    err_audio_read_failed: 'Audio konnte nicht gelesen werden.',
+    confirm_discard: 'Gespräch wirklich verwerfen? Es wird nicht ausgewertet oder gespeichert.',
+    err_need_messages: 'Erst ein paar Nachrichten wechseln, bevor du auswertest.',
+    err_eval_failed: 'Auswertung fehlgeschlagen: ',
+    bubble_label_seller: 'Du', bubble_label_customer: 'Interessent',
+
+    result_h2: 'Auswertung',
+    staerken_h3: 'Stärken',
+    verbesserungen_h3: 'Verbesserungen',
+    continue_btn: 'Gespräch fortsetzen',
+    pdf_btn: 'Als PDF speichern',
+    again_btn: 'Neues Gespräch',
+    vc_redeanteil_title: 'Redeanteil: {pct} % ({state})',
+    vc_redeanteil_ok: 'im Rahmen', vc_redeanteil_bad: 'zu hoch',
+    vc_fuellwoerter_title: 'Füllwörter: {n} ({per100} pro 100 Wörter)',
+    vc_tempo_title: 'Tempo: {wpm} Wörter/Min ({label})',
+    vc_tempo_schnell: 'zu schnell', vc_tempo_langsam: 'zu langsam', vc_tempo_passend: 'passend',
+    vc_problem_ok: 'Problem/Glaubenssätze erkannt', vc_problem_bad: 'Problem/Glaubenssätze nicht klar herausgearbeitet',
+    vc_discovery_title: 'Discovery-Tiefe: {label}',
+    vc_discovery_flach: 'oberflächlich', vc_discovery_mittel: 'mittel', vc_discovery_tief: 'tief',
+    vc_einwand_gut: 'Einwände gut behandelt', vc_einwand_keine: 'Keine Einwände im Gespräch', vc_einwand_schwach: 'Einwände schwach behandelt',
+    vc_stufe_ok: 'Interessent eine Stufe weitergebracht', vc_stufe_bad: 'Interessent nicht spürbar weitergebracht',
+    vc_produkt_passend: 'Produkt zum richtigen Zeitpunkt', vc_produkt_frueh: 'Produkt zu früh angesprochen', vc_produkt_nie: 'Produkt gar nicht erwähnt',
+
+    drafts_h2: 'Pausierte Gespräche',
+    drafts_hint: 'Ohne Auswertung beendete Gespräche, zum späteren Fortsetzen. Die Stufe bleibt absichtlich verdeckt, bis du auswertest.',
+    drafts_empty: 'Keine pausierten Gespräche.',
+    verlauf_h2: 'Trainingsverlauf',
+    hist_toolbar_continue: 'Fortsetzen', hist_toolbar_view: 'Auswertung', hist_toolbar_pdf: 'PDF', hist_toolbar_delete: 'Löschen',
+    hist_empty: 'Noch keine ausgewerteten Gespräche.',
+    th_wann: 'Wann', th_stufe: 'Stufe', th_redeanteil: 'Redeanteil', th_ergebnis: 'Ergebnis',
+    th_letzte_nachricht: 'Letzte Nachricht', th_aktionen: 'Aktionen',
+    hist_result_ok: 'weitergebracht', hist_result_bad: 'nicht weitergebracht',
+    csv_btn: 'Als CSV herunterladen', json_btn: 'Als JSON herunterladen',
+    clear_history_btn: 'Verlauf löschen', upload_json_btn: 'Verlauf hochladen (JSON)',
+    draft_continue_btn: 'Fortsetzen', draft_discard_btn: 'Verwerfen',
+    confirm_delete_entry: 'Diesen Eintrag wirklich löschen?',
+    confirm_clear_history: 'Trainingsverlauf wirklich löschen?',
+    alert_invalid_json: 'Datei ist kein gültiges JSON.',
+    alert_expected_list: 'Erwartet wird eine JSON-Liste, wie sie "Als JSON herunterladen" erzeugt.',
+    alert_file_read_failed: 'Datei konnte nicht gelesen werden.',
+    alert_imported: '{n} Eintrag/Einträge aus der Datei hinzugefügt.',
+
+    dash_h2: 'Überblick', dash_stage_h2: 'Pro Bewusstseinsstufe', dash_empty: 'Noch keine ausgewerteten Gespräche.',
+    dash_tile_total: 'Gespräche gesamt', dash_tile_avg_talk: 'Ø Redeanteil', dash_tile_advanced: 'Stufe weitergebracht',
+    dash_tile_fillers: 'Ø Füllwörter / 100 Wörter', dash_tile_pace: 'Ø Tempo (Wörter/Min)',
+    th_geuebt: 'Geübt', th_avg_redeanteil: 'Ø Redeanteil', th_weitergebracht: 'Weitergebracht',
+    dash_rec_label: 'Nächstes Training:', dash_focus_label: 'Fokus:', dash_rec_start_btn: 'Direkt starten',
+    metric_redeanteil: 'Redeanteil senken (mehr zuhören)', metric_fuellwoerter: 'Füllwörter reduzieren',
+    metric_tempo: 'Sprechtempo anpassen', metric_problem: 'Problem/Glaubenssätze klarer herausarbeiten',
+    metric_discovery: 'Tiefer nachfragen (Discovery)', metric_einwand: 'Einwände besser aufnehmen',
+    metric_produkt: 'Produkt später ansprechen', metric_stufe: 'Interessenten aktiver eine Stufe weiterbringen',
+
+    pv_title: 'DocWorm Vertrieb, Awareness-Training',
+    pv_h2_redeanteil: 'Redeanteil & Tempo', pv_h2_gespraechsfuehrung: 'Gesprächsführung',
+    pv_h2_naechster: 'Nächster Schritt', pv_h2_transkript: 'Transkript',
+    pv_redeanteil_row: 'Redeanteil: {pct} % ({sw} von {tw} Wörtern)',
+    pv_fuellwoerter_row: 'Füllwörter: {n} ({per100} pro 100 Wörter)',
+    pv_tempo_row: 'Tempo: {wpm} Wörter/Min',
+    pv_problem_row: 'Problem/Glaubenssätze erkannt: {v}',
+    pv_discovery_row: 'Discovery-Tiefe: {v}',
+    pv_einwand_row: 'Einwand-Qualität: {v}',
+    pv_stufe_row: 'Stufe hochgeführt: {v}',
+    pv_produkt_row: 'Produkt-Timing: {v}',
+    ja: 'ja', nein: 'nein', dash_val_empty: '–',
+
+    lang_name_de: 'DE', lang_name_en: 'EN'
+  },
+  en: {
+    menu_leitfaden: 'Guide', menu_stufen: 'Awareness Stages', menu_zugang: 'Access',
+    menu_konfiguration: 'Configuration', menu_neues_gespraech: 'New Conversation',
+    menu_verlauf: 'Training History', menu_dashboard: 'Dashboard',
+    menu_toggle_aria: 'Open menu',
+    eyebrow: 'DocWorm · Sales · Practice Tool',
+    h1: 'Awareness Training',
+    thesis_html: 'You practice a sales conversation against a simulated prospect at one of ' +
+      '<b>5 awareness stages</b> (Eugene Schwartz). The stage is not revealed to you beforehand. ' +
+      'Your task: find out through questions where your counterpart stands, instead of pitching.',
+
+    rules_h2: 'Guide: the 30/70 rule',
+    rules_p: 'Max. 30&nbsp;% talk share, at least 70&nbsp;% listening and targeted questions. Product presentation ' +
+      'at most 10&nbsp;% of the conversation, and only once all objections are resolved and it is clear ' +
+      'where the prospect stands.',
+    rules_bar_label: 'Seller max 30 %',
+    rules_quote: '"Nobody wants your product, they want a solution to their problem."',
+
+    stufen_h2: 'The 5 Stages of Awareness',
+    stufen_intro: 'The model this training is built on: every prospect is at one of five stages regarding ' +
+      'their problem and its solution. Pitching too early (e.g. product details to a still-unaware prospect) ' +
+      'falls flat; pitching too late (basic education for a prospect who is already ready to buy) feels ' +
+      'condescending and costs trust. The skill is recognizing the current stage and taking exactly the next step.',
+    stufen_source: 'Source: Eugene Schwartz, <i>Breakthrough Advertising</i> (1966), the "Stages of Market Awareness" concept. ' +
+      'Widely adapted since in marketing/sales practice (e.g. by later writers such as Ryan Deiss, Justin Goff, and others).',
+    stufen_practice_label: 'Used in this training as a roleplay scenario:',
+
+    zugang_h2: 'Access',
+    api_key_label: 'OpenRouter API key',
+    api_key_hint: 'Stays only locally in this browser (localStorage) and goes directly to OpenRouter, nowhere else.',
+    model_label: 'Model (LLM, conversation partner + evaluation)',
+    tts_model_label: 'Model (TTS, voice output)',
+    trans_model_label: 'Model (transcription, speech recognition)',
+    audio_source_label: 'Audio source (voice output)',
+    audio_source_opt_gpt: 'AI voice (TTS model above, paid via OpenRouter)',
+    audio_source_opt_browser: 'Device (free browser/OS text-to-speech)',
+    device_voice_label: 'Assign device voices',
+    device_voice_male_label: 'Male roles (Rex/Sal/Leo)',
+    device_voice_female_label: 'Female roles (Eve/Ara)',
+    device_voice_auto: 'Automatic/Default',
+    pitch_label: 'Pitch',
+    rate_label: 'Rate',
+    device_voice_hint: 'Device text-to-speech does not report a gender per voice, and sometimes not even a distinguishable ' +
+      'name (several entries may all be called "English #1/#2/…") – listen with ▶ first and assign accordingly. Where all ' +
+      'voices sound the same (some Android browsers expose only a single one), use the sliders to adjust pitch and rate.',
+    refresh_voices_btn: 'Reload voices',
+    setup_hint: 'Pre-filled with the same models DocWorm uses by default (sprinter text model, Grok TTS, Gemini transcription). ' +
+      'Just like in the app itself, voice output can be switched to the device output instead of the AI voice.',
+    save_setup_btn: 'Save',
+    setup_status_saved: 'Key saved.',
+    setup_status_missing: 'No conversation possible without a key.',
+    test_voice_title: 'Listen to voice',
+    test_voice_text: 'Hello, this is a test message from DocWorm.',
+
+    config_h2: 'Configuration',
+    config_intro: 'Here you can adjust the roleplay stages, behavior variants, and the product briefing that ' +
+      'flows into the roleplay prompt for the simulated counterpart. Changes apply immediately to new ' +
+      'conversations and only for the currently selected language (DE/EN are kept separate).',
+    config_lang_note: 'Currently editing language:',
+    config_stages_h3: 'Awareness stages (roleplay content)',
+    config_field_name: 'Name',
+    config_field_label: 'Short label',
+    config_field_voice: 'Voice',
+    config_field_zustand: "Prospect's state",
+    config_field_rolle: 'Role (who the simulated counterpart plays)',
+    config_field_verhalten: 'Behavior in the conversation',
+    config_field_aufgabe: "Salesperson's task at this stage",
+    config_field_einstieg: 'Opening line (example, freely varied every conversation)',
+    config_reset_stage_btn: 'Reset this stage',
+    config_personas_h3: 'Behavior variants',
+    config_field_persona_label: 'Label',
+    config_field_persona_hinweis: 'Additional behavior instruction for the roleplay',
+    config_reset_persona_btn: 'Reset',
+    config_brief_h3: 'Product briefing',
+    config_field_brief: 'Flows into the roleplay prompt as background knowledge (the prospect never mentions it unprompted)',
+    config_reset_brief_btn: 'Reset',
+    config_save_btn: 'Save',
+    config_reset_all_btn: 'Reset everything',
+    config_saved_status: 'Saved.',
+    confirm_reset_all: 'Really reset all customizations for this language?',
+
+    start_h2: 'New Conversation',
+    start_thesis: 'One click, the stage is chosen at random and stays hidden until you evaluate.',
+    trainer_toggle_label: 'Choose the stage yourself instead, to practice a specific one',
+    stage_pick_label: 'Stage:',
+    persona_pick_label: 'Variant:',
+    voice_mode_label: 'Voice mode (microphone input, spoken reply), otherwise keyboard',
+    start_btn: 'Start Conversation',
+    err_no_key: 'Enter and save an OpenRouter key first.',
+
+    chat_h2: 'Conversation',
+    stat_time_label: 'Time:',
+    stat_pct_label: 'Your talk share:',
+    stat_words_label: 'Words you / them:',
+    mode_switch_to_keyboard: 'Use keyboard',
+    mode_switch_to_voice: 'Use voice mode',
+    composer_placeholder: 'Your next question or reply …',
+    send_btn: 'Send',
+    voice_status_idle: 'Tap to speak',
+    voice_status_recording: 'Listening, a short pause ends the recording automatically',
+    voice_status_loading: 'Understanding …',
+    voice_status_speaking: 'Prospect is speaking …',
+    evaluate_toggle_label: 'Evaluate',
+    cancel_btn: 'Discard',
+    end_btn_evaluate: 'End conversation & evaluate',
+    end_btn_pause: 'Pause',
+    mic_aria: 'Microphone',
+    stop_aria: 'Stop',
+    err_start_failed: 'Conversation could not be started: ',
+    err_reply_failed: 'Reply failed: ',
+    err_transcribe_failed: 'Transcription failed: ',
+    err_mic_unsupported: 'Microphone is not supported by this browser.',
+    err_mic_failed: 'Microphone access failed: ',
+    err_api_generic: 'API error',
+    err_empty_response: 'Empty response from the model.',
+    err_json_parse: 'Response could not be parsed as JSON.',
+    err_audio_read_failed: 'Audio could not be read.',
+    confirm_discard: 'Really discard the conversation? It will not be evaluated or saved.',
+    err_need_messages: 'Exchange a few messages first before evaluating.',
+    err_eval_failed: 'Evaluation failed: ',
+    bubble_label_seller: 'You', bubble_label_customer: 'Prospect',
+
+    result_h2: 'Evaluation',
+    staerken_h3: 'Strengths',
+    verbesserungen_h3: 'Areas to improve',
+    continue_btn: 'Continue conversation',
+    pdf_btn: 'Save as PDF',
+    again_btn: 'New conversation',
+    vc_redeanteil_title: 'Talk share: {pct} % ({state})',
+    vc_redeanteil_ok: 'in range', vc_redeanteil_bad: 'too high',
+    vc_fuellwoerter_title: 'Filler words: {n} ({per100} per 100 words)',
+    vc_tempo_title: 'Pace: {wpm} words/min ({label})',
+    vc_tempo_schnell: 'too fast', vc_tempo_langsam: 'too slow', vc_tempo_passend: 'appropriate',
+    vc_problem_ok: 'Problem/beliefs identified', vc_problem_bad: 'Problem/beliefs not clearly worked out',
+    vc_discovery_title: 'Discovery depth: {label}',
+    vc_discovery_flach: 'shallow', vc_discovery_mittel: 'medium', vc_discovery_tief: 'deep',
+    vc_einwand_gut: 'Objections handled well', vc_einwand_keine: 'No objections in the conversation', vc_einwand_schwach: 'Objections handled weakly',
+    vc_stufe_ok: 'Prospect advanced a stage', vc_stufe_bad: 'Prospect not noticeably advanced',
+    vc_produkt_passend: 'Product raised at the right time', vc_produkt_frueh: 'Product raised too early', vc_produkt_nie: 'Product not mentioned at all',
+
+    drafts_h2: 'Paused Conversations',
+    drafts_hint: 'Conversations ended without evaluation, to continue later. The stage stays hidden on purpose until you evaluate.',
+    drafts_empty: 'No paused conversations.',
+    verlauf_h2: 'Training History',
+    hist_toolbar_continue: 'Continue', hist_toolbar_view: 'Evaluation', hist_toolbar_pdf: 'PDF', hist_toolbar_delete: 'Delete',
+    hist_empty: 'No evaluated conversations yet.',
+    th_wann: 'When', th_stufe: 'Stage', th_redeanteil: 'Talk share', th_ergebnis: 'Result',
+    th_letzte_nachricht: 'Last message', th_aktionen: 'Actions',
+    hist_result_ok: 'advanced', hist_result_bad: 'not advanced',
+    csv_btn: 'Download as CSV', json_btn: 'Download as JSON',
+    clear_history_btn: 'Clear history', upload_json_btn: 'Upload history (JSON)',
+    draft_continue_btn: 'Continue', draft_discard_btn: 'Discard',
+    confirm_delete_entry: 'Really delete this entry?',
+    confirm_clear_history: 'Really clear the training history?',
+    alert_invalid_json: 'File is not valid JSON.',
+    alert_expected_list: 'A JSON list is expected, as produced by "Download as JSON".',
+    alert_file_read_failed: 'File could not be read.',
+    alert_imported: '{n} entry/entries added from the file.',
+
+    dash_h2: 'Overview', dash_stage_h2: 'By awareness stage', dash_empty: 'No evaluated conversations yet.',
+    dash_tile_total: 'Total conversations', dash_tile_avg_talk: 'Avg. talk share', dash_tile_advanced: 'Stage advanced',
+    dash_tile_fillers: 'Avg. filler words / 100 words', dash_tile_pace: 'Avg. pace (words/min)',
+    th_geuebt: 'Practiced', th_avg_redeanteil: 'Avg. talk share', th_weitergebracht: 'Advanced',
+    dash_rec_label: 'Next training:', dash_focus_label: 'Focus:', dash_rec_start_btn: 'Start now',
+    metric_redeanteil: 'Lower talk share (listen more)', metric_fuellwoerter: 'Reduce filler words',
+    metric_tempo: 'Adjust speaking pace', metric_problem: 'Work out problem/beliefs more clearly',
+    metric_discovery: 'Ask deeper questions (discovery)', metric_einwand: 'Handle objections better',
+    metric_produkt: 'Raise the product later', metric_stufe: 'Advance the prospect a stage more actively',
+
+    pv_title: 'DocWorm Sales, Awareness Training',
+    pv_h2_redeanteil: 'Talk share & pace', pv_h2_gespraechsfuehrung: 'Conversation quality',
+    pv_h2_naechster: 'Next step', pv_h2_transkript: 'Transcript',
+    pv_redeanteil_row: 'Talk share: {pct} % ({sw} of {tw} words)',
+    pv_fuellwoerter_row: 'Filler words: {n} ({per100} per 100 words)',
+    pv_tempo_row: 'Pace: {wpm} words/min',
+    pv_problem_row: 'Problem/beliefs identified: {v}',
+    pv_discovery_row: 'Discovery depth: {v}',
+    pv_einwand_row: 'Objection quality: {v}',
+    pv_stufe_row: 'Stage advanced: {v}',
+    pv_produkt_row: 'Product timing: {v}',
+    ja: 'yes', nein: 'no', dash_val_empty: '–',
+
+    lang_name_de: 'DE', lang_name_en: 'EN'
+  }
+};
+function t(key, vars, langOverride){
+  var lang = langOverride || currentLang;
+  var s = (I18N[lang] && I18N[lang][key] != null) ? I18N[lang][key] : (I18N.de[key] || key);
+  if (vars) Object.keys(vars).forEach(function(k){ s = s.replace('{' + k + '}', vars[k]); });
+  return s;
+}
+function localeTagFor(lang){ return lang === 'en' ? 'en-US' : 'de-DE'; }
+function localeTag(){ return localeTagFor(currentLang); }
+function localeDateTimeStr(iso, lang){
+  var d = new Date(iso);
+  var tag = localeTagFor(lang || currentLang);
+  return d.toLocaleDateString(tag) + ' ' + d.toLocaleTimeString(tag, { hour: '2-digit', minute: '2-digit' });
+}
+function applyI18n(){
+  document.documentElement.lang = currentLang;
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'), function(el){ el.textContent = t(el.getAttribute('data-i18n')); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-html]'), function(el){ el.innerHTML = t(el.getAttribute('data-i18n-html')); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-placeholder]'), function(el){ el.placeholder = t(el.getAttribute('data-i18n-placeholder')); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-aria-label]'), function(el){ el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria-label'))); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-title]'), function(el){ el.setAttribute('title', t(el.getAttribute('data-i18n-title'))); });
+  Array.prototype.forEach.call(document.querySelectorAll('.lang-switch button'), function(b){ b.classList.toggle('active', b.dataset.lang === currentLang); });
+}
+
+/* -------------------------------------------------------------------------------- *
+ * 5 Bewusstseinsstufen (Eugene Schwartz), Szenarien aus
+ * ~/Downloads/docworm_sales_simulation_task.md uebernommen, jetzt in DE+EN. Jede Stufe
+ * traegt Rolle, Zustand/Verhalten und das Einstiegs-Statement, aus denen
+ * buildSystemPrompt() den Rollenspiel-Prompt fuer das simulierte Gegenueber baut.
+ * Nutzer-Anpassungen (Konfiguration-Panel) werden separat pro Sprache als Overrides in
+ * localStorage gehalten und von currentStages() ueber die Defaults gemergt - so bleiben
+ * die Originaltexte per "Zuruecksetzen" jederzeit wiederherstellbar.
+ * -------------------------------------------------------------------------------- */
+var STAGES_BY_LANG = {
+  de: [
+    {
+      id: 'unaware', num: 1, name: 'Unaware', label: 'Unbewusst', voice: 'Rex',
+      zustand: 'Weiß noch nicht, dass er ein Problem hat. Fühlt sich im Status quo, teils resigniert.',
+      rolle: 'Ein angehender Student, Azubi oder Berufstätiger in Weiterbildung, der gerade so durchkommt. Lernt nach der „Lese-und-Hoffe“-Methode: abends die Notizen nochmal durchlesen.',
+      verhalten: 'Desinteressiert, leicht abwehrend, sieht keinen Handlungsbedarf.',
+      aufgabe: 'Durch Symptom- und Kontextfragen erstes Nachdenken anregen (Symptom-Awareness erzeugen). Noch kein Wort über DocWorm.',
+      einstieg: 'Warum ruft ihr mich an? Ich hab doch letztes Semester bestanden, auch wenn ich die Nacht davor durchgemacht habe. Das klappt schon irgendwie, ist halt stressig, aber gehört dazu.'
+    },
+    {
+      id: 'problem_aware', num: 2, name: 'Problem-Aware', label: 'Problem-bewusst', voice: 'Sal',
+      zustand: 'Merkt, dass es schmerzt (Überforderung, schlechte Noten, Zeitmangel, Wissensverlust), kennt aber keine Lösung oder hat schlechte Vorerfahrungen.',
+      rolle: 'Ein genervter Student, der vor zwei Wochen eine Prüfung im Hauptfach versemmelt hat. Hat 500 Seiten Skripte ausgedruckt, stundenlang markiert, und in der Prüfung war trotzdem alles weg.',
+      verhalten: 'Schildert Frust, äußert Glaubenssätze wie „ich bin einfach zu dumm für dieses Fach“ oder „Online-Lernkram bringt eh nichts“.',
+      aufgabe: 'Zuhören, validieren, die wahren Schmerzpunkte herausarbeiten und schlechte Vorerfahrungen entkräften.',
+      einstieg: 'Es ist einfach deprimierend. Ich lerne wochenlang, knalle mir das Kurzzeitgedächtnis voll, und in der Klausur ist alles weg. Ich glaube einfach, mein Kopf ist zu schlecht für dieses Pensum. Apps oder Lerntools bringen sowieso alle nichts, das ist nur Geldmacherei.'
+    },
+    {
+      id: 'solution_aware', num: 3, name: 'Solution-Aware', label: 'Lösungs-bewusst', voice: 'Eve',
+      zustand: 'Weiß, was er grundsätzlich braucht (besser merken, mehr Struktur), weiß aber noch nicht, welche Art von Produkt am besten hilft.',
+      rolle: 'Eine ambitionierte Person, die eingesehen hat, dass ihr Zettelchaos-System kollabiert. Schwankt zwischen klassischem Karteikarten-Schreiben (Anki/Papier) und professioneller Nachhilfe, findet beides extrem zeitaufwendig.',
+      verhalten: 'Vergleicht Lösungswege: Karteikarten, Nachhilfe, Zusammenfassungen vs. Apps.',
+      aufgabe: 'Die Kriterien für eine gute Lösung herausfinden und positionieren, warum eine digitale Lösung wie DocWorm diese Kriterien erfüllt.',
+      einstieg: 'Mir ist klar geworden, dass ich aktives Abfragen brauche, statt nur Skripte zu lesen. Ich überlege, ob ich mir stundenlang Karteikarten schreibe oder mir Nachhilfe hole. Aber ganz ehrlich: Wer hat denn bitte die Zeit, 1.000 Seiten per Hand in Lernkarten zu hacken?'
+    },
+    {
+      id: 'product_aware', num: 4, name: 'Product-Aware', label: 'Produkt-bewusst', voice: 'Leo',
+      zustand: 'Kennt DocWorm oder ähnliche Apps, hat aber Einwände, Sicherheitsbedenken oder vergleicht direkt mit Mitbewerbern.',
+      rolle: 'Ein technikaffiner Nutzer, der DocWorm auf Instagram oder LinkedIn gesehen hat, aber skeptisch ist, ob die KI wirklich mehr bringt als ChatGPT oder RemNote.',
+      verhalten: 'Stellt konkrete Fragen zu Features, Preis oder Kompatibilität.',
+      aufgabe: 'Einwände vorwegnehmen, spezifische Funktionen nur im Kontext des vorher besprochenen Problems präsentieren.',
+      einstieg: 'Ich kenne DocWorm, ihr macht doch dieses automatisierte Zusammenfassen und Abfragen aus Skripten. Aber mal ehrlich: Warum sollte ich dafür zahlen, wenn ich meine Skripte auch einfach bei ChatGPT reinwerfen und mir selbst Karteikarten generieren kann?'
+    },
+    {
+      id: 'brand_aware', num: 5, name: 'Brand-Aware', label: 'Entscheidungsphase', voice: 'Ara',
+      zustand: 'Vertraut der Marke, fühlt sich verstanden und ist bereit, den Kauf- oder Test-Button zu drücken.',
+      rolle: 'Ein Nutzer, der die Testphase durchlaufen oder tiefen Recherche-Content gelesen hat, voll überzeugt ist, aber vor dem finalen Klick noch eine kleine Hürde hat (z. B. Zeit finden oder Angst, es nicht durchzuziehen).',
+      verhalten: 'Will Bestätigung, dass die Entscheidung richtig ist.',
+      aufgabe: 'Den Sack zumachen, den Übergang erleichtern und Vertrauen besiegeln.',
+      einstieg: 'Okay, das Konzept mit dem intelligenten Wiederholen von DocWorm leuchtet mir absolut ein, genau das hat mir gefehlt. Wie läuft das ab, wenn ich jetzt starte? Komme ich da direkt rein und kann meine ersten Vorlesungsfolien hochladen?'
+    }
+  ],
+  en: [
+    {
+      id: 'unaware', num: 1, name: 'Unaware', label: 'Unaware', voice: 'Rex',
+      zustand: "Doesn't yet know they have a problem. Feels fine with the status quo, somewhat resigned.",
+      rolle: 'A prospective student, apprentice, or working professional in further education who is just barely getting by. Studies using the "read-and-hope" method: skimming notes again in the evening.',
+      verhalten: 'Uninterested, slightly defensive, sees no need to act.',
+      aufgabe: 'Spark initial reflection through symptom and context questions (create symptom awareness). No mention of DocWorm yet.',
+      einstieg: "Why are you calling me? I passed last semester just fine, even though I pulled an all-nighter before the exam. It works out somehow, sure it's stressful, but that's just part of it."
+    },
+    {
+      id: 'problem_aware', num: 2, name: 'Problem-Aware', label: 'Problem-aware', voice: 'Sal',
+      zustand: "Notices the pain (overwhelm, bad grades, lack of time, forgetting everything) but doesn't know a solution, or has had bad experiences before.",
+      rolle: 'A frustrated student who bombed a major exam two weeks ago. Printed out 500 pages of lecture notes, spent hours highlighting them, and still blanked in the exam.',
+      verhalten: 'Vents frustration, voices beliefs like "I\'m just too dumb for this subject" or "online learning tools never help anyway."',
+      aufgabe: 'Listen, validate, surface the real pain points, and defuse bad prior experiences.',
+      einstieg: "It's just depressing. I study for weeks, cram my short-term memory full, and in the exam it's all gone. I honestly think my brain just can't handle this workload. Apps or study tools never help anyway, it's all just a money grab."
+    },
+    {
+      id: 'solution_aware', num: 3, name: 'Solution-Aware', label: 'Solution-aware', voice: 'Eve',
+      zustand: 'Knows in general what they need (better retention, more structure), but not yet which type of product helps best.',
+      rolle: 'An ambitious person who has realized their pile-of-notes system is collapsing. Torn between writing classic flashcards (Anki/paper) and getting professional tutoring, finds both extremely time-consuming.',
+      verhalten: 'Compares approaches: flashcards, tutoring, summaries vs. apps.',
+      aufgabe: 'Work out the criteria for a good solution and position why a digital solution like DocWorm meets them.',
+      einstieg: "I've realized I need active recall instead of just re-reading my notes. I'm torn between spending hours writing flashcards or getting a tutor. But honestly, who has the time to manually turn 1,000 pages into flashcards?"
+    },
+    {
+      id: 'product_aware', num: 4, name: 'Product-Aware', label: 'Product-aware', voice: 'Leo',
+      zustand: 'Knows DocWorm or similar apps, but has objections, security concerns, or directly compares it to competitors.',
+      rolle: 'A tech-savvy user who saw DocWorm on Instagram or LinkedIn, but is skeptical whether the AI really offers more than ChatGPT or RemNote.',
+      verhalten: 'Asks concrete questions about features, price, or compatibility.',
+      aufgabe: 'Anticipate objections, present specific features only in the context of the problem already discussed.',
+      einstieg: "I know DocWorm, you do that automated summarizing and quizzing from lecture notes, right? But honestly, why would I pay for that when I can just dump my notes into ChatGPT and generate flashcards myself?"
+    },
+    {
+      id: 'brand_aware', num: 5, name: 'Brand-Aware', label: 'Decision stage', voice: 'Ara',
+      zustand: 'Trusts the brand, feels understood, and is ready to hit the buy or trial button.',
+      rolle: 'A user who has gone through the trial or read in-depth research content, is fully convinced, but has one small hurdle before the final click (e.g. finding the time, or fear of not following through).',
+      verhalten: 'Wants confirmation that the decision is right.',
+      aufgabe: 'Close the deal, smooth the transition, and cement trust.',
+      einstieg: "Okay, the idea behind DocWorm's smart spaced repetition really clicks for me, that's exactly what I was missing. How does it work if I start now? Do I get straight in and can upload my first lecture slides?"
+    }
+  ]
+};
+
+/* -------------------------------------------------------------------------------- *
+ * Bewusstseinsstufen-Modell allgemein erklaert (nicht rollenspielspezifisch), fuer das
+ * neue Menue-Tab "Stufen erklaert" - separat von STAGES_BY_LANG, da hier die generische
+ * Marketing-Theorie beschrieben wird statt der konkreten Trainings-Szenarien.
+ * -------------------------------------------------------------------------------- */
+var STAGE_EXPLAIN_BY_LANG = {
+  de: [
+    { id: 'unaware', title: '1. Unbewusst (Unaware)', text: 'Der Interessent weiß nicht, dass er ein Problem hat, oder hat sich mit dem Status quo abgefunden. Klassisches Verkaufen scheitert hier, weil es nichts zu verkaufen gibt, das noch niemand vermisst. Aufgabe ist, zuerst ein Bewusstsein für Symptome zu schaffen, nicht für die Lösung oder gar das Produkt.' },
+    { id: 'problem_aware', title: '2. Problem-bewusst (Problem-Aware)', text: 'Der Interessent spürt den Schmerz (Zeitdruck, Frust, schlechte Ergebnisse), kennt aber keine Lösung oder hat mit bisherigen Versuchen schlechte Erfahrungen gemacht. Aufgabe ist, den Schmerz zu validieren und zu vertiefen, nicht das eigene Produkt zu pitchen.' },
+    { id: 'solution_aware', title: '3. Lösungs-bewusst (Solution-Aware)', text: 'Der Interessent weiß, welche Art von Lösung grundsätzlich hilft (z. B. „eine App“, „Nachhilfe“, „mehr Struktur“), kennt aber noch nicht das konkrete Produkt. Aufgabe ist, die Kriterien für die richtige Lösung zu schärfen und zu zeigen, warum diese Art Lösung überlegen ist.' },
+    { id: 'product_aware', title: '4. Produkt-bewusst (Product-Aware)', text: 'Der Interessent kennt das eigene Produkt oder direkte Wettbewerber, hat aber offene Einwände oder vergleicht aktiv. Aufgabe ist, konkrete Einwände zu entkräften und Unterscheidungsmerkmale klar zu machen, statt das Produkt von vorn zu erklären.' },
+    { id: 'brand_aware', title: '5. Entscheidungsphase (Most Aware / Brand-Aware)', text: 'Der Interessent kennt und vertraut der Marke, ist inhaltlich überzeugt und braucht nur noch den letzten Anstoß (Klarheit über den nächsten Schritt, Bestätigung). Aufgabe ist, den Abschluss zu erleichtern, nicht erneut zu überzeugen.' }
+  ],
+  en: [
+    { id: 'unaware', title: '1. Unaware', text: "The prospect doesn't know they have a problem, or has made peace with the status quo. Classic selling fails here because there's nothing to sell that nobody misses yet. The task is to first create awareness of symptoms, not of the solution or the product." },
+    { id: 'problem_aware', title: '2. Problem-Aware', text: 'The prospect feels the pain (time pressure, frustration, poor results) but knows no solution, or has had bad experiences with previous attempts. The task is to validate and deepen the pain, not to pitch your own product.' },
+    { id: 'solution_aware', title: '3. Solution-Aware', text: 'The prospect knows what type of solution generally helps (e.g. "an app", "tutoring", "more structure"), but not yet the specific product. The task is to sharpen the criteria for the right solution and show why this type of solution is superior.' },
+    { id: 'product_aware', title: '4. Product-Aware', text: 'The prospect knows your product or direct competitors, but has open objections or is actively comparing. The task is to defuse concrete objections and clarify differentiators, instead of explaining the product from scratch.' },
+    { id: 'brand_aware', title: '5. Most Aware / Brand-Aware', text: 'The prospect knows and trusts the brand, is convinced in substance, and just needs the final nudge (clarity on the next step, reassurance). The task is to ease the close, not to persuade again.' }
+  ]
+};
+
+/* -------------------------------------------------------------------------------- *
+ * Persona-Varianten: zweite, von der Stufe unabhaengige Verhaltens-Dimension. 'neutral'
+ * aendert nichts (nur im Trainer-Modus waehlbar, nie zufaellig), 'defensiv'/'offen'
+ * werden bei zufaelliger Wahl gleich gewichtet aus randomPersonas() gezogen.
+ * -------------------------------------------------------------------------------- */
+var PERSONA_VARIANTS_BY_LANG = {
+  de: [
+    { id: 'neutral', label: 'Neutral', hinweis: '' },
+    { id: 'defensiv', label: 'Defensiv', hinweis: 'ZUSAETZLICHE VERHALTENS-VARIANTE: Du bist besonders zurueckhaltend und vorsichtig. Du oeffnest dich erst nach mehreren einfuehlsamen, gezielten Fragen, reagierst auf oberflaechliche oder zu schnelle Ansprache reserviert bis leicht genervt, und laesst dir dein eigentliches Anliegen erst nach echtem Vertrauensaufbau entlocken.' },
+    { id: 'offen', label: 'Offen', hinweis: 'ZUSAETZLICHE VERHALTENS-VARIANTE: Du bist grundsaetzlich kooperativ und redebereit, antwortest ausfuehrlicher und schneller als sonst ueblich, bleibst dabei aber strikt bei den Fakten deiner Rolle und Stufe und erwaehnst DocWorm nicht von dir aus.' }
+  ],
+  en: [
+    { id: 'neutral', label: 'Neutral', hinweis: '' },
+    { id: 'defensiv', label: 'Defensive', hinweis: 'ADDITIONAL BEHAVIOR VARIANT: You are especially reserved and cautious. You only open up after several empathetic, targeted questions, react to shallow or overly fast pitching with reservation to mild annoyance, and only reveal your real concern once genuine trust has been built.' },
+    { id: 'offen', label: 'Open', hinweis: 'ADDITIONAL BEHAVIOR VARIANT: You are fundamentally cooperative and willing to talk, answering more elaborately and quickly than usual, but you stick strictly to the facts of your role and stage and do not bring up DocWorm on your own.' }
+  ]
+};
+
+var DOCWORM_BRIEF_BY_LANG = {
+  de: 'DocWorm ist eine Lern-App (Android, 5 Euro Premium einmalig, Basis gratis): man laedt eigene ' +
+    'Skripte/PDFs/Vorlesungsfolien hoch, chattet per KI darueber, bekommt automatisch Karteikarten, Zusammenfassungen ' +
+    'und einen mehrstufigen Lernplan (Lernmodul) mit aktivem Abfragen statt nur Lesen. Daten bleiben auf dem Geraet.',
+  en: 'DocWorm is a learning app (Android, 5 euro one-time premium, free basic tier): you upload your own ' +
+    'lecture notes/PDFs/slides, chat with an AI about them, and automatically get flashcards, summaries, ' +
+    'and a multi-step study plan (learning module) with active recall instead of just reading. Data stays on the device.'
+};
+
+/* -------------------------------------------------------------------------------- *
+ * Konfiguration: Nutzer-Overrides pro Sprache, gemergt ueber die Defaults oben. Immer
+ * frisch berechnet (kein Caching), damit Aenderungen im Konfiguration-Panel sofort fuer
+ * das naechste Gespraech wirken, ohne Reload.
+ * -------------------------------------------------------------------------------- */
+function LS_KEY_STAGE_OVERRIDES(lang){ return 'docworm_st_stage_overrides_' + lang; }
+function LS_KEY_PERSONA_OVERRIDES(lang){ return 'docworm_st_persona_overrides_' + lang; }
+function LS_KEY_BRIEF_OVERRIDE(lang){ return 'docworm_st_brief_override_' + lang; }
+
+function loadStageOverrides(lang){ try{ return JSON.parse(localStorage.getItem(LS_KEY_STAGE_OVERRIDES(lang)) || '{}'); }catch(_){ return {}; } }
+function saveStageOverrides(lang, obj){ saveLocal(LS_KEY_STAGE_OVERRIDES(lang), JSON.stringify(obj)); }
+function loadPersonaOverrides(lang){ try{ return JSON.parse(localStorage.getItem(LS_KEY_PERSONA_OVERRIDES(lang)) || '{}'); }catch(_){ return {}; } }
+function savePersonaOverrides(lang, obj){ saveLocal(LS_KEY_PERSONA_OVERRIDES(lang), JSON.stringify(obj)); }
+function loadBriefOverride(lang){ return loadLocal(LS_KEY_BRIEF_OVERRIDE(lang), ''); }
+function saveBriefOverride(lang, text){ saveLocal(LS_KEY_BRIEF_OVERRIDE(lang), text); }
+
+function stagesForLang(lang){
+  var overrides = loadStageOverrides(lang);
+  return (STAGES_BY_LANG[lang] || STAGES_BY_LANG.de).map(function(s){
+    var o = overrides[s.id];
+    return o ? Object.assign({}, s, o) : Object.assign({}, s);
+  });
+}
+function personasForLang(lang){
+  var overrides = loadPersonaOverrides(lang);
+  return (PERSONA_VARIANTS_BY_LANG[lang] || PERSONA_VARIANTS_BY_LANG.de).map(function(p){
+    var o = overrides[p.id];
+    return o ? Object.assign({}, p, o) : Object.assign({}, p);
+  });
+}
+function briefForLang(lang){
+  var o = loadBriefOverride(lang);
+  return o || DOCWORM_BRIEF_BY_LANG[lang] || DOCWORM_BRIEF_BY_LANG.de;
+}
+function currentStages(){ return stagesForLang(currentLang); }
+function currentPersonas(){ return personasForLang(currentLang); }
+function currentBrief(){ return briefForLang(currentLang); }
+function randomPersonas(){ return currentPersonas().filter(function(p){ return p.id !== 'neutral'; }); }
+
+/* -------------------------------------------------------------------------------- *
+ * Sprach-Ein-/Ausgabe: dieselbe Mechanik und dieselben Modelle wie der Klassenraum-
+ * Lernpartner (src/js/academy-lernpartner.js). Transkription laeuft ueber den
+ * OpenRouter-/Gemini-Audio-Slot (Audio als data-URL im image_url-Feld, siehe
+ * audioContentPart() in app.html) mit dem dort per aiModel('transcription') gesetzten
+ * Standardmodell; TTS ueber den OpenAI-kompatiblen /audio/speech-Endpunkt mit dem dort
+ * per aiModel('tts') gesetzten Grok-Voice-Modell, das rohes PCM16 streamt (siehe
+ * _ttsReadAloudStream()/speakAgentText() in app.html).
+ * -------------------------------------------------------------------------------- */
+// TTS-/Transkriptionsmodell kommen aus den Setup-Feldern (ttsModelId()/transModelId()),
+// Standardwerte wie DocWorm: Grok-TTS bzw. Gemini-Flash-Lite fuer Transkription.
+function transPrompt(){
+  return currentLang === 'en'
+    ? 'Transcribe the following audio precisely in English. Respond ONLY with the recognized text, ' +
+      'without quotation marks, without introductory sentences, and without explanations.'
+    : 'Transkribiere das folgende Audio präzise auf Deutsch. Antworte AUSSCHLIESSLICH mit dem ' +
+      'erkannten Text, ohne Anführungszeichen, ohne Einleitungssätze und ohne Erklärungen.';
+}
+
+var ICON_MIC = '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3z"/><path d="M19 11a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V20H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-2.08A7 7 0 0 0 19 11z"/></svg>';
+var ICON_STOP = '<svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="3"/></svg>';
+
+// Stille-Erkennung per AnalyserNode, urspruenglich 1:1 aus createUiPauseDetector() in
+// app.html uebernommen, silenceMs hier aber auf 2.4s hochgesetzt (App-Original: 1.6s),
+// weil die Aufnahme sonst bei natuerlichen Sprechpausen zu frueh gestoppt hat. Bricht
+// nach 10s ganz ohne Sprachsignal ab.
+function createPauseDetector(stream, onPause, silenceMs, onNoInput, noInputMs){
+  silenceMs = silenceMs || 1600; noInputMs = noInputMs || 10000;
+  try{
+    var Ctx = window.AudioContext || window.webkitAudioContext;
+    var ctx = new Ctx();
+    var src = ctx.createMediaStreamSource(stream);
+    var analyser = ctx.createAnalyser();
+    analyser.fftSize = 512;
+    src.connect(analyser);
+    var buf = new Uint8Array(analyser.frequencyBinCount);
+    var hadSound = false, silenceTimer = null, stopped = false;
+    var THRESHOLD = 10;
+    var doStop = function(){
+      if (stopped) return; stopped = true;
+      clearInterval(iv); if (silenceTimer) clearTimeout(silenceTimer); if (noInputTimer) clearTimeout(noInputTimer);
+      try{ src.disconnect(); }catch(_){}
+      safeCloseCtx(ctx);
+    };
+    var noInputTimer = onNoInput ? setTimeout(function(){ if (!stopped && !hadSound){ doStop(); onNoInput(); } }, noInputMs) : null;
+    var iv = setInterval(function(){
+      if (stopped) return;
+      analyser.getByteTimeDomainData(buf);
+      var loud = false;
+      for (var i = 0; i < buf.length; i++){ if (Math.abs(buf[i] - 128) > THRESHOLD){ loud = true; break; } }
+      if (loud){
+        hadSound = true;
+        if (noInputTimer) clearTimeout(noInputTimer);
+        if (silenceTimer){ clearTimeout(silenceTimer); silenceTimer = null; }
+      } else if (hadSound && !silenceTimer){
+        silenceTimer = setTimeout(function(){ if (!stopped) onPause(); }, silenceMs);
+      }
+    }, 100);
+    return { hadSound: function(){ return hadSound; }, stop: doStop };
+  }catch(e){ return { hadSound: function(){ return true; }, stop: function(){} }; }
+}
+
+function transcribeAudio(blob){
+  return new Promise(function(resolve, reject){
+    var reader = new FileReader();
+    reader.onloadend = function(){
+      fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey() },
+        body: JSON.stringify({
+          model: transModelId(),
+          messages: [{ role: 'user', content: [{ type: 'text', text: transPrompt() }, { type: 'image_url', image_url: { url: reader.result } }] }]
+        })
+      }).then(function(r){ return r.json(); }).then(function(data){
+        if (data.error) throw new Error(data.error.message || t('err_api_generic'));
+        var text = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+        resolve((text || '').trim());
+      }).catch(reject);
+    };
+    reader.onerror = function(){ reject(new Error(t('err_audio_read_failed'))); };
+    reader.readAsDataURL(blob);
+  });
+}
+
+// TTS-Wiedergabe: identischer PCM16-Streaming-Zuschnitt wie _ttsReadAloudStream() in
+// app.html (Sample-Rate aus dem Content-Type, 4096-Byte-Fluschen, lueckenlose
+// AudioBufferSourceNode-Kette). agentSpeechCancelled erlaubt Barge-in (Mikro antippen
+// waehrend das simulierte Gegenueber noch spricht, siehe stopAgentSpeech()).
+var agentAudioCtx = null;
+var agentSpeechCancelled = false;
+// AudioContext.close() liefert ein Promise, das bei einem bereits geschlossenen Context
+// ablehnt statt synchron zu werfen - ein einfaches try/catch fängt das NICHT ab und
+// erzeugt eine unhandled promise rejection. Kann bei Barge-in/Abbrechen passieren, wenn
+// derselbe Context an zwei Stellen fast gleichzeitig geschlossen wird.
+function safeCloseCtx(ctx){
+  try{
+    var p = ctx.close();
+    if (p && typeof p.catch === 'function') p.catch(function(){});
+  }catch(_){}
+}
+function stopAgentSpeech(){
+  agentSpeechCancelled = true;
+  if (agentAudioCtx){ safeCloseCtx(agentAudioCtx); agentAudioCtx = null; }
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  avatarSpeakingStop();
+}
+// Geräteausgabe (Browser-SpeechSynthesis) als kostenlose Alternative zur KI-Stimme,
+// gleiche Audioquelle-Weiche wie audioMode==='browser' in app.html. Die Grok-Stimmen der
+// Stufen (Rex/Sal/Leo maennlich, Eve/Ara weiblich, siehe STAGES) werden hier auf eine
+// passende Geräte-Stimme gemappt. SpeechSynthesisVoice hat kein offizielles Gender-Feld,
+// daher Namens-Heuristik; ohne Treffer (z. B. Android mit nur einer de-DE-Stimme
+// installiert) bleibt es beim OS-Standard.
+var VOICE_GENDER_BY_STAGE_VOICE = { Rex: 'male', Sal: 'male', Leo: 'male', Eve: 'female', Ara: 'female' };
+var FEMALE_VOICE_NAME_HINTS = ['female', 'weiblich', 'frau', 'anna', 'petra', 'martina', 'katja', 'vicki', 'marlene', 'helena', 'samantha', 'karen', 'victoria', 'susan', 'zira'];
+var MALE_VOICE_NAME_HINTS = ['male', 'männlich', 'maennlich', 'mann', 'stefan', 'yannick', 'conrad', 'markus', 'daniel', 'klaus', 'alex', 'james', 'david', 'mark', 'george'];
+function deviceVoiceLangPrefix(){ return currentLang === 'en' ? 'en' : 'de'; }
+function deviceVoiceLangTag(){ return currentLang === 'en' ? 'en-US' : 'de-DE'; }
+var _cachedDeviceVoices = null;
+function getDeviceVoicesAsync(){
+  if (!('speechSynthesis' in window)) return Promise.resolve([]);
+  var existing = window.speechSynthesis.getVoices();
+  if (existing && existing.length > 0) return Promise.resolve(existing);
+  if (_cachedDeviceVoices) return Promise.resolve(_cachedDeviceVoices);
+  return new Promise(function(resolve){
+    var done = false;
+    function finish(){
+      if (done) return; done = true;
+      _cachedDeviceVoices = window.speechSynthesis.getVoices();
+      resolve(_cachedDeviceVoices);
+    }
+    window.speechSynthesis.addEventListener('voiceschanged', finish, { once: true });
+    setTimeout(finish, 500);
+  });
+}
+var LS_KEY_DEVICE_VOICE_MALE = 'docworm_st_device_voice_male';
+var LS_KEY_DEVICE_VOICE_FEMALE = 'docworm_st_device_voice_female';
+var LS_KEY_DEVICE_PITCH_MALE = 'docworm_st_device_pitch_male';
+var LS_KEY_DEVICE_PITCH_FEMALE = 'docworm_st_device_pitch_female';
+var LS_KEY_DEVICE_RATE_MALE = 'docworm_st_device_rate_male';
+var LS_KEY_DEVICE_RATE_FEMALE = 'docworm_st_device_rate_female';
+function devicePitchForGender(gender){
+  var fallback = gender === 'female' ? 1.3 : 0.85;
+  var raw = gender === 'female' ? loadLocal(LS_KEY_DEVICE_PITCH_FEMALE, String(fallback)) : loadLocal(LS_KEY_DEVICE_PITCH_MALE, String(fallback));
+  var n = parseFloat(raw);
+  return (isFinite(n) && n >= 0 && n <= 2) ? n : fallback;
+}
+function deviceRateForGender(gender){
+  var raw = gender === 'female' ? loadLocal(LS_KEY_DEVICE_RATE_FEMALE, '1') : loadLocal(LS_KEY_DEVICE_RATE_MALE, '1');
+  var n = parseFloat(raw);
+  return (isFinite(n) && n >= 0.5 && n <= 2) ? n : 1;
+}
+function pickDeviceVoiceForGender(voices, gender){
+  // Manuelle Zuordnung (Zugang-Panel) geht vor: viele Geräte-TTS-Engines (v.a. Android)
+  // liefern mehrere Stimmen ohne jedes Geschlechts-Merkmal im Namen, die Namens-Heuristik
+  // greift dort ins Leere.
+  var manualURI = gender === 'female' ? loadLocal(LS_KEY_DEVICE_VOICE_FEMALE, '') : loadLocal(LS_KEY_DEVICE_VOICE_MALE, '');
+  if (manualURI){
+    var manual = voices.find(function(v){ return v.voiceURI === manualURI; });
+    if (manual) return manual;
+  }
+  var langPrefix = deviceVoiceLangPrefix();
+  var deVoices = voices.filter(function(v){ return new RegExp('^' + langPrefix, 'i').test(v.lang); });
+  if (deVoices.length === 0) return null;
+  var hints = gender === 'female' ? FEMALE_VOICE_NAME_HINTS : MALE_VOICE_NAME_HINTS;
+  var match = deVoices.filter(function(v){
+    var n = v.name.toLowerCase();
+    return hints.some(function(h){ return n.indexOf(h) !== -1; });
+  })[0];
+  return match || null;
+}
+function speakTextBrowser(text, stageVoiceName){
+  agentSpeechCancelled = false;
+  setVoiceStatus('speaking');
+  avatarSpeakingStart();
+  return getDeviceVoicesAsync().then(function(voices){
+    return new Promise(function(resolve){
+      if (agentSpeechCancelled || !('speechSynthesis' in window)){ avatarSpeakingStop(); resolve(); return; }
+      window.speechSynthesis.cancel();
+      var utter = new SpeechSynthesisUtterance(text);
+      utter.lang = deviceVoiceLangTag();
+      var gender = VOICE_GENDER_BY_STAGE_VOICE[stageVoiceName];
+      if (gender){
+        var match = pickDeviceVoiceForGender(voices, gender);
+        if (match) utter.voice = match;
+        // Manche Android-Chrome-Versionen liefern ueber die Web-Speech-API nur eine
+        // einzige Systemstimme, egal wie viele in den Geräte-Einstellungen installiert
+        // sind (bekannte Chromium-Einschraenkung, siehe pickDeviceVoiceForGender()).
+        // Tonhoehe/Tempo sind per Regler (Zugang-Panel) einstellbar, da manche Geräte-
+        // TTS-Engines die Standardwerte kaum bis gar nicht hoerbar umsetzen.
+        utter.pitch = devicePitchForGender(gender);
+        utter.rate = deviceRateForGender(gender);
+      }
+      var done = false;
+      function finish(){ if (done) return; done = true; avatarSpeakingStop(); resolve(); }
+      utter.onend = finish;
+      utter.onerror = finish;
+      window.speechSynthesis.speak(utter);
+    });
+  });
+}
+function speakText(text, voice){
+  if (audioSourceSelect && audioSourceSelect.value === 'browser') return speakTextBrowser(text, voice);
+  agentSpeechCancelled = false;
+  setVoiceStatus('speaking');
+  avatarSpeakingStart();
+  return fetch('https://openrouter.ai/api/v1/audio/speech', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey() },
+    body: JSON.stringify({ model: ttsModelId(), input: text, voice: voice || 'Eve', response_format: 'pcm', stream: true })
+  }).then(function(resp){
+    if (!resp.ok) throw new Error('TTS HTTP ' + resp.status);
+    var ct = resp.headers.get('content-type') || '';
+    var m = ct.match(/rate=(\d{4,6})/i);
+    var sampleRate = m ? parseInt(m[1], 10) : 24000;
+    if (!(sampleRate >= 8000 && sampleRate <= 48000)) sampleRate = 24000;
+    var Ctx = window.AudioContext || window.webkitAudioContext;
+    var audioCtx = new Ctx({ sampleRate: sampleRate });
+    agentAudioCtx = audioCtx;
+    var nextStart = audioCtx.currentTime;
+    var pending = new Uint8Array(0);
+    var FLUSH_MIN = 4096;
+    function concatU8(a, b){ var out = new Uint8Array(a.length + b.length); out.set(a, 0); out.set(b, a.length); return out; }
+    function flush(){
+      var evenLen = pending.length - (pending.length % 2);
+      if (evenLen < 2) return null;
+      var slice = pending.slice(0, evenLen);
+      pending = pending.slice(evenLen);
+      var aligned = new Uint8Array(slice);
+      var int16 = new Int16Array(aligned.buffer);
+      var audioBuf = audioCtx.createBuffer(1, int16.length, sampleRate);
+      var ch = audioBuf.getChannelData(0);
+      for (var i = 0; i < int16.length; i++) ch[i] = int16[i] / 32768;
+      return audioBuf;
+    }
+    function schedule(audioBuf){
+      if (agentSpeechCancelled) return;
+      var srcNode = audioCtx.createBufferSource();
+      srcNode.buffer = audioBuf; srcNode.connect(audioCtx.destination);
+      var startAt = Math.max(nextStart, audioCtx.currentTime);
+      srcNode.start(startAt);
+      nextStart = startAt + audioBuf.duration;
+    }
+    var reader = resp.body.getReader();
+    function pump(){
+      return reader.read().then(function(res){
+        if (res.done){
+          if (pending.length >= 2){ var b = flush(); if (b) schedule(b); }
+          return;
+        }
+        pending = concatU8(pending, res.value);
+        while (pending.length >= FLUSH_MIN){ var b2 = flush(); if (b2) schedule(b2); }
+        return pump();
+      });
+    }
+    return pump().then(function(){
+      var deadline = Date.now() + Math.max(0, (nextStart - audioCtx.currentTime) * 1000) + 250;
+      return new Promise(function(resolve){
+        (function poll(){
+          if (agentSpeechCancelled || Date.now() >= deadline){ resolve(); return; }
+          setTimeout(poll, 80);
+        })();
+      });
+    }).then(function(){
+      if (agentAudioCtx === audioCtx) agentAudioCtx = null;
+      safeCloseCtx(audioCtx);
+    });
+  }).catch(function(e){
+    if (agentAudioCtx) { safeCloseCtx(agentAudioCtx); agentAudioCtx = null; }
+    throw e;
+  });
+}
+
+/* -------------------------------------------------------------------------------- *
+ * Persistenz: API-Key/Modell + Trainingsverlauf nur lokal in diesem Browser.
+ * -------------------------------------------------------------------------------- */
+var LS_KEY_API = 'docworm_st_api_key';
+var LS_KEY_MODEL = 'docworm_st_model';
+var LS_KEY_TTS_MODEL = 'docworm_st_tts_model';
+var LS_KEY_TRANS_MODEL = 'docworm_st_trans_model';
+var LS_KEY_AUDIO_SOURCE = 'docworm_st_audio_source';
+var LS_KEY_HISTORY = 'docworm_st_history';
+var LS_KEY_DRAFTS = 'docworm_st_drafts';
+
+function loadLocal(key, fallback){ try{ var v = localStorage.getItem(key); return v === null ? fallback : v; }catch(_){ return fallback; } }
+function saveLocal(key, val){ try{ localStorage.setItem(key, val); }catch(_){} }
+function loadHistory(){ try{ return JSON.parse(localStorage.getItem(LS_KEY_HISTORY) || '[]'); }catch(_){ return []; } }
+function saveHistory(list){ try{ localStorage.setItem(LS_KEY_HISTORY, JSON.stringify(list.slice(-30))); }catch(_){} }
+function loadDrafts(){ try{ return JSON.parse(localStorage.getItem(LS_KEY_DRAFTS) || '[]'); }catch(_){ return []; } }
+function saveDrafts(list){ try{ localStorage.setItem(LS_KEY_DRAFTS, JSON.stringify(list.slice(-15))); }catch(_){} }
+
+var apiKeyInput = document.getElementById('api-key');
+var modelInput = document.getElementById('model-id');
+var ttsModelInput = document.getElementById('tts-model-id');
+var transModelInput = document.getElementById('trans-model-id');
+var audioSourceSelect = document.getElementById('audio-source');
+var deviceVoiceRow = document.getElementById('device-voice-row');
+var deviceVoiceMaleSelect = document.getElementById('device-voice-male');
+var deviceVoiceFemaleSelect = document.getElementById('device-voice-female');
+var devicePitchMaleInput = document.getElementById('device-pitch-male');
+var devicePitchFemaleInput = document.getElementById('device-pitch-female');
+var devicePitchMaleVal = document.getElementById('device-pitch-male-val');
+var devicePitchFemaleVal = document.getElementById('device-pitch-female-val');
+var deviceRateMaleInput = document.getElementById('device-rate-male');
+var deviceRateFemaleInput = document.getElementById('device-rate-female');
+var deviceRateMaleVal = document.getElementById('device-rate-male-val');
+var deviceRateFemaleVal = document.getElementById('device-rate-female-val');
+var setupStatus = document.getElementById('setup-status');
+
+apiKeyInput.value = loadLocal(LS_KEY_API, '');
+modelInput.value = loadLocal(LS_KEY_MODEL, modelInput.value);
+ttsModelInput.value = loadLocal(LS_KEY_TTS_MODEL, ttsModelInput.value);
+transModelInput.value = loadLocal(LS_KEY_TRANS_MODEL, transModelInput.value);
+audioSourceSelect.value = loadLocal(LS_KEY_AUDIO_SOURCE, 'gpt');
+
+updateSetupStatus();
+
+document.getElementById('save-setup-btn').addEventListener('click', function(){
+  saveLocal(LS_KEY_API, apiKeyInput.value.trim());
+  saveLocal(LS_KEY_MODEL, modelInput.value.trim() || 'google/gemini-2.5-flash-lite');
+  saveLocal(LS_KEY_TTS_MODEL, ttsModelInput.value.trim() || 'x-ai/grok-voice-tts-1.0');
+  saveLocal(LS_KEY_TRANS_MODEL, transModelInput.value.trim() || 'google/gemini-3.1-flash-lite-preview');
+  saveLocal(LS_KEY_AUDIO_SOURCE, audioSourceSelect.value);
+  updateSetupStatus();
+});
+function updateSetupStatus(){
+  setupStatus.textContent = apiKeyInput.value.trim() ? t('setup_status_saved') : t('setup_status_missing');
+}
+
+/* -------------------------------------------------------------------------------- *
+ * Geräte-Stimmen für die Geräteausgabe: manuelle Männlich/Weiblich-Zuordnung, da
+ * SpeechSynthesisVoice kein Gender-Feld liefert (siehe pickDeviceVoiceForGender()).
+ * -------------------------------------------------------------------------------- */
+function populateDeviceVoiceSelects(){
+  getDeviceVoicesAsync().then(function(voices){
+    var langPrefix = deviceVoiceLangPrefix();
+    var deVoices = voices.filter(function(v){ return new RegExp('^' + langPrefix, 'i').test(v.lang); });
+    var list = deVoices.length ? deVoices : voices;
+    // Manche Geräte-TTS-Engines (v.a. Android) geben allen Stimmen denselben Namen
+    // ("Deutsch") ohne weitere Unterscheidung - dann per Zähler durchnummerieren, damit
+    // trotzdem gezielt einzelne Einträge angehört und ausgewählt werden können.
+    var nameCounts = {};
+    list.forEach(function(v){ nameCounts[v.name] = (nameCounts[v.name] || 0) + 1; });
+    [deviceVoiceMaleSelect, deviceVoiceFemaleSelect].forEach(function(sel){
+      var keep = sel.value;
+      sel.innerHTML = '<option value="">' + escapeHtml(t('device_voice_auto')) + '</option>';
+      list.forEach(function(v){
+        var opt = document.createElement('option');
+        opt.value = v.voiceURI;
+        opt.textContent = v.name + ' (' + v.lang + ')';
+        sel.appendChild(opt);
+      });
+      sel.value = keep;
+    });
+    var idxByURI = {};
+    var counters = {};
+    list.forEach(function(v){
+      if (nameCounts[v.name] > 1){
+        counters[v.name] = (counters[v.name] || 0) + 1;
+        idxByURI[v.voiceURI] = counters[v.name];
+      }
+    });
+    [deviceVoiceMaleSelect, deviceVoiceFemaleSelect].forEach(function(sel){
+      Array.prototype.forEach.call(sel.options, function(opt){
+        if (idxByURI[opt.value]) opt.textContent = opt.textContent + ' #' + idxByURI[opt.value];
+      });
+    });
+    var savedMale = loadLocal(LS_KEY_DEVICE_VOICE_MALE, '');
+    var savedFemale = loadLocal(LS_KEY_DEVICE_VOICE_FEMALE, '');
+    if (savedMale) deviceVoiceMaleSelect.value = savedMale;
+    if (savedFemale) deviceVoiceFemaleSelect.value = savedFemale;
+  });
+}
+function testDeviceVoice(sel, gender){
+  if (!('speechSynthesis' in window)) return;
+  getDeviceVoicesAsync().then(function(voices){
+    window.speechSynthesis.cancel();
+    var utter = new SpeechSynthesisUtterance(t('test_voice_text'));
+    utter.lang = deviceVoiceLangTag();
+    if (sel.value){
+      var v = voices.find(function(vv){ return vv.voiceURI === sel.value; });
+      if (v) utter.voice = v;
+    }
+    // Tonhoehe/Tempo gelten immer, unabhaengig von der Stimmenauswahl - gleiche Logik
+    // wie speakTextBrowser(), damit der Test das echte Gespraech widerspiegelt.
+    utter.pitch = devicePitchForGender(gender);
+    utter.rate = deviceRateForGender(gender);
+    window.speechSynthesis.speak(utter);
+  });
+}
+function updateDeviceVoiceRowVisibility(){
+  deviceVoiceRow.style.display = audioSourceSelect.value === 'browser' ? 'block' : 'none';
+}
+audioSourceSelect.addEventListener('change', function(){
+  updateDeviceVoiceRowVisibility();
+  if (audioSourceSelect.value === 'browser') populateDeviceVoiceSelects();
+});
+deviceVoiceMaleSelect.addEventListener('change', function(){ saveLocal(LS_KEY_DEVICE_VOICE_MALE, deviceVoiceMaleSelect.value); });
+deviceVoiceFemaleSelect.addEventListener('change', function(){ saveLocal(LS_KEY_DEVICE_VOICE_FEMALE, deviceVoiceFemaleSelect.value); });
+document.getElementById('refresh-device-voices-btn').addEventListener('click', populateDeviceVoiceSelects);
+document.getElementById('test-device-voice-male-btn').addEventListener('click', function(){ testDeviceVoice(deviceVoiceMaleSelect, 'male'); });
+document.getElementById('test-device-voice-female-btn').addEventListener('click', function(){ testDeviceVoice(deviceVoiceFemaleSelect, 'female'); });
+if ('speechSynthesis' in window) window.speechSynthesis.addEventListener('voiceschanged', populateDeviceVoiceSelects);
+updateDeviceVoiceRowVisibility();
+if (audioSourceSelect.value === 'browser') populateDeviceVoiceSelects();
+
+devicePitchMaleInput.value = loadLocal(LS_KEY_DEVICE_PITCH_MALE, devicePitchMaleInput.value);
+devicePitchFemaleInput.value = loadLocal(LS_KEY_DEVICE_PITCH_FEMALE, devicePitchFemaleInput.value);
+devicePitchMaleVal.textContent = devicePitchMaleInput.value;
+devicePitchFemaleVal.textContent = devicePitchFemaleInput.value;
+devicePitchMaleInput.addEventListener('input', function(){
+  devicePitchMaleVal.textContent = devicePitchMaleInput.value;
+  saveLocal(LS_KEY_DEVICE_PITCH_MALE, devicePitchMaleInput.value);
+});
+devicePitchFemaleInput.addEventListener('input', function(){
+  devicePitchFemaleVal.textContent = devicePitchFemaleInput.value;
+  saveLocal(LS_KEY_DEVICE_PITCH_FEMALE, devicePitchFemaleInput.value);
+});
+
+deviceRateMaleInput.value = loadLocal(LS_KEY_DEVICE_RATE_MALE, deviceRateMaleInput.value);
+deviceRateFemaleInput.value = loadLocal(LS_KEY_DEVICE_RATE_FEMALE, deviceRateFemaleInput.value);
+deviceRateMaleVal.textContent = deviceRateMaleInput.value;
+deviceRateFemaleVal.textContent = deviceRateFemaleInput.value;
+deviceRateMaleInput.addEventListener('input', function(){
+  deviceRateMaleVal.textContent = deviceRateMaleInput.value;
+  saveLocal(LS_KEY_DEVICE_RATE_MALE, deviceRateMaleInput.value);
+});
+deviceRateFemaleInput.addEventListener('input', function(){
+  deviceRateFemaleVal.textContent = deviceRateFemaleInput.value;
+  saveLocal(LS_KEY_DEVICE_RATE_FEMALE, deviceRateFemaleInput.value);
+});
+
+/* -------------------------------------------------------------------------------- *
+ * Stufenwahl (Trainer-Modus)
+ * -------------------------------------------------------------------------------- */
+var trainerToggle = document.getElementById('trainer-toggle');
+var stagePickRow = document.getElementById('stage-pick-row');
+var stagePick = document.getElementById('stage-pick');
+var personaPickRow = document.getElementById('persona-pick-row');
+var personaPick = document.getElementById('persona-pick');
+// Wird beim Initialisieren UND bei jedem Sprachwechsel neu aufgerufen, da Stufen-/
+// Personabezeichnungen sprachabhaengig sind (currentStages()/currentPersonas()).
+function populateStagePersonaPicks(){
+  var keepStage = stagePick.value, keepPersona = personaPick.value;
+  stagePick.innerHTML = '';
+  personaPick.innerHTML = '';
+  currentStages().forEach(function(s){
+    var opt = document.createElement('option');
+    opt.value = s.id;
+    opt.textContent = s.num + '. ' + s.name + ' (' + s.label + ')';
+    stagePick.appendChild(opt);
+  });
+  currentPersonas().forEach(function(p){
+    var opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = p.label;
+    personaPick.appendChild(opt);
+  });
+  if (keepStage && currentStages().some(function(s){ return s.id === keepStage; })) stagePick.value = keepStage;
+  if (keepPersona && currentPersonas().some(function(p){ return p.id === keepPersona; })) personaPick.value = keepPersona;
+}
+populateStagePersonaPicks();
+trainerToggle.addEventListener('change', function(){
+  stagePickRow.style.display = trainerToggle.checked ? 'flex' : 'none';
+  personaPickRow.style.display = trainerToggle.checked ? 'flex' : 'none';
+});
+
+/* -------------------------------------------------------------------------------- *
+ * LLM-Aufruf: direkter Client-Call gegen OpenRouter mit dem lokal gespeicherten Key,
+ * gleiche Grundmechanik wie callOpenRouter()/_lpAssessExplanation() in der App
+ * (system+turns, response_format json_object fuer die Auswertung).
+ * -------------------------------------------------------------------------------- */
+function apiKey(){ return apiKeyInput.value.trim(); }
+function modelId(){ return modelInput.value.trim() || 'google/gemini-2.5-flash-lite'; }
+function ttsModelId(){ return ttsModelInput.value.trim() || 'x-ai/grok-voice-tts-1.0'; }
+function transModelId(){ return transModelInput.value.trim() || 'google/gemini-3.1-flash-lite-preview'; }
+
+function callLLM(messages, asJson){
+  var body = { model: modelId(), messages: messages };
+  if (asJson) body.response_format = { type: 'json_object' };
+  return fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey() },
+    body: JSON.stringify(body)
+  }).then(function(resp){ return resp.json(); }).then(function(data){
+    if (data.error) throw new Error(data.error.message || t('err_api_generic'));
+    var text = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+    if (!text) throw new Error(t('err_empty_response'));
+    return text.trim();
+  });
+}
+// Tolerantes JSON-Parsing: ganze Antwort, sonst Codefence, sonst erstes {..} bzw [..].
+function parseJsonLoose(text){
+  try{ return JSON.parse(text); }catch(_){}
+  var fence = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fence){ try{ return JSON.parse(fence[1]); }catch(_){} }
+  var start = text.search(/[\{\[]/);
+  var endObj = text.lastIndexOf('}');
+  var endArr = text.lastIndexOf(']');
+  var end = Math.max(endObj, endArr);
+  if (start !== -1 && end > start){
+    try{ return JSON.parse(text.slice(start, end + 1)); }catch(_){}
+  }
+  throw new Error(t('err_json_parse'));
+}
+
+/* -------------------------------------------------------------------------------- *
+ * Rollenspiel-Prompt fuer das simulierte Gegenueber. stage/persona kommen bereits in der
+ * zur Session gehoerenden Sprache (session.lang, siehe currentStages()/currentPersonas()),
+ * nur der umgebende Instruktionstext hier ist explizit DE/EN verzweigt.
+ * -------------------------------------------------------------------------------- */
+function buildSystemPrompt(stage, persona, lang){
+  var brief = briefForLang(lang);
+  if (lang === 'en'){
+    return 'You are playing a prospect for the learning app DocWorm on the phone in a sales roleplay training. ' +
+      'BACKGROUND ON DOCWORM (for you only, so you can react authentically, you do not mention it unprompted): ' + brief +
+      '\n\nYOUR ROLE: ' + stage.rolle +
+      '\nYOUR STATE: ' + stage.zustand +
+      '\nYOUR BEHAVIOR IN THE CONVERSATION: ' + stage.verhalten +
+      (persona && persona.hinweis ? '\n' + persona.hinweis : '') +
+      '\n\nRULES OF THE GAME:' +
+      '\n- You are NEVER the salesperson, only the prospect. You never pitch anything, at most you ask questions back.' +
+      '\n- Stay strictly in character. Never mention, even hinted at, that this is a training, a simulation, or an "awareness stage".' +
+      '\n- Speak like on the phone: short, natural sentences (usually 1-4 sentences per reply), no lists, no headings, no markdown.' +
+      '\n- Only open up if your counterpart really listens well and asks targeted follow-up questions. React to shallow or overly salesy replies with reservation, evasiveness, or mild annoyance ("You talk a lot, don\'t you", "What are you getting at?").' +
+      '\n- If someone explains the product to you unprompted before you have described your actual problem, briefly push back and stay on your own topic.' +
+      '\n- Your first message is your reaction right after the caller has briefly introduced themselves. Phrase it in the spirit of this example, but not word for word (free variation, same meaning and tone): "' + stage.einstieg + '"' +
+      '\n- Reply ONLY with your character\'s spoken text, nothing else.';
+  }
+  return 'Du spielst in einem Verkaufs-Rollenspiel-Training einen Interessenten fuer die Lern-App DocWorm am Telefon. ' +
+    'HINTERGRUND ZU DOCWORM (nur fuer dich, damit du authentisch reagieren kannst, du erwaehnst es nicht ungefragt): ' + brief +
+    '\n\nDEINE ROLLE: ' + stage.rolle +
+    '\nDEIN ZUSTAND: ' + stage.zustand +
+    '\nDEIN VERHALTEN IM GESPRAECH: ' + stage.verhalten +
+    (persona && persona.hinweis ? '\n' + persona.hinweis : '') +
+    '\n\nSPIELREGELN:' +
+    '\n- Du bist NIEMALS der/die Verkaeufer:in, sondern ausschliesslich der Interessent. Du pitchst nichts, du fragst hoechstens nach.' +
+    '\n- Bleib strikt in der Rolle. Erwaehne nie, dass dies ein Training, eine Simulation oder eine "Bewusstseinsstufe" ist, auch nicht angedeutet.' +
+    '\n- Sprich wie am Telefon: kurze, natuerliche Saetze (meist 1-4 Saetze pro Antwort), keine Aufzaehlungen, keine Ueberschriften, kein Markdown.' +
+    '\n- Oeffne dich nur, wenn dein Gegenueber wirklich gut zuhoert und gezielt nachfragt. Auf oberflaechliche oder zu frueh verkaeuferische Antworten reagierst du reserviert, ausweichend oder leicht genervt ("Sie reden aber ganz schoen viel", "Worauf wollen Sie hinaus?").' +
+    '\n- Wenn jemand dir ungefragt das Produkt erklaert, bevor du dein eigentliches Problem geschildert hast, wehrst du kurz ab und bleibst bei deinem Thema.' +
+    '\n- Deine erste Nachricht ist deine Reaktion direkt nachdem die anrufende Person sich kurz vorgestellt hat. Formuliere sie sinngemaess wie dieses Beispiel, aber nicht wortwoertlich (freie Variation, gleicher Sinn und Ton): "' + stage.einstieg + '"' +
+    '\n- Antworte NUR mit dem gesprochenen Text deiner Figur, sonst nichts.';
+}
+
+function transcriptRolePrefix(lang, role){
+  if (lang === 'en') return role === 'seller' ? 'S: ' : 'C: ';
+  return role === 'seller' ? 'V: ' : 'K: ';
+}
+
+function buildEvalPrompt(stage, persona, lang, transcriptText, sellerWords, totalWords, pct, behavioral){
+  var pctStr = totalWords ? pct.toFixed(0) : '0';
+  if (lang === 'en'){
+    return 'You are evaluating a sales roleplay training. A solo founder sells the learning app DocWorm and practices ' +
+      'sales conversations against a simulated prospect at one of 5 awareness stages (Eugene Schwartz).' +
+      '\n\nPRACTICED STAGE: ' + stage.num + '. ' + stage.name + ' (' + stage.label + ')' +
+      '\nSTATE OF THE PROSPECT AT THIS STAGE: ' + stage.zustand +
+      '\nSALESPERSON\'S TASK AT THIS STAGE: ' + stage.aufgabe +
+      (persona && persona.hinweis ? '\nADDITIONAL BEHAVIOR VARIANT OF THE PROSPECT: ' + persona.label + ' - ' + persona.hinweis : '') +
+      '\n\nGROUND RULE OF THE TRAINING: max. 30% talk share for the salesperson, at least 70% listening/asking questions, ' +
+      'product presentation at most 10% of the conversation and only once all objections have been clarified and it is clear where the prospect stands.' +
+      '\n\nMEASURED TALK SHARE OF THE SALESPERSON: ' + pctStr + '% of words (' + sellerWords + ' of ' + totalWords + ' words in the whole conversation).' +
+      '\nMEASURED FILLER WORDS OF THE SALESPERSON: ' + behavioral.fillerCount + ' occurrences in ' + sellerWords + ' words (' +
+      behavioral.fillerPer100.toFixed(1) + ' per 100 words)' + (behavioral.fillerTopList ? ', most frequent: ' + behavioral.fillerTopList : '') + '.' +
+      '\nMEASURED PACE OF THE SALESPERSON: approx. ' + behavioral.paceWpm + ' words/minute over the whole conversation duration (' +
+      behavioral.durationMin.toFixed(1) + ' minutes incl. thinking pauses, rough guide only).' +
+      '\n\nTRANSCRIPT (S = Salesperson, C = Customer/Prospect):\n' + transcriptText +
+      '\n\nEvaluate the conversation against the guide and answer ONLY as a JSON object with exactly these fields ' +
+      '(keep the field NAMES and the listed enum values exactly as given, English below is only for the free-text comments):' +
+      '\n{"redeanteil_ok": true/false, "redeanteil_kommentar": "one sentence",' +
+      '\n "problem_erkannt": true/false, "problem_kommentar": "which concrete problem or beliefs were surfaced or missed",' +
+      '\n "stufe_hochgefuehrt": true/false, "stufe_kommentar": "brief reasoning whether the salesperson advanced the prospect a stage",' +
+      '\n "produkt_timing": "zu_frueh" | "passend" | "gar_nicht_erwaehnt", "produkt_kommentar": "one sentence",' +
+      '\n "fuellwoerter_ok": true/false, "fuellwoerter_kommentar": "one sentence, whether the measured filler words were noticeably frequent",' +
+      '\n "tempo_einschaetzung": "zu_schnell" | "passend" | "zu_langsam", "tempo_kommentar": "one sentence on the measured pace",' +
+      '\n "discovery_tiefe": "oberflaechlich" | "mittel" | "tief", "discovery_kommentar": "how deeply the prospect\'s needs/situation were explored",' +
+      '\n "einwand_qualitaet": "keine_einwaende" | "schwach_behandelt" | "gut_behandelt", "einwand_kommentar": "how well the prospect\'s objections/skepticism were handled",' +
+      '\n "staerken": ["...", "..."], "verbesserungen": ["...", "..."],' +
+      '\n "naechster_schritt": "one concrete, actionable tip for the next real call"}' +
+      '\nResponse language: English. Quote briefly from the transcript where helpful. Be concrete, no filler phrases.';
+  }
+  return 'Du wertest ein Verkaufs-Rollenspiel-Training aus. Ein Solo-Gruender vertreibt die Lern-App DocWorm und uebt ' +
+    'Verkaufsgespraeche gegen einen simulierten Interessenten auf einer von 5 Bewusstseinsstufen (Eugene Schwartz).' +
+    '\n\nGEUEBTE STUFE: ' + stage.num + '. ' + stage.name + ' (' + stage.label + ')' +
+    '\nZUSTAND DES INTERESSENTEN AUF DIESER STUFE: ' + stage.zustand +
+    '\nAUFGABE DES VERKAEUFERS AUF DIESER STUFE: ' + stage.aufgabe +
+    (persona && persona.hinweis ? '\nZUSAETZLICHE VERHALTENS-VARIANTE DES INTERESSENTEN: ' + persona.label + ' - ' + persona.hinweis : '') +
+    '\n\nGRUNDREGEL DES TRAININGS: max. 30% Redeanteil Verkaeufer, mind. 70% Zuhoeren/Fragen, Produktpraesentation ' +
+    'hoechstens 10% des Gespraechs und nur, wenn vorher alle Einwaende geklaert wurden und klar ist, wo der Interessent steht.' +
+    '\n\nGEMESSENER REDEANTEIL DES VERKAEUFERS: ' + pctStr + '% der Woerter (' + sellerWords + ' von ' + totalWords + ' Woertern im gesamten Gespraech).' +
+    '\nGEMESSENE FUELLWOERTER DES VERKAEUFERS: ' + behavioral.fillerCount + ' Vorkommen auf ' + sellerWords + ' Woerter (' +
+    behavioral.fillerPer100.toFixed(1) + ' pro 100 Woerter)' + (behavioral.fillerTopList ? ', haeufigste: ' + behavioral.fillerTopList : '') + '.' +
+    '\nGEMESSENES GESPRAECHSTEMPO DES VERKAEUFERS: ca. ' + behavioral.paceWpm + ' Woerter/Minute ueber die gesamte Gespraechsdauer (' +
+    behavioral.durationMin.toFixed(1) + ' Minuten inkl. Denkpausen, nur grobe Orientierung).' +
+    '\n\nTRANSKRIPT (V = Verkaeufer, K = Kunde/Interessent):\n' + transcriptText +
+    '\n\nBewerte das Gespraech anhand des Leitfadens und antworte AUSSCHLIESSLICH als JSON-Objekt mit genau diesen Feldern:' +
+    '\n{"redeanteil_ok": true/false, "redeanteil_kommentar": "ein Satz",' +
+    '\n "problem_erkannt": true/false, "problem_kommentar": "welches konkrete Problem bzw. welche Glaubenssaetze wurden herausgearbeitet oder uebersehen",' +
+    '\n "stufe_hochgefuehrt": true/false, "stufe_kommentar": "kurze Begruendung, ob der Verkaeufer den Interessenten eine Stufe weitergebracht hat",' +
+    '\n "produkt_timing": "zu_frueh" | "passend" | "gar_nicht_erwaehnt", "produkt_kommentar": "ein Satz",' +
+    '\n "fuellwoerter_ok": true/false, "fuellwoerter_kommentar": "ein Satz, ob die gemessenen Fuellwoerter auffaellig haeufig waren",' +
+    '\n "tempo_einschaetzung": "zu_schnell" | "passend" | "zu_langsam", "tempo_kommentar": "ein Satz zum gemessenen Tempo",' +
+    '\n "discovery_tiefe": "oberflaechlich" | "mittel" | "tief", "discovery_kommentar": "wie tief wurden Bedarf/Situation des Interessenten erfragt",' +
+    '\n "einwand_qualitaet": "keine_einwaende" | "schwach_behandelt" | "gut_behandelt", "einwand_kommentar": "wie gut wurden Einwaende/Skepsis des Interessenten aufgenommen",' +
+    '\n "staerken": ["...", "..."], "verbesserungen": ["...", "..."],' +
+    '\n "naechster_schritt": "ein konkreter, umsetzbarer Tipp fuer das naechste echte Telefonat"}' +
+    '\nAntwortsprache: Deutsch. Zitiere wo hilfreich kurz aus dem Transkript. Sei konkret, keine Floskeln.';
+}
+
+/* -------------------------------------------------------------------------------- *
+ * Session-State + Chat-Ablauf
+ * -------------------------------------------------------------------------------- */
+var session = null; // { stage, messages:[{role:'seller'|'customer', text}], startedAt }
+var timerHandle = null;
+var busy = false;
+
+var startSection = document.getElementById('start-section');
+var chatSection = document.getElementById('chat-section');
+var resultSection = document.getElementById('result-section');
+var logEl = document.getElementById('log');
+var composerRow = document.getElementById('composer-row');
+var composerInput = document.getElementById('composer-input');
+var sendBtn = document.getElementById('send-btn');
+var endBtn = document.getElementById('end-btn');
+var startBtn = document.getElementById('start-btn');
+var startError = document.getElementById('start-error');
+var chatError = document.getElementById('chat-error');
+var voiceModeToggle = document.getElementById('voice-mode-toggle');
+var modeSwitchBtn = document.getElementById('mode-switch-btn');
+var voicebar = document.getElementById('voicebar');
+var micBtn = document.getElementById('mic-btn');
+var voiceStatusEl = document.getElementById('voice-status');
+var voiceStopBtn = document.getElementById('voice-stop-btn');
+var evaluateToggle = document.getElementById('evaluate-toggle');
+evaluateToggle.addEventListener('change', function(){
+  endBtn.textContent = evaluateToggle.checked ? t('end_btn_evaluate') : t('end_btn_pause');
+});
+
+startBtn.addEventListener('click', function(){
+  if (!apiKey()){ showError(startError, t('err_no_key')); return; }
+  hideError(startError);
+  var stages = currentStages(), personas = randomPersonas();
+  var stage = trainerToggle.checked
+    ? stages.filter(function(s){ return s.id === stagePick.value; })[0]
+    : stages[Math.floor(Math.random() * stages.length)];
+  var persona = trainerToggle.checked
+    ? currentPersonas().filter(function(p){ return p.id === personaPick.value; })[0]
+    : personas[Math.floor(Math.random() * personas.length)];
+  startSession(stage, persona, voiceModeToggle.checked);
+});
+
+function showError(el, msg){ el.textContent = msg; el.style.display = 'block'; }
+function hideError(el){ el.style.display = 'none'; }
+
+/* -------------------------------------------------------------------------------- *
+ * Text-/Sprachmodus-Umschaltung. Wie beim Klassenraum-Lernpartner ist Sprache der
+ * Standard (Turn-based-Live: nach jeder gesprochenen Antwort des Gegenuebers startet
+ * die Aufnahme automatisch neu), Tastatur eine gleichwertige Alternative jederzeit
+ * umschaltbar.
+ * -------------------------------------------------------------------------------- */
+var voiceState = { textMode: false, liveOn: false, recording: false, mediaRecorder: null, audioChunks: [], silenceDet: null, cancelPending: false, stream: null };
+micBtn.innerHTML = ICON_MIC;
+voiceStopBtn.innerHTML = ICON_STOP;
+
+function setTextMode(v){
+  voiceState.textMode = v;
+  composerRow.style.display = v ? 'flex' : 'none';
+  voicebar.style.display = v ? 'none' : 'flex';
+  modeSwitchBtn.textContent = v ? 'Sprachmodus verwenden' : 'Tastatur verwenden';
+  if (v) stopListening(true);
+}
+modeSwitchBtn.addEventListener('click', function(){ setTextMode(!voiceState.textMode); });
+
+function startSession(stage, persona, useVoice){
+  session = { stage: stage, persona: persona, lang: currentLang, messages: [], startedAt: Date.now() };
+  logEl.innerHTML = '';
+  startSection.style.display = 'none';
+  resultSection.style.display = 'none';
+  chatSection.style.display = 'block';
+  setTextMode(!useVoice);
+  setVoiceStatus('idle');
+  setAvatarForStage(stage);
+  updateStats();
+  startTimer();
+  setBusy(true);
+  var mySession = session;
+  var thinkingBubble = addBubble('customer', '…', true);
+  var openerPrompt = session.lang === 'en'
+    ? '[You just picked up, the caller has briefly introduced themselves as DocWorm sales and asked for two minutes. React now.]'
+    : '[Du hast gerade abgehoben, die anrufende Person hat sich kurz als DocWorm-Vertrieb vorgestellt und um zwei Minuten gebeten. Reagiere jetzt.]';
+  callLLM([
+    { role: 'system', content: buildSystemPrompt(stage, persona, session.lang) },
+    { role: 'user', content: openerPrompt }
+  ], false).then(function(text){
+    thinkingBubble.remove();
+    if (session !== mySession) return; // Gespraech wurde inzwischen abgebrochen
+    onCustomerReply(text);
+  }).catch(function(e){
+    thinkingBubble.remove();
+    if (session !== mySession) return;
+    showError(chatError, t('err_start_failed') + e.message);
+    setBusy(false);
+  });
+}
+
+// Bricht die laufende Sitzung sofort ab, ohne Auswertung/Speicherung. Bleibt auch waehrend
+// eine Anfrage noch laeuft nutzbar (kein setBusy-Eintrag), da genau das der Zweck ist:
+// aus einem versehentlich gestarteten oder haengenden Gespraech wieder rauskommen.
+document.getElementById('cancel-btn').addEventListener('click', function(){
+  var hasSellerMessages = !!(session && session.messages.some(function(m){ return m.role === 'seller'; }));
+  if (hasSellerMessages && !confirm(t('confirm_discard'))) return;
+  if (timerHandle) clearInterval(timerHandle);
+  stopListening(true);
+  session = null;
+  setBusy(false);
+  hideError(chatError);
+  chatSection.style.display = 'none';
+  resultSection.style.display = 'none';
+  startSection.style.display = 'block';
+});
+
+function setBusy(v){
+  busy = v;
+  sendBtn.disabled = v;
+  composerInput.disabled = v;
+  endBtn.disabled = v;
+  micBtn.disabled = v;
+}
+
+sendBtn.addEventListener('click', function(){
+  if (busy) return;
+  var text = composerInput.value.trim();
+  if (!text) return;
+  composerInput.value = '';
+  sendSellerText(text);
+});
+composerInput.addEventListener('keydown', function(e){
+  if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendBtn.click(); }
+});
+
+// Gemeinsamer Turn fuer beide Eingabewege (Tastatur und transkribierte Sprache):
+// Nachricht rendern, LLM-Antwort holen, bei Erfolg an onCustomerReply() weiterreichen.
+function sendSellerText(text){
+  hideError(chatError);
+  addBubble('seller', text);
+  session.messages.push({ role: 'seller', text: text });
+  updateStats();
+  setBusy(true);
+  var mySession = session;
+  var messages = [{ role: 'system', content: buildSystemPrompt(session.stage, session.persona, session.lang) }];
+  session.messages.forEach(function(m){
+    messages.push({ role: m.role === 'seller' ? 'user' : 'assistant', content: m.text });
+  });
+  var thinkingBubble = addBubble('customer', '…', true);
+  callLLM(messages, false).then(function(reply){
+    thinkingBubble.remove();
+    if (session !== mySession) return; // Gespraech wurde inzwischen abgebrochen
+    onCustomerReply(reply);
+  }).catch(function(e){
+    thinkingBubble.remove();
+    if (session !== mySession) return;
+    showError(chatError, t('err_reply_failed') + e.message);
+    setBusy(false);
+    if (voiceState.liveOn && !voiceState.textMode) startListening();
+  });
+}
+
+// Nach jeder Antwort des simulierten Gegenuebers: Bubble rendern, im Sprachmodus
+// vorlesen und danach die Aufnahme fuer den naechsten Turn automatisch wieder starten
+// (Turn-based-Live-Schleife wie _lpRunTurn() in academy-lernpartner.js).
+function onCustomerReply(text){
+  addBubble('customer', text);
+  session.messages.push({ role: 'customer', text: text });
+  updateStats();
+  setBusy(false);
+  if (voiceState.textMode) return;
+  speakText(text, session.stage.voice).then(function(){
+    avatarSpeakingStop();
+    setVoiceStatus(voiceState.recording ? 'recording' : 'idle');
+    if (voiceState.liveOn) startListening();
+  }).catch(function(){
+    avatarSpeakingStop();
+    setVoiceStatus('idle');
+    if (voiceState.liveOn) startListening();
+  });
+}
+
+/* -------------------------------------------------------------------------------- *
+ * Avatar-Kachel wie im Presentation-Viewer-PiP (app.html, _pvAvatarStart()/pvStopTts()):
+ * idle = gedimmt/graustufig und pausiert, speaking = volle Farbe, Video laeuft im Loop,
+ * goldener Ring "pulsiert" per zufaelliger Randbreite als Sprech-Indikator (keine echte
+ * Lippensynchronisation, siehe gen_avatar_videos.mjs).
+ * -------------------------------------------------------------------------------- */
+var avatarPip = document.getElementById('avatar-pip');
+var avatarVideo = document.getElementById('avatar-video');
+var avatarRingTimer = null;
+function setAvatarForStage(stage){
+  avatarSpeakingStop();
+  avatarVideo.pause();
+  avatarVideo.poster = 'avatars/' + stage.id + '-avatar.jpg';
+  avatarVideo.src = 'avatars/' + stage.id + '-avatar-animated.mp4';
+}
+function avatarSpeakingStart(){
+  if (!avatarPip) return;
+  avatarPip.classList.remove('idle');
+  avatarPip.classList.add('speaking');
+  avatarVideo.play().catch(function(){});
+  if (avatarRingTimer) clearInterval(avatarRingTimer);
+  var ring = document.getElementById('avatar-ring');
+  avatarRingTimer = setInterval(function(){
+    ring.style.borderWidth = (2 + Math.random() * 5).toFixed(1) + 'px';
+  }, 110);
+}
+function avatarSpeakingStop(){
+  if (!avatarPip) return;
+  avatarPip.classList.remove('speaking');
+  avatarPip.classList.add('idle');
+  if (avatarRingTimer){ clearInterval(avatarRingTimer); avatarRingTimer = null; }
+  try{ avatarVideo.pause(); }catch(_){}
+}
+
+/* -------------------------------------------------------------------------------- *
+ * Mikrofon: Antippen startet/stoppt die Aufnahme manuell, Stille von 1.6s stoppt sie
+ * automatisch und schickt sie zur Transkription. Antippen waehrend der simulierte
+ * Interessent noch spricht unterbricht die Ansage (Barge-in).
+ * -------------------------------------------------------------------------------- */
+micBtn.addEventListener('click', function(){
+  if (voiceState.recording){
+    try{ voiceState.mediaRecorder.stop(); }catch(_){}
+    voiceState.recording = false;
+    return;
+  }
+  toggleRecording();
+});
+voiceStopBtn.addEventListener('click', function(){ stopListening(true); });
+
+function setVoiceStatus(state){
+  micBtn.classList.remove('recording', 'speaking');
+  if (state === 'recording') micBtn.classList.add('recording');
+  if (state === 'speaking') micBtn.classList.add('speaking');
+  micBtn.innerHTML = state === 'loading' ? '<div class="spinner"></div>' : ICON_MIC;
+  var labels = {
+    idle: t('voice_status_idle'), recording: t('voice_status_recording'),
+    loading: t('voice_status_loading'), speaking: t('voice_status_speaking')
+  };
+  voiceStatusEl.textContent = labels[state] || '';
+  voiceStopBtn.disabled = !(state === 'recording' || state === 'speaking');
+}
+
+// Der Mikrofon-Stream wird EINMAL pro Sprach-Sitzung angefragt und fuer alle folgenden
+// Turns wiederverwendet (nur der MediaRecorder wird pro Turn neu erzeugt) - sonst fragt
+// der Browser bei jeder einzelnen Antwort erneut nach der Mikrofon-Erlaubnis, was gerade
+// bei file:// (keine dauerhaft gespeicherte Berechtigung wie bei einer echten https-Origin)
+// bei jedem Turn erneut aufpoppt. Freigegeben wird der Stream nur beim harten Stop
+// (stopListening(true): Textmodus, Stopp-Button, Gespraech beenden).
+async function ensureMicStream(){
+  if (voiceState.stream){
+    var stillLive = voiceState.stream.getAudioTracks().some(function(tr){ return tr.readyState === 'live'; });
+    if (stillLive) return voiceState.stream;
+  }
+  voiceState.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  return voiceState.stream;
+}
+function releaseMicStream(){
+  if (voiceState.stream){
+    try{ voiceState.stream.getTracks().forEach(function(tr){ tr.stop(); }); }catch(_){}
+    voiceState.stream = null;
+  }
+}
+
+async function toggleRecording(){
+  if (busy || voiceState.textMode) return;
+  stopAgentSpeech();
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    showError(chatError, t('err_mic_unsupported'));
+    return;
+  }
+  try{
+    var stream = await ensureMicStream();
+    voiceState.mediaRecorder = new MediaRecorder(stream);
+    voiceState.audioChunks = [];
+    voiceState.silenceDet = createPauseDetector(stream, function(){
+      if (voiceState.recording){
+        setVoiceStatus('loading');
+        try{ voiceState.mediaRecorder.stop(); }catch(_){}
+        voiceState.recording = false;
+      }
+    }, 2400, function(){ setVoiceStatus('idle'); });
+    voiceState.mediaRecorder.ondataavailable = function(ev){ if (ev.data.size > 0) voiceState.audioChunks.push(ev.data); };
+    voiceState.mediaRecorder.onstop = function(){
+      var hadSound = voiceState.silenceDet ? voiceState.silenceDet.hadSound() : false;
+      if (voiceState.silenceDet){ try{ voiceState.silenceDet.stop(); }catch(_){} voiceState.silenceDet = null; }
+      if (voiceState.cancelPending){ voiceState.cancelPending = false; setVoiceStatus('idle'); return; }
+      var blob = new Blob(voiceState.audioChunks, { type: voiceState.mediaRecorder.mimeType });
+      if (blob.size < 2000 || !hadSound){
+        setVoiceStatus('idle');
+        if (voiceState.liveOn) startListening();
+        return;
+      }
+      setVoiceStatus('loading');
+      transcribeAudio(blob).then(function(transcript){
+        if (!transcript){ setVoiceStatus('idle'); if (voiceState.liveOn) startListening(); return; }
+        sendSellerText(transcript);
+      }).catch(function(e){
+        showError(chatError, t('err_transcribe_failed') + e.message);
+        setVoiceStatus('idle');
+        if (voiceState.liveOn) startListening();
+      });
+    };
+    voiceState.mediaRecorder.start();
+    voiceState.recording = true;
+    voiceState.liveOn = true;
+    setVoiceStatus('recording');
+  }catch(err){
+    showError(chatError, t('err_mic_failed') + (err && err.message ? err.message : err));
+    setVoiceStatus('idle');
+  }
+}
+function startListening(){ if (!voiceState.recording && !busy) toggleRecording(); }
+function stopListening(hard){
+  voiceState.liveOn = false;
+  if (voiceState.recording && voiceState.mediaRecorder){
+    voiceState.cancelPending = true;
+    try{ voiceState.mediaRecorder.stop(); }catch(_){}
+    voiceState.recording = false;
+  }
+  if (hard){ stopAgentSpeech(); releaseMicStream(); }
+  setVoiceStatus('idle');
+}
+
+function addBubble(role, text, thinking){
+  var wrap = document.createElement('div');
+  wrap.className = 'bubble-wrap ' + role;
+  var label = document.createElement('div');
+  label.className = 'bubble-label';
+  label.textContent = role === 'seller' ? t('bubble_label_seller') : t('bubble_label_customer');
+  var bubble = document.createElement('div');
+  bubble.className = 'bubble ' + role + (thinking ? ' thinking' : '');
+  bubble.textContent = text;
+  wrap.appendChild(label);
+  wrap.appendChild(bubble);
+  logEl.appendChild(wrap);
+  logEl.scrollTop = logEl.scrollHeight;
+  return wrap;
+}
+
+function wordCount(str){ var m = str.trim().match(/\S+/g); return m ? m.length : 0; }
+
+// Fuellwort-Erkennung ueber Token-Vergleich statt Regex-Wortgrenzen (\b verhaelt sich bei
+// fuehrenden Umlauten wie "ae/oe" in JS-Regexen ohne u-Flag nicht zuverlaessig). Eigene
+// Liste je Sprache, da Fuellwoerter sprachspezifisch sind.
+var FILLER_WORDS_BY_LANG = {
+  de: ['äh', 'ähm', 'ahm', 'öh', 'öhm', 'hm', 'mhm', 'quasi', 'sozusagen'],
+  en: ['um', 'uh', 'uhm', 'erm', 'hmm', 'mhm', 'basically', 'actually']
+};
+function countFillers(text, lang){
+  var words = FILLER_WORDS_BY_LANG[lang] || FILLER_WORDS_BY_LANG.de;
+  var tokens = (text || '').toLowerCase().match(/[a-zäöüß]+/g) || [];
+  var count = 0, found = {};
+  tokens.forEach(function(t){
+    if (words.indexOf(t) !== -1){ count++; found[t] = (found[t] || 0) + 1; }
+  });
+  return { count: count, found: found };
+}
+
+function updateStats(){
+  var sellerWords = 0, customerWords = 0;
+  session.messages.forEach(function(m){
+    var wc = wordCount(m.text);
+    if (m.role === 'seller') sellerWords += wc; else customerWords += wc;
+  });
+  var total = sellerWords + customerWords;
+  var pct = total ? (sellerWords / total * 100) : 0;
+  document.getElementById('stat-words').textContent = sellerWords + ' / ' + customerWords;
+  document.getElementById('stat-pct').textContent = total ? pct.toFixed(0) + ' %' : t('dash_val_empty');
+  var fill = document.getElementById('pct-fill');
+  var bar = fill.parentElement;
+  fill.style.width = Math.min(100, pct) + '%';
+  bar.classList.toggle('over', pct > 30);
+}
+
+function startTimer(){
+  if (timerHandle) clearInterval(timerHandle);
+  var timeEl = document.getElementById('stat-time');
+  timerHandle = setInterval(function(){
+    var s = Math.floor((Date.now() - session.startedAt) / 1000);
+    var mm = Math.floor(s / 60), ss = s % 60;
+    timeEl.textContent = mm + ':' + (ss < 10 ? '0' : '') + ss;
+  }, 1000);
+}
+
+/* -------------------------------------------------------------------------------- *
+ * Auswertung
+ * -------------------------------------------------------------------------------- */
+endBtn.addEventListener('click', function(){
+  if (busy || !session) return;
+  if (!evaluateToggle.checked){
+    if (timerHandle) clearInterval(timerHandle);
+    stopListening(true);
+    // Anders als "Abbrechen" ist "Beenden ohne Auswerten" eine bewusste Pausier-Aktion,
+    // daher wird sie immer als Entwurf gesichert, auch wenn der Verkaeufer noch gar nichts
+    // gesagt hat (nur die Eroeffnungszeile des Interessenten steht bereits im Log).
+    if (session.messages.length){
+      var drafts = loadDrafts();
+      drafts.push({ date: new Date().toISOString(), stageId: session.stage.id, personaId: session.persona ? session.persona.id : 'neutral', lang: session.lang || 'de', messages: session.messages.slice() });
+      saveDrafts(drafts);
+      renderDrafts();
+    }
+    session = null;
+    setBusy(false);
+    hideError(chatError);
+    chatSection.style.display = 'none';
+    resultSection.style.display = 'none';
+    startSection.style.display = 'block';
+    return;
+  }
+  if (session.messages.length < 2) {
+    showError(chatError, t('err_need_messages'));
+    return;
+  }
+  hideError(chatError);
+  stopListening(true);
+  setBusy(true);
+  if (timerHandle) clearInterval(timerHandle);
+
+  var sessionLang = session.lang || 'de';
+  var sellerWords = 0, totalWords = 0;
+  var fillerCount = 0, fillerFound = {};
+  var transcriptLines = session.messages.map(function(m){
+    var wc = wordCount(m.text);
+    totalWords += wc;
+    if (m.role === 'seller'){
+      sellerWords += wc;
+      var f = countFillers(m.text, sessionLang);
+      fillerCount += f.count;
+      Object.keys(f.found).forEach(function(k){ fillerFound[k] = (fillerFound[k] || 0) + f.found[k]; });
+    }
+    return transcriptRolePrefix(sessionLang, m.role) + m.text;
+  });
+  var pct = totalWords ? (sellerWords / totalWords * 100) : 0;
+  var transcriptText = transcriptLines.join('\n');
+  var fillerPer100 = sellerWords ? (fillerCount / sellerWords * 100) : 0;
+  var fillerTopList = Object.keys(fillerFound).sort(function(a, b){ return fillerFound[b] - fillerFound[a]; })
+    .slice(0, 5).map(function(k){ return k + ' (' + fillerFound[k] + '×)'; }).join(', ');
+  var durationMin = Math.max(0.1, (Date.now() - session.startedAt) / 60000);
+  var paceWpm = Math.round(sellerWords / durationMin);
+  var behavioral = { fillerCount: fillerCount, fillerPer100: fillerPer100, fillerTopList: fillerTopList, paceWpm: paceWpm, durationMin: durationMin };
+
+  callLLM([{ role: 'user', content: buildEvalPrompt(session.stage, session.persona, sessionLang, transcriptText, sellerWords, totalWords, pct, behavioral) }], true)
+    .then(function(raw){
+      var data = parseJsonLoose(raw);
+      showResult(session.stage, session.persona, data, pct, behavioral);
+      pushHistory(session.stage, session.persona, sessionLang, data, pct, sellerWords, totalWords, transcriptText, behavioral);
+      setBusy(false);
+    }).catch(function(e){
+      showError(chatError, t('err_eval_failed') + e.message);
+      setBusy(false);
+    });
+});
+
+function verdictCard(kind, title, text){
+  var div = document.createElement('div');
+  div.className = 'verdict-card ' + kind;
+  var iconChar = kind === 'ok' ? '✓' : (kind === 'bad' ? '✕' : '!');
+  div.innerHTML = '<div class="icon">' + iconChar + '</div><div class="t"><b>' + escapeHtml(title) + '</b>' + escapeHtml(text || '') + '</div>';
+  return div;
+}
+function escapeHtml(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]; }); }
+
+function showResult(stage, persona, data, pct, behavioral){
+  chatSection.style.display = 'none';
+  resultSection.style.display = 'block';
+  var personaSuffix = (persona && persona.id !== 'neutral') ? ' · ' + persona.label : '';
+  document.getElementById('reveal-num').textContent = stage.num;
+  document.getElementById('reveal-name').textContent = stage.name + ' (' + stage.label + ')' + personaSuffix;
+  document.getElementById('reveal-state').textContent = stage.zustand;
+
+  var list = document.getElementById('verdict-list');
+  list.innerHTML = '';
+  list.appendChild(verdictCard(data.redeanteil_ok ? 'ok' : 'bad',
+    t('vc_redeanteil_title', { pct: pct.toFixed(0), state: data.redeanteil_ok ? t('vc_redeanteil_ok') : t('vc_redeanteil_bad') }),
+    data.redeanteil_kommentar || ''));
+  list.appendChild(verdictCard(data.fuellwoerter_ok ? 'ok' : 'warn',
+    t('vc_fuellwoerter_title', { n: behavioral.fillerCount, per100: behavioral.fillerPer100.toFixed(1) }),
+    data.fuellwoerter_kommentar || ''));
+  var tempoKind = data.tempo_einschaetzung === 'passend' ? 'ok' : 'warn';
+  var tempoLabel = data.tempo_einschaetzung === 'zu_schnell' ? t('vc_tempo_schnell') : (data.tempo_einschaetzung === 'zu_langsam' ? t('vc_tempo_langsam') : t('vc_tempo_passend'));
+  list.appendChild(verdictCard(tempoKind, t('vc_tempo_title', { wpm: behavioral.paceWpm, label: tempoLabel }), data.tempo_kommentar || ''));
+  list.appendChild(verdictCard(data.problem_erkannt ? 'ok' : 'warn',
+    data.problem_erkannt ? t('vc_problem_ok') : t('vc_problem_bad'),
+    data.problem_kommentar || ''));
+  var discKind = data.discovery_tiefe === 'tief' ? 'ok' : (data.discovery_tiefe === 'mittel' ? 'warn' : 'bad');
+  var discLabel = data.discovery_tiefe === 'tief' ? t('vc_discovery_tief') : (data.discovery_tiefe === 'mittel' ? t('vc_discovery_mittel') : t('vc_discovery_flach'));
+  list.appendChild(verdictCard(discKind, t('vc_discovery_title', { label: discLabel }), data.discovery_kommentar || ''));
+  var objKind = data.einwand_qualitaet === 'gut_behandelt' ? 'ok' : (data.einwand_qualitaet === 'keine_einwaende' ? 'warn' : 'bad');
+  var objTitle = data.einwand_qualitaet === 'gut_behandelt' ? t('vc_einwand_gut')
+    : (data.einwand_qualitaet === 'keine_einwaende' ? t('vc_einwand_keine') : t('vc_einwand_schwach'));
+  list.appendChild(verdictCard(objKind, objTitle, data.einwand_kommentar || ''));
+  list.appendChild(verdictCard(data.stufe_hochgefuehrt ? 'ok' : 'warn',
+    data.stufe_hochgefuehrt ? t('vc_stufe_ok') : t('vc_stufe_bad'),
+    data.stufe_kommentar || ''));
+  var timingKind = data.produkt_timing === 'passend' ? 'ok' : (data.produkt_timing === 'zu_frueh' ? 'bad' : 'warn');
+  var timingTitle = data.produkt_timing === 'passend' ? t('vc_produkt_passend')
+    : (data.produkt_timing === 'zu_frueh' ? t('vc_produkt_frueh') : t('vc_produkt_nie'));
+  list.appendChild(verdictCard(timingKind, timingTitle, data.produkt_kommentar || ''));
+
+  fillList('list-staerken', data.staerken);
+  fillList('list-verbesserungen', data.verbesserungen);
+  document.getElementById('next-step').textContent = data.naechster_schritt || '';
+}
+function fillList(id, items){
+  var ul = document.getElementById(id);
+  ul.innerHTML = '';
+  (items || []).forEach(function(t){
+    var li = document.createElement('li');
+    li.textContent = t;
+    ul.appendChild(li);
+  });
+  if (!items || !items.length){ var li = document.createElement('li'); li.textContent = t('dash_val_empty'); ul.appendChild(li); }
+}
+
+document.getElementById('again-btn').addEventListener('click', function(){
+  resultSection.style.display = 'none';
+  startSection.style.display = 'block';
+});
+document.getElementById('continue-btn').addEventListener('click', function(){
+  if (!session) return;
+  resultSection.style.display = 'none';
+  chatSection.style.display = 'block';
+  hideError(chatError);
+  setBusy(false);
+  startTimer();
+});
+
+/* -------------------------------------------------------------------------------- *
+ * Trainingsverlauf (nur lokal)
+ * -------------------------------------------------------------------------------- */
+// Voller Datensatz je Gespraech (nicht nur die Kurzfassung fuer die Tabelle), damit der
+// Download tatsaechlich fuer eine weitere Auswertung taugt: komplette Auswertung inkl.
+// Kommentare/Staerken/Verbesserungen sowie das Transkript.
+var lastEvalRecord = null;
+function pushHistory(stage, persona, lang, data, pct, sellerWords, totalWords, transcriptText, behavioral){
+  var list = loadHistory();
+  var record = {
+    date: new Date().toISOString(),
+    lang: lang || 'de',
+    stageId: stage.id,
+    stageNum: stage.num,
+    stageName: stage.num + '. ' + stage.name,
+    stageLabel: stage.label,
+    personaId: persona ? persona.id : 'neutral',
+    personaLabel: persona ? persona.label : 'Neutral',
+    redeanteilPct: Math.round(pct),
+    sellerWords: sellerWords || 0,
+    totalWords: totalWords || 0,
+    fillerCount: behavioral ? behavioral.fillerCount : 0,
+    fillerPer100: behavioral ? behavioral.fillerPer100 : 0,
+    paceWpm: behavioral ? behavioral.paceWpm : 0,
+    messages: (session && session.messages) ? session.messages.slice() : [],
+    redeanteilOk: !!data.redeanteil_ok,
+    redeanteilKommentar: data.redeanteil_kommentar || '',
+    fuellwoerterOk: !!data.fuellwoerter_ok,
+    fuellwoerterKommentar: data.fuellwoerter_kommentar || '',
+    tempoEinschaetzung: data.tempo_einschaetzung || '',
+    tempoKommentar: data.tempo_kommentar || '',
+    problemErkannt: !!data.problem_erkannt,
+    problemKommentar: data.problem_kommentar || '',
+    discoveryTiefe: data.discovery_tiefe || '',
+    discoveryKommentar: data.discovery_kommentar || '',
+    einwandQualitaet: data.einwand_qualitaet || '',
+    einwandKommentar: data.einwand_kommentar || '',
+    stufeHochgefuehrt: !!data.stufe_hochgefuehrt,
+    stufeKommentar: data.stufe_kommentar || '',
+    produktTiming: data.produkt_timing || '',
+    produktKommentar: data.produkt_kommentar || '',
+    staerken: data.staerken || [],
+    verbesserungen: data.verbesserungen || [],
+    naechsterSchritt: data.naechster_schritt || '',
+    transcript: transcriptText || ''
+  };
+  lastEvalRecord = record;
+  list.push(record);
+  saveHistory(list);
+  renderHistory();
+  renderDashboard();
+}
+// Statt vier Buttons pro Zeile: eine Checkbox pro Zeile (Einfachauswahl wie bei Radios,
+// nur eben als Checkbox umgesetzt) plus eine feste Button-Leiste (hist-select-toolbar),
+// die auf den jeweils ausgewaehlten Eintrag wirkt.
+var selectedHistIdx = null;
+function renderHistory(){
+  var list = loadHistory();
+  var body = document.getElementById('history-body');
+  var clearRow = document.getElementById('history-clear-row');
+  var toolbar = document.getElementById('hist-select-toolbar');
+  selectedHistIdx = null;
+  updateHistToolbar();
+  if (!list.length){
+    body.innerHTML = '<p class="empty-hint">' + escapeHtml(t('hist_empty')) + '</p>';
+    clearRow.style.display = 'none';
+    toolbar.style.display = 'none';
+    return;
+  }
+  clearRow.style.display = 'flex';
+  toolbar.style.display = 'flex';
+  var rows = list.map(function(h, i){ return { h: h, idx: i }; }).reverse().map(function(entry){
+    var h = entry.h;
+    var dateStr = localeDateTimeStr(h.date);
+    var pillClass = h.redeanteilOk ? 'ok' : 'warn';
+    var canContinue = h.messages && h.messages.length;
+    var stageLabel = h.stageName + ((h.personaLabel && h.personaId && h.personaId !== 'neutral') ? ' · ' + h.personaLabel : '');
+    return '<tr><td><input type="checkbox" class="hist-select" data-idx="' + entry.idx + '" data-can-continue="' + (canContinue ? '1' : '0') + '"></td>' +
+      '<td>' + escapeHtml(dateStr) + '</td><td>' + escapeHtml(stageLabel) + '</td>' +
+      '<td><span class="pill ' + pillClass + '">' + h.redeanteilPct + ' %</span></td>' +
+      '<td>' + escapeHtml(h.stufeHochgefuehrt ? t('hist_result_ok') : t('hist_result_bad')) + '</td></tr>';
+  }).join('');
+  body.innerHTML = '<div style="overflow-x:auto"><table class="hist"><thead><tr>' +
+    '<th></th><th>' + escapeHtml(t('th_wann')) + '</th><th>' + escapeHtml(t('th_stufe')) + '</th><th>' + escapeHtml(t('th_redeanteil')) + '</th><th>' + escapeHtml(t('th_ergebnis')) + '</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+}
+function updateHistToolbar(){
+  var selected = selectedHistIdx !== null;
+  var cb = selected ? document.querySelector('.hist-select[data-idx="' + selectedHistIdx + '"]') : null;
+  var canContinue = cb && cb.dataset.canContinue === '1';
+  document.getElementById('hist-toolbar-continue').disabled = !(selected && canContinue);
+  document.getElementById('hist-toolbar-view').disabled = !selected;
+  document.getElementById('hist-toolbar-pdf').disabled = !selected;
+  document.getElementById('hist-toolbar-delete').disabled = !selected;
+}
+document.getElementById('history-body').addEventListener('change', function(e){
+  var cb = e.target.closest ? e.target.closest('.hist-select') : null;
+  if (!cb) return;
+  if (cb.checked){
+    Array.prototype.forEach.call(document.querySelectorAll('.hist-select'), function(other){ if (other !== cb) other.checked = false; });
+    selectedHistIdx = parseInt(cb.dataset.idx, 10);
+  } else {
+    selectedHistIdx = null;
+  }
+  updateHistToolbar();
+});
+document.getElementById('hist-toolbar-continue').addEventListener('click', function(){
+  if (selectedHistIdx !== null) continueFromHistory(selectedHistIdx);
+});
+document.getElementById('hist-toolbar-view').addEventListener('click', function(){
+  if (selectedHistIdx !== null) showEvalModal(loadHistory()[selectedHistIdx]);
+});
+document.getElementById('hist-toolbar-pdf').addEventListener('click', function(){
+  if (selectedHistIdx !== null) printEntry(loadHistory()[selectedHistIdx]);
+});
+document.getElementById('hist-toolbar-delete').addEventListener('click', function(){
+  if (selectedHistIdx === null) return;
+  if (!confirm(t('confirm_delete_entry'))) return;
+  var list = loadHistory();
+  list.splice(selectedHistIdx, 1);
+  saveHistory(list);
+  renderHistory();
+  renderDashboard();
+});
+function continueFromHistory(idx){
+  var list = loadHistory();
+  var entry = list[idx];
+  if (!entry || !entry.messages || !entry.messages.length) return;
+  var entryLang = entry.lang || 'de';
+  var stage = stagesForLang(entryLang).filter(function(s){ return s.id === entry.stageId; })[0];
+  if (!stage) return;
+  var persona = personasForLang(entryLang).filter(function(p){ return p.id === entry.personaId; })[0] || personasForLang(entryLang)[0];
+  if (timerHandle) clearInterval(timerHandle);
+  session = { stage: stage, persona: persona, lang: entryLang, messages: entry.messages.slice(), startedAt: Date.now() };
+  logEl.innerHTML = '';
+  session.messages.forEach(function(m){ addBubble(m.role, m.text); });
+  showPanel('neues-gespraech');
+  startSection.style.display = 'none';
+  resultSection.style.display = 'none';
+  chatSection.style.display = 'block';
+  setAvatarForStage(stage);
+  setTextMode(true);
+  setVoiceStatus('idle');
+  hideError(chatError);
+  setBusy(false);
+  updateStats();
+  startTimer();
+}
+
+/* -------------------------------------------------------------------------------- *
+ * Pausierte (ohne Auswertung beendete) Gespraeche: eigene, kleine Liste getrennt von
+ * der ausgewerteten Historie. Stufe/Persona werden hier bewusst NICHT angezeigt, sonst
+ * waere die Ueberraschung beim spaeteren Fortsetzen dahin.
+ * -------------------------------------------------------------------------------- */
+function renderDrafts(){
+  var list = loadDrafts();
+  var body = document.getElementById('drafts-body');
+  if (!list.length){ body.innerHTML = '<p class="empty-hint">' + escapeHtml(t('drafts_empty')) + '</p>'; return; }
+  var rows = list.map(function(d, i){ return { d: d, idx: i }; }).reverse().map(function(entry){
+    var d = entry.d;
+    var dateStr = localeDateTimeStr(d.date);
+    var lastMsg = d.messages.length ? d.messages[d.messages.length - 1].text : '';
+    if (lastMsg.length > 70) lastMsg = lastMsg.slice(0, 70) + '…';
+    return '<tr><td>' + escapeHtml(dateStr) + '</td><td>' + escapeHtml(lastMsg) + '</td>' +
+      '<td><div class="hist-actions"><button class="ghost draft-continue-btn" data-idx="' + entry.idx + '" type="button">' + escapeHtml(t('draft_continue_btn')) + '</button>' +
+      '<button class="ghost draft-discard-btn" data-idx="' + entry.idx + '" type="button">' + escapeHtml(t('draft_discard_btn')) + '</button></div></td></tr>';
+  }).join('');
+  body.innerHTML = '<div style="overflow-x:auto"><table class="hist"><thead><tr>' +
+    '<th>' + escapeHtml(t('th_wann')) + '</th><th>' + escapeHtml(t('th_letzte_nachricht')) + '</th><th>' + escapeHtml(t('th_aktionen')) + '</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+}
+document.getElementById('drafts-body').addEventListener('click', function(e){
+  var contBtn = e.target.closest ? e.target.closest('.draft-continue-btn') : null;
+  if (contBtn){ continueFromDraft(parseInt(contBtn.dataset.idx, 10)); return; }
+  var delBtn = e.target.closest ? e.target.closest('.draft-discard-btn') : null;
+  if (delBtn){
+    var list = loadDrafts();
+    list.splice(parseInt(delBtn.dataset.idx, 10), 1);
+    saveDrafts(list);
+    renderDrafts();
+  }
+});
+function continueFromDraft(idx){
+  var list = loadDrafts();
+  var entry = list[idx];
+  if (!entry || !entry.messages || !entry.messages.length) return;
+  var entryLang = entry.lang || 'de';
+  var stage = stagesForLang(entryLang).filter(function(s){ return s.id === entry.stageId; })[0];
+  if (!stage) return;
+  var persona = personasForLang(entryLang).filter(function(p){ return p.id === entry.personaId; })[0] || personasForLang(entryLang)[0];
+  list.splice(idx, 1);
+  saveDrafts(list);
+  renderDrafts();
+  if (timerHandle) clearInterval(timerHandle);
+  session = { stage: stage, persona: persona, lang: entryLang, messages: entry.messages.slice(), startedAt: Date.now() };
+  logEl.innerHTML = '';
+  session.messages.forEach(function(m){ addBubble(m.role, m.text); });
+  showPanel('neues-gespraech');
+  startSection.style.display = 'none';
+  resultSection.style.display = 'none';
+  chatSection.style.display = 'block';
+  setAvatarForStage(stage);
+  setTextMode(true);
+  setVoiceStatus('idle');
+  hideError(chatError);
+  setBusy(false);
+  updateStats();
+  startTimer();
+}
+
+document.getElementById('clear-history-btn').addEventListener('click', function(){
+  if (!confirm(t('confirm_clear_history'))) return;
+  saveHistory([]);
+  renderHistory();
+  renderDashboard();
+});
+
+/* -------------------------------------------------------------------------------- *
+ * Management-Dashboard: aggregierte Kennzahlen ueber den gesamten Trainingsverlauf,
+ * gesamt und pro Bewusstseinsstufe. Rein aus loadHistory() abgeleitet, keine eigene
+ * Persistenz.
+ * -------------------------------------------------------------------------------- */
+function avgOf(arr){ return arr.length ? arr.reduce(function(a, b){ return a + b; }, 0) / arr.length : 0; }
+function dashTile(value, label){ return '<div class="dash-tile"><div class="v">' + escapeHtml(String(value)) + '</div><div class="l">' + escapeHtml(label) + '</div></div>'; }
+function renderDashboard(){
+  var list = loadHistory();
+  var tiles = document.getElementById('dash-tiles');
+  var stageTableEl = document.getElementById('dash-stage-table');
+  if (!list.length){
+    tiles.innerHTML = '<p class="empty-hint">' + escapeHtml(t('dash_empty')) + '</p>';
+    stageTableEl.innerHTML = '';
+    return;
+  }
+  var avgRedeanteil = avgOf(list.map(function(h){ return h.redeanteilPct || 0; }));
+  var weitergebrachtRate = avgOf(list.map(function(h){ return h.stufeHochgefuehrt ? 100 : 0; }));
+  var avgFillerPer100 = avgOf(list.map(function(h){ return h.fillerPer100 || 0; }));
+  var pacedEntries = list.filter(function(h){ return h.paceWpm; });
+  var avgPace = avgOf(pacedEntries.map(function(h){ return h.paceWpm; }));
+  tiles.innerHTML =
+    dashTile(list.length, t('dash_tile_total')) +
+    dashTile(avgRedeanteil.toFixed(0) + ' %', t('dash_tile_avg_talk')) +
+    dashTile(weitergebrachtRate.toFixed(0) + ' %', t('dash_tile_advanced')) +
+    dashTile(avgFillerPer100.toFixed(1), t('dash_tile_fillers')) +
+    dashTile(pacedEntries.length ? avgPace.toFixed(0) : t('dash_val_empty'), t('dash_tile_pace'));
+
+  var stages = currentStages();
+  var byStage = {};
+  stages.forEach(function(s){ byStage[s.id] = []; });
+  list.forEach(function(h){ if (byStage[h.stageId]) byStage[h.stageId].push(h); });
+  var rows = stages.map(function(s){
+    var entries = byStage[s.id];
+    if (!entries.length){
+      return '<tr><td>' + s.num + '. ' + escapeHtml(s.name) + '</td><td>0</td><td>' + escapeHtml(t('dash_val_empty')) + '</td><td>' + escapeHtml(t('dash_val_empty')) + '</td></tr>';
+    }
+    var avgR = avgOf(entries.map(function(h){ return h.redeanteilPct || 0; }));
+    var rate = avgOf(entries.map(function(h){ return h.stufeHochgefuehrt ? 100 : 0; }));
+    return '<tr><td>' + s.num + '. ' + escapeHtml(s.name) + '</td><td>' + entries.length + '</td>' +
+      '<td>' + avgR.toFixed(0) + ' %</td><td>' + rate.toFixed(0) + ' %</td></tr>';
+  }).join('');
+  stageTableEl.innerHTML = '<div style="overflow-x:auto"><table class="hist"><thead><tr>' +
+    '<th>' + escapeHtml(t('th_stufe')) + '</th><th>' + escapeHtml(t('th_geuebt')) + '</th><th>' + escapeHtml(t('th_avg_redeanteil')) + '</th><th>' + escapeHtml(t('th_weitergebracht')) + '</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+
+  renderRecommendation(list);
+}
+
+// Uebersetzt die schwaechste gemessene Kennzahl ueber den gesamten Verlauf in einen
+// konkreten Uebungsvorschlag: welche Stufe (ungeuebte zuerst, sonst die mit den
+// schwaechsten Werten) und welcher inhaltliche Fokus als naechstes drankommen sollte.
+function computeRecommendation(list){
+  if (!list.length) return null;
+  var metrics = [
+    { key: 'metric_redeanteil', bad: function(h){ return !h.redeanteilOk; } },
+    { key: 'metric_fuellwoerter', bad: function(h){ return h.fuellwoerterOk === false; } },
+    { key: 'metric_tempo', bad: function(h){ return !!h.tempoEinschaetzung && h.tempoEinschaetzung !== 'passend'; } },
+    { key: 'metric_problem', bad: function(h){ return !h.problemErkannt; } },
+    { key: 'metric_discovery', bad: function(h){ return h.discoveryTiefe === 'oberflaechlich'; } },
+    { key: 'metric_einwand', bad: function(h){ return h.einwandQualitaet === 'schwach_behandelt'; } },
+    { key: 'metric_produkt', bad: function(h){ return h.produktTiming === 'zu_frueh'; } },
+    { key: 'metric_stufe', bad: function(h){ return !h.stufeHochgefuehrt; } }
+  ];
+  var worst = null;
+  metrics.forEach(function(m){
+    var rate = avgOf(list.map(function(h){ return m.bad(h) ? 100 : 0; }));
+    if (rate > 0 && (!worst || rate > worst.rate)) worst = { label: t(m.key), rate: rate };
+  });
+  if (!worst) return null;
+
+  var stages = currentStages();
+  var untried = stages.filter(function(s){ return !list.some(function(h){ return h.stageId === s.id; }); });
+  var stageRec;
+  if (untried.length){
+    stageRec = untried[0];
+  } else {
+    var scored = stages.map(function(s){
+      var entries = list.filter(function(h){ return h.stageId === s.id; });
+      var score = avgOf(entries.map(function(h){ return (h.stufeHochgefuehrt ? 1 : 0) + (h.redeanteilOk ? 1 : 0); }));
+      return { stage: s, score: score };
+    });
+    scored.sort(function(a, b){ return a.score - b.score; });
+    stageRec = scored[0].stage;
+  }
+  return { stage: stageRec, focusLabel: worst.label };
+}
+function renderRecommendation(list){
+  var recEl = document.getElementById('dash-recommendation');
+  var rec = computeRecommendation(list);
+  if (!rec){ recEl.style.display = 'none'; return; }
+  recEl.style.display = 'block';
+  recEl.innerHTML = '<b>' + escapeHtml(t('dash_rec_label')) + '</b> ' + escapeHtml(t('th_stufe')) + ' ' + rec.stage.num + ' (' + escapeHtml(rec.stage.name) + ') · ' + escapeHtml(t('dash_focus_label')) + ' ' + escapeHtml(rec.focusLabel) +
+    '<div class="btn-row" style="margin-top:10px"><button class="ghost" id="dash-rec-start-btn" type="button">' + escapeHtml(t('dash_rec_start_btn')) + '</button></div>';
+  document.getElementById('dash-rec-start-btn').addEventListener('click', function(){
+    trainerToggle.checked = true;
+    stagePickRow.style.display = 'flex';
+    personaPickRow.style.display = 'flex';
+    stagePick.value = rec.stage.id;
+    showPanel('neues-gespraech');
+  });
+}
+
+/* -------------------------------------------------------------------------------- *
+ * PDF-Export: bewusst ohne PDF-Bibliothek, sondern ueber eine ausgeblendete
+ * Druckansicht (#print-view) und window.print() - der Nutzer waehlt im Systemdialog
+ * "Als PDF speichern". Funktioniert fuer die zuletzt ausgewertete Session (pdf-btn)
+ * und fuer jeden Eintrag im Trainingsverlauf (hist-pdf-btn).
+ * -------------------------------------------------------------------------------- */
+function pvRow(label, value, fallback){ return '<div class="pv-row"><b>' + escapeHtml(label) + '</b>' + escapeHtml(value || fallback) + '</div>'; }
+function pvList(label, items, fallback){
+  var lis = (items && items.length) ? items.map(function(txt){ return '<li>' + escapeHtml(txt) + '</li>'; }).join('') : '<li>' + escapeHtml(fallback) + '</li>';
+  return '<h2>' + escapeHtml(label) + '</h2><ul>' + lis + '</ul>';
+}
+// Die Druck-/Modal-Ansicht rendert in der Sprache des jeweiligen Verlaufs-Eintrags
+// (entry.lang), nicht in der aktuellen UI-Sprache - Transkript/Kommentare sind bereits in
+// dieser Sprache gespeichert, eine gemischtsprachige Ansicht waere verwirrend.
+function buildPrintHtml(entry){
+  var lang = entry.lang || 'de';
+  var dateStr = localeDateTimeStr(entry.date, lang);
+  var personaSuffix = (entry.personaLabel && entry.personaId && entry.personaId !== 'neutral') ? ' · ' + entry.personaLabel : '';
+  var empty = t('dash_val_empty', null, lang);
+  var yesNo = function(v){ return v ? t('ja', null, lang) : t('nein', null, lang); };
+  return '<h1>' + escapeHtml(t('pv_title', null, lang)) + '</h1>' +
+    '<div class="pv-meta">' + escapeHtml(dateStr) + ' · ' + escapeHtml(entry.stageName) + personaSuffix + '</div>' +
+    '<h2>' + escapeHtml(t('pv_h2_redeanteil', null, lang)) + '</h2>' +
+    pvRow(t('pv_redeanteil_row', { pct: entry.redeanteilPct, sw: entry.sellerWords, tw: entry.totalWords }, lang), entry.redeanteilKommentar, empty) +
+    pvRow(t('pv_fuellwoerter_row', { n: entry.fillerCount || 0, per100: (entry.fillerPer100 || 0).toFixed(1) }, lang), entry.fuellwoerterKommentar, empty) +
+    pvRow(t('pv_tempo_row', { wpm: entry.paceWpm || 0 }, lang), entry.tempoKommentar, empty) +
+    '<h2>' + escapeHtml(t('pv_h2_gespraechsfuehrung', null, lang)) + '</h2>' +
+    pvRow(t('pv_problem_row', { v: yesNo(entry.problemErkannt) }, lang), entry.problemKommentar, empty) +
+    pvRow(t('pv_discovery_row', { v: entry.discoveryTiefe || empty }, lang), entry.discoveryKommentar, empty) +
+    pvRow(t('pv_einwand_row', { v: entry.einwandQualitaet || empty }, lang), entry.einwandKommentar, empty) +
+    pvRow(t('pv_stufe_row', { v: yesNo(entry.stufeHochgefuehrt) }, lang), entry.stufeKommentar, empty) +
+    pvRow(t('pv_produkt_row', { v: entry.produktTiming || empty }, lang), entry.produktKommentar, empty) +
+    pvList(t('staerken_h3', null, lang), entry.staerken, empty) +
+    pvList(t('verbesserungen_h3', null, lang), entry.verbesserungen, empty) +
+    '<h2>' + escapeHtml(t('pv_h2_naechster', null, lang)) + '</h2><div class="pv-row">' + escapeHtml(entry.naechsterSchritt || empty) + '</div>' +
+    '<h2>' + escapeHtml(t('pv_h2_transkript', null, lang)) + '</h2><div class="pv-transcript">' + escapeHtml(entry.transcript || '') + '</div>';
+}
+function printEntry(entry){
+  if (!entry) return;
+  document.getElementById('print-view').innerHTML = buildPrintHtml(entry);
+  window.print();
+}
+document.getElementById('pdf-btn').addEventListener('click', function(){ printEntry(lastEvalRecord); });
+
+// Bildschirm-Ansicht derselben Auswertung als Modal, ohne den Systemdruckdialog.
+var evalModal = document.getElementById('eval-modal');
+function showEvalModal(entry){
+  if (!entry) return;
+  document.getElementById('eval-modal-content').innerHTML = buildPrintHtml(entry);
+  evalModal.classList.add('open');
+}
+function closeEvalModal(){ evalModal.classList.remove('open'); }
+document.getElementById('eval-modal-close').addEventListener('click', closeEvalModal);
+evalModal.addEventListener('click', function(e){ if (e.target === evalModal) closeEvalModal(); });
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && evalModal.classList.contains('open')) closeEvalModal(); });
+
+/* -------------------------------------------------------------------------------- *
+ * Download des Trainingsverlaufs fuer die weitere Auswertung: CSV (Excel-tauglich,
+ * Semikolon-getrennt wie 04-PIPELINE.csv) oder vollstaendiges JSON. Echte lokale Datei,
+ * daher funktioniert ein simpler <a download>-Link (kein Artifact-Sandbox-Fall).
+ * -------------------------------------------------------------------------------- */
+function triggerDownload(filename, content, mime){
+  var blob = new Blob([content], { type: mime });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+}
+function csvField(v){
+  var s = String(v == null ? '' : v);
+  return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+document.getElementById('download-csv-btn').addEventListener('click', function(){
+  var list = loadHistory();
+  if (!list.length) return;
+  var cols = ['Datum', 'Stufe', 'Variante', 'Redeanteil_Prozent', 'Woerter_Du', 'Woerter_Gegenüber',
+    'Redeanteil_ok', 'Redeanteil_Kommentar', 'Fuellwoerter', 'Fuellwoerter_pro_100', 'Fuellwoerter_Kommentar',
+    'Tempo_Woerter_pro_Min', 'Tempo_Einschaetzung', 'Tempo_Kommentar',
+    'Problem_erkannt', 'Problem_Kommentar', 'Discovery_Tiefe', 'Discovery_Kommentar',
+    'Einwand_Qualitaet', 'Einwand_Kommentar',
+    'Stufe_hochgefuehrt', 'Stufe_Kommentar', 'Produkt_Timing', 'Produkt_Kommentar',
+    'Staerken', 'Verbesserungen', 'Naechster_Schritt', 'Transkript'];
+  var lines = [cols.join(';')];
+  list.forEach(function(h){
+    var hLang = h.lang || 'de';
+    lines.push([
+      csvField(localeDateTimeStr(h.date, hLang)), csvField(h.stageName), csvField(h.personaLabel),
+      csvField(h.redeanteilPct), csvField(h.sellerWords), csvField(h.totalWords),
+      csvField(h.redeanteilOk ? 'ja' : 'nein'), csvField(h.redeanteilKommentar),
+      csvField(h.fillerCount), csvField((h.fillerPer100 || 0).toFixed(1)), csvField(h.fuellwoerterKommentar),
+      csvField(h.paceWpm), csvField(h.tempoEinschaetzung), csvField(h.tempoKommentar),
+      csvField(h.problemErkannt ? 'ja' : 'nein'), csvField(h.problemKommentar),
+      csvField(h.discoveryTiefe), csvField(h.discoveryKommentar),
+      csvField(h.einwandQualitaet), csvField(h.einwandKommentar),
+      csvField(h.stufeHochgefuehrt ? 'ja' : 'nein'), csvField(h.stufeKommentar),
+      csvField(h.produktTiming), csvField(h.produktKommentar),
+      csvField((h.staerken || []).join(' | ')), csvField((h.verbesserungen || []).join(' | ')),
+      csvField(h.naechsterSchritt), csvField(h.transcript)
+    ].join(';'));
+  });
+  triggerDownload('docworm-sales-training-verlauf.csv', '﻿' + lines.join('\r\n'), 'text/csv;charset=utf-8');
+});
+document.getElementById('download-json-btn').addEventListener('click', function(){
+  var list = loadHistory();
+  if (!list.length) return;
+  triggerDownload('docworm-sales-training-verlauf.json', JSON.stringify(list, null, 2), 'application/json;charset=utf-8');
+});
+// CSV-Spaltennamen bleiben absichtlich fixe deutsche Feldbezeichner (wie die JSON-Keys im
+// Verlauf) statt sprachabhaengig - stabiles Datenschema fuer den Re-Import, unabhaengig
+// von der UI-Sprache beim Export.
+
+// Upload einer zuvor per "Als JSON herunterladen" exportierten Datei: wird in den
+// bestehenden lokalen Verlauf gemergt (nicht ersetzt), damit sich z.B. Exporte aus
+// einem anderen Browser/Geraet dazuholen lassen. saveHistory() kappt danach wie ueberall
+// sonst auch auf die juengsten 30 Eintraege.
+document.getElementById('upload-json-btn').addEventListener('click', function(){
+  document.getElementById('upload-json-input').click();
+});
+document.getElementById('upload-json-input').addEventListener('change', function(e){
+  var file = e.target.files && e.target.files[0];
+  e.target.value = '';
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(){
+    var imported;
+    try{ imported = JSON.parse(reader.result); }catch(_){ alert(t('alert_invalid_json')); return; }
+    if (!Array.isArray(imported)){ alert(t('alert_expected_list')); return; }
+    var merged = loadHistory().concat(imported);
+    merged.sort(function(a, b){ return new Date(a.date) - new Date(b.date); });
+    saveHistory(merged);
+    renderHistory();
+    renderDashboard();
+    alert(t('alert_imported', { n: imported.length }));
+  };
+  reader.onerror = function(){ alert(t('alert_file_read_failed')); };
+  reader.readAsText(file);
+});
+
+/* -------------------------------------------------------------------------------- *
+ * Konfiguration-Panel: Stufen/Personas/Produkt-Briefing pro Sprache bearbeitbar, siehe
+ * stagesForLang()/personasForLang()/briefForLang() weiter oben.
+ * -------------------------------------------------------------------------------- */
+var configPanelEl = document.getElementById('panel-konfiguration');
+function configField(labelKey, value, kind, extraAttrs){
+  var tag = kind === 'textarea' ? 'textarea' : 'input';
+  var openTag = tag === 'textarea'
+    ? '<textarea ' + (extraAttrs || '') + '>' + escapeHtml(value || '') + '</textarea>'
+    : '<input type="text" value="' + escapeHtml(value || '') + '" ' + (extraAttrs || '') + '>';
+  return '<div class="config-field"><label>' + escapeHtml(t(labelKey)) + '</label>' + openTag + '</div>';
+}
+function renderConfigPanel(){
+  if (!configPanelEl) return;
+  var lang = currentLang;
+  var stages = stagesForLang(lang);
+  var personas = personasForLang(lang);
+  var brief = briefForLang(lang);
+  var html = '<section class="card"><h2>' + escapeHtml(t('config_h2')) + '</h2>' +
+    '<p class="thesis" style="max-width:none">' + escapeHtml(t('config_intro')) + '</p></section>';
+
+  html += '<section class="card"><h2>' + escapeHtml(t('config_stages_h3')) + '</h2>';
+  stages.forEach(function(s){
+    html += '<div class="config-stage-card" data-stage-id="' + escapeHtml(s.id) + '"><h3>' + s.num + '. ' + escapeHtml(s.name) + ' (' + escapeHtml(s.label) + ')</h3>' +
+      configField('config_field_name', s.name, 'input', 'data-field="name"') +
+      configField('config_field_label', s.label, 'input', 'data-field="label"') +
+      configField('config_field_zustand', s.zustand, 'textarea', 'data-field="zustand"') +
+      configField('config_field_rolle', s.rolle, 'textarea', 'data-field="rolle"') +
+      configField('config_field_verhalten', s.verhalten, 'textarea', 'data-field="verhalten"') +
+      configField('config_field_aufgabe', s.aufgabe, 'textarea', 'data-field="aufgabe"') +
+      configField('config_field_einstieg', s.einstieg, 'textarea', 'data-field="einstieg"') +
+      '<div class="btn-row" style="margin-top:6px"><button class="ghost config-reset-stage-btn" type="button" data-stage-id="' + escapeHtml(s.id) + '">' + escapeHtml(t('config_reset_stage_btn')) + '</button></div>' +
+      '</div>';
+  });
+  html += '</section>';
+
+  html += '<section class="card"><h2>' + escapeHtml(t('config_personas_h3')) + '</h2>';
+  personas.filter(function(p){ return p.id !== 'neutral'; }).forEach(function(p){
+    html += '<div class="config-persona-card" data-persona-id="' + escapeHtml(p.id) + '">' +
+      configField('config_field_persona_label', p.label, 'input', 'data-field="label"') +
+      configField('config_field_persona_hinweis', p.hinweis, 'textarea', 'data-field="hinweis"') +
+      '<div class="btn-row" style="margin-top:6px"><button class="ghost config-reset-persona-btn" type="button" data-persona-id="' + escapeHtml(p.id) + '">' + escapeHtml(t('config_reset_persona_btn')) + '</button></div>' +
+      '</div>';
+  });
+  html += '</section>';
+
+  html += '<section class="card"><h2>' + escapeHtml(t('config_brief_h3')) + '</h2>' +
+    configField('config_field_brief', brief, 'textarea', 'id="config-brief-input" rows="4"') +
+    '<div class="btn-row"><button class="ghost" id="config-reset-brief-btn" type="button">' + escapeHtml(t('config_reset_brief_btn')) + '</button></div>' +
+    '</section>';
+
+  html += '<section class="card"><div class="btn-row" style="margin-top:0">' +
+    '<button class="primary" id="config-save-btn" type="button">' + escapeHtml(t('config_save_btn')) + '</button>' +
+    '<button class="ghost" id="config-reset-all-btn" type="button">' + escapeHtml(t('config_reset_all_btn')) + '</button>' +
+    '</div><p class="hint" id="config-status"></p></section>';
+
+  configPanelEl.innerHTML = html;
+  wireConfigPanel();
+}
+function wireConfigPanel(){
+  var lang = currentLang;
+  Array.prototype.forEach.call(configPanelEl.querySelectorAll('.config-reset-stage-btn'), function(btn){
+    btn.addEventListener('click', function(){
+      var id = btn.dataset.stageId;
+      var overrides = loadStageOverrides(lang);
+      delete overrides[id];
+      saveStageOverrides(lang, overrides);
+      renderConfigPanel();
+      populateStagePersonaPicks();
+    });
+  });
+  Array.prototype.forEach.call(configPanelEl.querySelectorAll('.config-reset-persona-btn'), function(btn){
+    btn.addEventListener('click', function(){
+      var id = btn.dataset.personaId;
+      var overrides = loadPersonaOverrides(lang);
+      delete overrides[id];
+      savePersonaOverrides(lang, overrides);
+      renderConfigPanel();
+      populateStagePersonaPicks();
+    });
+  });
+  var resetBriefBtn = document.getElementById('config-reset-brief-btn');
+  if (resetBriefBtn) resetBriefBtn.addEventListener('click', function(){
+    saveBriefOverride(lang, '');
+    renderConfigPanel();
+  });
+  var saveBtn = document.getElementById('config-save-btn');
+  if (saveBtn) saveBtn.addEventListener('click', function(){
+    var stageOverrides = {};
+    Array.prototype.forEach.call(configPanelEl.querySelectorAll('.config-stage-card'), function(card){
+      var id = card.dataset.stageId;
+      var o = {};
+      Array.prototype.forEach.call(card.querySelectorAll('[data-field]'), function(el){ o[el.dataset.field] = el.value; });
+      stageOverrides[id] = o;
+    });
+    saveStageOverrides(lang, stageOverrides);
+
+    var personaOverrides = {};
+    Array.prototype.forEach.call(configPanelEl.querySelectorAll('.config-persona-card'), function(card){
+      var id = card.dataset.personaId;
+      var o = {};
+      Array.prototype.forEach.call(card.querySelectorAll('[data-field]'), function(el){ o[el.dataset.field] = el.value; });
+      personaOverrides[id] = o;
+    });
+    savePersonaOverrides(lang, personaOverrides);
+
+    var briefInput = document.getElementById('config-brief-input');
+    if (briefInput) saveBriefOverride(lang, briefInput.value);
+
+    populateStagePersonaPicks();
+    var status = document.getElementById('config-status');
+    if (status) status.textContent = t('config_saved_status');
+  });
+  var resetAllBtn = document.getElementById('config-reset-all-btn');
+  if (resetAllBtn) resetAllBtn.addEventListener('click', function(){
+    if (!confirm(t('confirm_reset_all'))) return;
+    saveStageOverrides(lang, {});
+    savePersonaOverrides(lang, {});
+    saveBriefOverride(lang, '');
+    renderConfigPanel();
+    populateStagePersonaPicks();
+  });
+}
+
+/* -------------------------------------------------------------------------------- *
+ * Stufen-erklaert-Panel: statische Erklaerung des Bewusstseinsstufen-Modells (siehe
+ * STAGE_EXPLAIN_BY_LANG), unabhaengig vom Rollenspiel-Inhalt der Konfiguration.
+ * -------------------------------------------------------------------------------- */
+var stufenPanelEl = document.getElementById('panel-stufen-erklaert');
+function renderStufenPanel(){
+  if (!stufenPanelEl) return;
+  var explainers = STAGE_EXPLAIN_BY_LANG[currentLang] || STAGE_EXPLAIN_BY_LANG.de;
+  var practiceStages = currentStages();
+  var html = '<section class="card"><h2>' + escapeHtml(t('stufen_h2')) + '</h2>' +
+    '<p class="thesis" style="max-width:none">' + escapeHtml(t('stufen_intro')) + '</p>' +
+    '<p class="hint" style="margin-top:12px">' + t('stufen_source') + '</p></section>';
+  explainers.forEach(function(ex){
+    var practice = practiceStages.filter(function(s){ return s.id === ex.id; })[0];
+    html += '<section class="card"><h2 style="text-transform:none; letter-spacing:0; font-size:15px; color:var(--ink)">' + escapeHtml(ex.title) + '</h2>' +
+      '<p class="thesis" style="max-width:none">' + escapeHtml(ex.text) + '</p>' +
+      (practice ? '<p class="hint" style="margin-top:10px"><b>' + escapeHtml(t('stufen_practice_label')) + '</b> ' + escapeHtml(practice.rolle) + '</p>' : '') +
+      '</section>';
+  });
+  stufenPanelEl.innerHTML = html;
+}
+
+// Sprachumschaltung: aendert currentLang, persistiert, rendert alle sprachabhaengigen
+// Teile neu (statische UI, Stufen-/Personabezeichnungen, Konfiguration, Erklaer-Panel).
+function setLang(lang){
+  if (lang !== 'de' && lang !== 'en') return;
+  currentLang = lang;
+  saveLocal(LS_KEY_LANG, lang);
+  applyI18n();
+  populateStagePersonaPicks();
+  renderConfigPanel();
+  renderStufenPanel();
+  renderHistory();
+  renderDrafts();
+  renderDashboard();
+  updateSetupStatus();
+  if (audioSourceSelect.value === 'browser') populateDeviceVoiceSelects();
+}
+Array.prototype.forEach.call(document.querySelectorAll('.lang-switch button'), function(btn){
+  btn.addEventListener('click', function(){ setLang(btn.dataset.lang); });
+});
+
+applyI18n();
+renderConfigPanel();
+renderStufenPanel();
+renderHistory();
+renderDrafts();
+renderDashboard();
+
+})();
+</script>
+</body>
+</html>
