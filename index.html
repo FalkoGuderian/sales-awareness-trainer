@@ -2336,6 +2336,7 @@ endBtn.addEventListener('click', function(){
   setBusy(true);
   if (timerHandle) clearInterval(timerHandle);
 
+  var mySession = session;
   var sessionLang = session.lang || 'de';
   var sellerWords = 0, totalWords = 0;
   var fillerCount = 0, fillerFound = {};
@@ -2359,13 +2360,15 @@ endBtn.addEventListener('click', function(){
   var paceWpm = Math.round(sellerWords / durationMin);
   var behavioral = { fillerCount: fillerCount, fillerPer100: fillerPer100, fillerTopList: fillerTopList, paceWpm: paceWpm, durationMin: durationMin };
 
-  callLLM([{ role: 'user', content: buildEvalPrompt(session.stage, session.persona, sessionLang, transcriptText, sellerWords, totalWords, pct, behavioral) }], true)
+  callLLM([{ role: 'user', content: buildEvalPrompt(mySession.stage, mySession.persona, sessionLang, transcriptText, sellerWords, totalWords, pct, behavioral) }], true)
     .then(function(raw){
+      if (session !== mySession) return; // waehrend der Auswertung verworfen
       var data = parseJsonLoose(raw);
-      showResult(session.stage, session.persona, data, pct, behavioral);
-      pushHistory(session.stage, session.persona, sessionLang, data, pct, sellerWords, totalWords, transcriptText, behavioral);
+      showResult(mySession.stage, mySession.persona, data, pct, behavioral);
+      pushHistory(mySession.stage, mySession.persona, sessionLang, data, pct, sellerWords, totalWords, transcriptText, behavioral, mySession.messages);
       setBusy(false);
     }).catch(function(e){
+      if (session !== mySession) return; // waehrend der Auswertung verworfen
       showError(chatError, t('err_eval_failed') + e.message);
       setBusy(false);
     });
@@ -2452,7 +2455,7 @@ document.getElementById('continue-btn').addEventListener('click', function(){
 // Download tatsaechlich fuer eine weitere Auswertung taugt: komplette Auswertung inkl.
 // Kommentare/Staerken/Verbesserungen sowie das Transkript.
 var lastEvalRecord = null;
-function pushHistory(stage, persona, lang, data, pct, sellerWords, totalWords, transcriptText, behavioral){
+function pushHistory(stage, persona, lang, data, pct, sellerWords, totalWords, transcriptText, behavioral, messages){
   var list = loadHistory();
   var record = {
     date: new Date().toISOString(),
@@ -2469,7 +2472,7 @@ function pushHistory(stage, persona, lang, data, pct, sellerWords, totalWords, t
     fillerCount: behavioral ? behavioral.fillerCount : 0,
     fillerPer100: behavioral ? behavioral.fillerPer100 : 0,
     paceWpm: behavioral ? behavioral.paceWpm : 0,
-    messages: (session && session.messages) ? session.messages.slice() : [],
+    messages: messages ? messages.slice() : [],
     redeanteilOk: !!data.redeanteil_ok,
     redeanteilKommentar: data.redeanteil_kommentar || '',
     fuellwoerterOk: !!data.fuellwoerter_ok,
