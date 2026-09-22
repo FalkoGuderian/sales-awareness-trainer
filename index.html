@@ -454,7 +454,7 @@ footer{margin-top:40px; padding-top:18px; border-top:1px solid var(--line); font
     </div>
   </div>
   <div class="redeanteil-bar"><i id="pct-fill"></i></div>
-  <div id="log"></div>
+  <div id="log" role="log" aria-live="polite"></div>
   <div class="mode-switch-row">
     <button type="button" id="mode-switch-btn">Tastatur verwenden</button>
   </div>
@@ -550,7 +550,7 @@ footer{margin-top:40px; padding-top:18px; border-top:1px solid var(--line); font
 <div id="print-view"></div>
 
 <div class="modal-overlay" id="eval-modal">
-  <div class="modal-box">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-label="Auswertung">
     <button class="modal-close" id="eval-modal-close" type="button" aria-label="Schließen">✕</button>
     <div class="pv-content" id="eval-modal-content"></div>
   </div>
@@ -568,6 +568,7 @@ function openMenu(){ sideMenuEl.classList.add('open'); menuBackdrop.classList.ad
 function closeMenu(){ sideMenuEl.classList.remove('open'); menuBackdrop.classList.remove('open'); menuToggleBtn.setAttribute('aria-expanded', 'false'); }
 menuToggleBtn.addEventListener('click', function(){ sideMenuEl.classList.contains('open') ? closeMenu() : openMenu(); });
 menuBackdrop.addEventListener('click', closeMenu);
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && sideMenuEl.classList.contains('open')) closeMenu(); });
 var LS_KEY_PANEL = 'docworm_st_panel';
 function applyActivePanel(name){
   Array.prototype.forEach.call(document.querySelectorAll('.panel'), function(p){ p.classList.toggle('active', p.dataset.panel === name); });
@@ -2847,17 +2848,42 @@ function printEntry(entry){
 }
 document.getElementById('pdf-btn').addEventListener('click', function(){ printEntry(lastEvalRecord); });
 
-// Bildschirm-Ansicht derselben Auswertung als Modal, ohne den Systemdruckdialog.
+// Bildschirm-Ansicht derselben Auswertung als Modal, ohne den Systemdruckdialog. Fokusfalle +
+// Fokus-Rueckgabe fuer Tastatur-/Screenreader-Bedienung: beim Oeffnen geht der Fokus auf den
+// Schliessen-Button, Tab zirkuliert innerhalb der modal-box, beim Schliessen kehrt der Fokus
+// zum ursprünglichen Ausloeser zurueck.
 var evalModal = document.getElementById('eval-modal');
+var evalModalBox = evalModal.querySelector('.modal-box');
+var evalModalCloseBtn = document.getElementById('eval-modal-close');
+var evalModalTrigger = null;
+function evalModalFocusables(){
+  return Array.prototype.filter.call(evalModalBox.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'), function(el){ return !el.disabled && el.offsetParent !== null; });
+}
 function showEvalModal(entry){
   if (!entry) return;
+  evalModalTrigger = document.activeElement;
   document.getElementById('eval-modal-content').innerHTML = buildPrintHtml(entry);
   evalModal.classList.add('open');
+  evalModalCloseBtn.focus();
 }
-function closeEvalModal(){ evalModal.classList.remove('open'); }
+function closeEvalModal(){
+  evalModal.classList.remove('open');
+  if (evalModalTrigger && typeof evalModalTrigger.focus === 'function') evalModalTrigger.focus();
+  evalModalTrigger = null;
+}
 document.getElementById('eval-modal-close').addEventListener('click', closeEvalModal);
 evalModal.addEventListener('click', function(e){ if (e.target === evalModal) closeEvalModal(); });
-document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && evalModal.classList.contains('open')) closeEvalModal(); });
+document.addEventListener('keydown', function(e){
+  if (!evalModal.classList.contains('open')) return;
+  if (e.key === 'Escape'){ closeEvalModal(); return; }
+  if (e.key === 'Tab'){
+    var focusables = evalModalFocusables();
+    if (!focusables.length) return;
+    var first = focusables[0], last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  }
+});
 
 /* -------------------------------------------------------------------------------- *
  * Download des Trainingsverlaufs fuer die weitere Auswertung: CSV (Excel-tauglich,
