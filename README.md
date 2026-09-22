@@ -1,6 +1,6 @@
 # Sales Awareness Trainer
 
-![Sales Awareness Trainer](assets/cover.png)
+![Sales Awareness Trainer](assets/cover.png?v=2)
 
 A single-file, client-side web app for practicing sales conversations against an AI-simulated prospect at one of the **5 stages of awareness** (Eugene Schwartz, *Breakthrough Advertising*, 1966) — without knowing in advance which stage you're talking to.
 
