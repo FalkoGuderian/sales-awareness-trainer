@@ -83,7 +83,7 @@ Nach dem Gespräch bewertet dieselbe KI dein Gespräch anhand eines Leitfadens (
   <img src="assets/screenshot-result.png" width="31%" alt="Auswertung nach dem Gespräch">
 </p>
 
-1. `index.html` im Browser öffnen (oder live auf [GitHub Pages](https://falkoguderian.github.io/sales-awareness-trainer/) ansehen) — kein Server, kein Build, keine Installation.
+1. `index.html` im Browser öffnen (oder live auf [GitHub Pages](https://falkoguderian.github.io/sales-awareness-trainer/) ausprobieren) — kein Server, kein Build, keine Installation.
 2. Kostenlosen [OpenRouter](https://openrouter.ai/)-API-Key anlegen und unter **Zugang** eintragen (Details unten).
 3. **Gespräch starten** klicken — die Stufe wird zufällig gewählt und bleibt verdeckt, bis du auswertest.
 4. Nach dem Gespräch auswerten lassen: Redeanteil, Füllwörter, Tempo, Discovery-Tiefe, Einwandbehandlung und ein konkreter nächster Schritt.
@@ -110,7 +110,7 @@ OpenRouter berechnet die Nutzung pay-as-you-go direkt über deinen Account (übl
 
 ### Nutzung
 
-Einfach `index.html` im Browser öffnen (Doppelklick oder live auf [GitHub Pages](https://falkoguderian.github.io/sales-awareness-trainer/) ansehen). Kein Server, kein Build, keine Installation nötig.
+Einfach `index.html` im Browser öffnen (Doppelklick oder live auf [GitHub Pages](https://falkoguderian.github.io/sales-awareness-trainer/) ausprobieren). Kein Server, kein Build, keine Installation nötig.
 
 ### Datenschutz
 
