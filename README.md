@@ -24,7 +24,7 @@ After the conversation, the same AI evaluates your call against a guide (talk sh
   <img src="assets/screenshot-result-en.png" width="31%" alt="Evaluation after the conversation">
 </p>
 
-1. Open `index.html` in your browser (or view it live on [GitHub Pages](https://falkoguderian.github.io/sales-awareness-trainer/)) — no server, no build, no install.
+1. Open `index.html` in your browser (or try it live on [GitHub Pages](https://falkoguderian.github.io/sales-awareness-trainer/)) — no server, no build, no install.
 2. Create a free [OpenRouter](https://openrouter.ai/) API key and enter it under **Access** (details below).
 3. Click **Start conversation** — the stage is picked at random and stays hidden until you evaluate.
 4. After the conversation, get evaluated on talk share, filler words, pace, discovery depth, objection handling, and a concrete next step.
@@ -51,7 +51,7 @@ OpenRouter bills usage pay-as-you-go directly to your account (typical cost per 
 
 ### Usage
 
-Just open `index.html` in a browser (double-click, or view it live on [GitHub Pages](https://falkoguderian.github.io/sales-awareness-trainer/)). No server, no build, no install required.
+Just open `index.html` in a browser (double-click, or try it live on [GitHub Pages](https://falkoguderian.github.io/sales-awareness-trainer/)). No server, no build, no install required.
 
 ### Privacy
 
