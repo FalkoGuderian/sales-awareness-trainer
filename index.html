@@ -732,6 +732,7 @@ var I18N = {
     err_start_failed: 'Gespräch konnte nicht gestartet werden: ',
     err_reply_failed: 'Antwort fehlgeschlagen: ',
     err_transcribe_failed: 'Transkription fehlgeschlagen. Meist liegt es daran, dass das gewählte Transkriptionsmodell kein Audio versteht (siehe Hinweis bei „Modell (Transkription, Spracherkennung)“ im Tab „Zugang & KI-Modelle“). Technische Meldung: {msg}',
+    err_tts_failed: 'Sprachausgabe fehlgeschlagen. Meist liegt es daran, dass das gewählte TTS-Modell die verwendete Stimme (Rex/Sal/Eve/Leo/Ara) oder das Audioformat nicht unterstützt. Technische Meldung: {msg}',
     err_mic_unsupported: 'Mikrofon wird von diesem Browser nicht unterstützt.',
     err_mic_failed: 'Mikrofonzugriff fehlgeschlagen: ',
     err_api_generic: 'API-Fehler',
@@ -928,6 +929,7 @@ var I18N = {
     err_start_failed: 'Conversation could not be started: ',
     err_reply_failed: 'Reply failed: ',
     err_transcribe_failed: 'Transcription failed. This is usually because the selected transcription model doesn\'t understand audio (see the hint under "Model (transcription, speech recognition)" in the "Access & AI Models" tab). Technical message: {msg}',
+    err_tts_failed: 'Voice output failed. This is usually because the selected TTS model doesn\'t support the voice used (Rex/Sal/Eve/Leo/Ara) or the audio format. Technical message: {msg}',
     err_mic_unsupported: 'Microphone is not supported by this browser.',
     err_mic_failed: 'Microphone access failed: ',
     err_api_generic: 'API error',
@@ -1419,7 +1421,12 @@ function speakText(text, voice){
     headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey() },
     body: JSON.stringify({ model: ttsModelId(), input: text, voice: voice || 'Eve', response_format: 'pcm', stream: true })
   }).then(function(resp){
-    if (!resp.ok) throw new Error('TTS HTTP ' + resp.status);
+    if (!resp.ok){
+      return resp.json().catch(function(){ return null; }).then(function(errBody){
+        var msg = errBody && errBody.error && errBody.error.message ? errBody.error.message : ('HTTP ' + resp.status);
+        throw new Error(msg);
+      });
+    }
     var ct = resp.headers.get('content-type') || '';
     var m = ct.match(/rate=(\d{4,6})/i);
     var sampleRate = m ? parseInt(m[1], 10) : 24000;
@@ -2040,9 +2047,10 @@ function onCustomerReply(text){
     avatarSpeakingStop();
     setVoiceStatus(voiceState.recording ? 'recording' : 'idle');
     if (voiceState.liveOn) startListening();
-  }).catch(function(){
+  }).catch(function(e){
     avatarSpeakingStop();
     setVoiceStatus('idle');
+    showError(chatError, t('err_tts_failed', { msg: e.message }));
     if (voiceState.liveOn) startListening();
   });
 }
