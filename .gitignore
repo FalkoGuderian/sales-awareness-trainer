@@ -1,0 +1,6 @@
+# Generator-Skripte und Helfer-HTMLs fuer Marketing-/Cover-Assets - nur lokale
+# Werkzeuge, nicht Teil der ausgelieferten App. Die von ihnen erzeugten Bilder
+# (assets/*.png, avatars/*.jpg, avatars/*.mp4) bleiben getrackt.
+assets/generate.mjs
+assets/*.html
+avatars/generate.mjs
