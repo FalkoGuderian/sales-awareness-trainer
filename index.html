@@ -722,7 +722,7 @@ var I18N = {
     stop_aria: 'Stopp',
     err_start_failed: 'Gespräch konnte nicht gestartet werden: ',
     err_reply_failed: 'Antwort fehlgeschlagen: ',
-    err_transcribe_failed: 'Transkription fehlgeschlagen: ',
+    err_transcribe_failed: 'Transkription fehlgeschlagen. Meist liegt es daran, dass das gewählte Transkriptionsmodell kein Audio versteht (siehe Hinweis bei „Modell (Transkription, Spracherkennung)“ im Tab „Zugang & KI-Modelle“). Technische Meldung: {msg}',
     err_mic_unsupported: 'Mikrofon wird von diesem Browser nicht unterstützt.',
     err_mic_failed: 'Mikrofonzugriff fehlgeschlagen: ',
     err_api_generic: 'API-Fehler',
@@ -914,7 +914,7 @@ var I18N = {
     stop_aria: 'Stop',
     err_start_failed: 'Conversation could not be started: ',
     err_reply_failed: 'Reply failed: ',
-    err_transcribe_failed: 'Transcription failed: ',
+    err_transcribe_failed: 'Transcription failed. This is usually because the selected transcription model doesn\'t understand audio (see the hint under "Model (transcription, speech recognition)" in the "Access & AI Models" tab). Technical message: {msg}',
     err_mic_unsupported: 'Microphone is not supported by this browser.',
     err_mic_failed: 'Microphone access failed: ',
     err_api_generic: 'API error',
@@ -2105,7 +2105,7 @@ async function toggleRecording(){
         if (!transcript){ setVoiceStatus('idle'); if (voiceState.liveOn) startListening(); return; }
         sendSellerText(transcript);
       }).catch(function(e){
-        showError(chatError, t('err_transcribe_failed') + e.message);
+        showError(chatError, t('err_transcribe_failed', { msg: e.message }));
         setVoiceStatus('idle');
         if (voiceState.liveOn) startListening();
       });
