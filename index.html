@@ -1285,18 +1285,41 @@ function createPauseDetector(stream, onPause, silenceMs, onNoInput, noInputMs){
   }catch(e){ return { hadSound: function(){ return true; }, stop: function(){} }; }
 }
 
+// Bricht haengende Anfragen nach ms selbst ab (sonst bleibt busy=true dauerhaft, einziger
+// Ausweg waere "Verwerfen"). AbortError wird in eine sprechende Fehlermeldung uebersetzt.
+function fetchWithTimeout(url, opts, ms){
+  var ctrl = new AbortController();
+  var timer = setTimeout(function(){ ctrl.abort(); }, ms || 60000);
+  opts = opts || {};
+  opts.signal = ctrl.signal;
+  return fetch(url, opts).then(function(resp){
+    clearTimeout(timer);
+    return resp;
+  }, function(err){
+    clearTimeout(timer);
+    if (err && err.name === 'AbortError') throw new Error(t('err_api_generic') + ' (timeout)');
+    throw err;
+  });
+}
+// resp.json() wirft bei Nicht-JSON-Fehlerseiten (z. B. 5xx-HTML von Proxys) nur "Unexpected
+// token <" statt einer brauchbaren Meldung - erst als Text lesen, dann selbst parsen.
+function parseJsonResponse(resp){
+  return resp.text().then(function(txt){
+    try{ return JSON.parse(txt); }catch(_){ throw new Error('HTTP ' + resp.status + ': ' + txt.slice(0, 120)); }
+  });
+}
 function transcribeAudio(blob){
   return new Promise(function(resolve, reject){
     var reader = new FileReader();
     reader.onloadend = function(){
-      fetch('https://openrouter.ai/api/v1/chat/completions', {
+      fetchWithTimeout('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey() },
         body: JSON.stringify({
           model: transModelId(),
           messages: [{ role: 'user', content: [{ type: 'text', text: transPrompt(activeLang()) }, { type: 'image_url', image_url: { url: reader.result } }] }]
         })
-      }).then(function(r){ return r.json(); }).then(function(data){
+      }, 90000).then(parseJsonResponse).then(function(data){
         if (data.error) throw new Error(data.error.message || t('err_api_generic'));
         var text = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
         resolve((text || '').trim());
@@ -1428,11 +1451,11 @@ function speakText(text, voice){
   agentSpeechCancelled = false;
   setVoiceStatus('speaking');
   avatarSpeakingStart();
-  return fetch('https://openrouter.ai/api/v1/audio/speech', {
+  return fetchWithTimeout('https://openrouter.ai/api/v1/audio/speech', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey() },
     body: JSON.stringify({ model: ttsModelId(), input: text, voice: voice || 'Eve', response_format: 'pcm', stream: true })
-  }).then(function(resp){
+  }, 60000).then(function(resp){
     if (!resp.ok){
       return resp.json().catch(function(){ return null; }).then(function(errBody){
         var msg = errBody && errBody.error && errBody.error.message ? errBody.error.message : ('HTTP ' + resp.status);
@@ -1798,11 +1821,11 @@ function transModelId(){ return transModelInput.value.trim() || DEFAULT_TRANS_MO
 function callLLM(messages, asJson){
   var body = { model: modelId(), messages: messages };
   if (asJson) body.response_format = { type: 'json_object' };
-  return fetch('https://openrouter.ai/api/v1/chat/completions', {
+  return fetchWithTimeout('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey() },
     body: JSON.stringify(body)
-  }).then(function(resp){ return resp.json(); }).then(function(data){
+  }, 60000).then(parseJsonResponse).then(function(data){
     if (data.error) throw new Error(data.error.message || t('err_api_generic'));
     var text = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
     if (!text) throw new Error(t('err_empty_response'));
