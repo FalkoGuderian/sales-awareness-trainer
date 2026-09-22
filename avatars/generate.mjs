@@ -1,6 +1,6 @@
 /**
  * Avatar-„lebende Porträts" für die 5 Bewusstseinsstufen im Sales-Awareness-Training
- * (vertrieb/sales_awareness_training.html), gleiche Pipeline wie die Premium-Sonderedition-
+ * (index.html), gleiche Pipeline wie die Premium-Sonderedition-
  * Avatare (scripts/generate-courses/gen_avatar_images.mjs + gen_avatar_videos.mjs), nur
  * lokal in diesem Ordner statt in BuchTutorLegal/avatars, weil das Trainingstool
  * eigenständig außerhalb der App/des Content-CDN lebt.
@@ -13,9 +13,9 @@
  * Schritt 2: Loop-Video daraus (grok-imagine-video, img2img) -> <slug>-avatar-animated.mp4
  *
  * Usage:
- *   node vertrieb/avatars/generate.mjs --all
- *   node vertrieb/avatars/generate.mjs --only unaware
- *   node vertrieb/avatars/generate.mjs --all --images-only   (nur Portraits, kein Video)
+ *   node avatars/generate.mjs --all
+ *   node avatars/generate.mjs --only unaware
+ *   node avatars/generate.mjs --all --images-only   (nur Portraits, kein Video)
  * Braucht XAI_API_KEY.
  */
 import { readFile, writeFile, mkdir } from "node:fs/promises";

@@ -1376,11 +1376,12 @@ function getDeviceVoicesAsync(){
   if (!('speechSynthesis' in window)) return Promise.resolve([]);
   var existing = window.speechSynthesis.getVoices();
   if (existing && existing.length > 0) return Promise.resolve(existing);
-  if (_cachedDeviceVoices) return Promise.resolve(_cachedDeviceVoices);
+  if (_cachedDeviceVoices && _cachedDeviceVoices.length) return Promise.resolve(_cachedDeviceVoices);
   return new Promise(function(resolve){
     var done = false;
     function finish(){
       if (done) return; done = true;
+      window.speechSynthesis.removeEventListener('voiceschanged', finish);
       _cachedDeviceVoices = window.speechSynthesis.getVoices();
       resolve(_cachedDeviceVoices);
     }
@@ -2143,7 +2144,7 @@ function onCustomerReply(text){
 /* -------------------------------------------------------------------------------- *
  * Avatar-Kachel wie im Presentation-Viewer-PiP (app.html, _pvAvatarStart()/pvStopTts()):
  * idle = gedimmt/graustufig und pausiert, speaking = volle Farbe, Video laeuft im Loop,
- * goldener Ring "pulsiert" per zufaelliger Randbreite als Sprech-Indikator (keine echte
+ * Akzent-Ring "pulsiert" per zufaelliger Randbreite als Sprech-Indikator (keine echte
  * Lippensynchronisation, siehe gen_avatar_videos.mjs).
  * -------------------------------------------------------------------------------- */
 var avatarPip = document.getElementById('avatar-pip');
@@ -2175,7 +2176,7 @@ function avatarSpeakingStop(){
 }
 
 /* -------------------------------------------------------------------------------- *
- * Mikrofon: Antippen startet/stoppt die Aufnahme manuell, Stille von 1.6s stoppt sie
+ * Mikrofon: Antippen startet/stoppt die Aufnahme manuell, Stille von 2.4s stoppt sie
  * automatisch und schickt sie zur Transkription. Antippen waehrend der simulierte
  * Interessent noch spricht unterbricht die Ansage (Barge-in).
  * -------------------------------------------------------------------------------- */
@@ -2471,9 +2472,9 @@ function showResult(stage, persona, data, pct, behavioral){
 function fillList(id, items){
   var ul = document.getElementById(id);
   ul.innerHTML = '';
-  (items || []).forEach(function(t){
+  (items || []).forEach(function(txt){
     var li = document.createElement('li');
-    li.textContent = t;
+    li.textContent = txt;
     ul.appendChild(li);
   });
   if (!items || !items.length){ var li = document.createElement('li'); li.textContent = t('dash_val_empty'); ul.appendChild(li); }
