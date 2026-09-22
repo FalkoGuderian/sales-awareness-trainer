@@ -785,7 +785,10 @@ var I18N = {
     alert_invalid_json: 'Datei ist kein gültiges JSON.',
     alert_expected_list: 'Erwartet wird eine JSON-Liste, wie sie "Als JSON herunterladen" erzeugt.',
     alert_file_read_failed: 'Datei konnte nicht gelesen werden.',
-    alert_imported: '{n} neu hinzugefügt, {d} Duplikate übersprungen, {i} ungültig verworfen.',
+    alert_imported: '{n} neu hinzugefügt, {d} Duplikate übersprungen, {i} ungültig verworfen, {c} wegen 30er-Kappe entfernt.',
+    alert_storage_full: 'Speicher voll – ältere Einträge werden verworfen bzw. diese Änderung wurde nicht gesichert.',
+    hist_cap_hint: 'Es werden nur die letzten 30 ausgewerteten Gespräche gespeichert – per JSON exportieren, bevor ältere verloren gehen.',
+    drafts_cap_hint: 'Es werden nur die letzten 15 pausierten Gespräche gespeichert – ältere gehen sonst verloren.',
 
     dash_h2: 'Überblick', dash_stage_h2: 'Pro Bewusstseinsstufe', dash_empty: 'Noch keine ausgewerteten Gespräche.',
     dash_tile_total: 'Gespräche gesamt', dash_tile_avg_talk: 'Ø Redeanteil', dash_tile_advanced: 'Stufe weitergebracht',
@@ -983,7 +986,10 @@ var I18N = {
     alert_invalid_json: 'File is not valid JSON.',
     alert_expected_list: 'A JSON list is expected, as produced by "Download as JSON".',
     alert_file_read_failed: 'File could not be read.',
-    alert_imported: '{n} new added, {d} duplicates skipped, {i} invalid discarded.',
+    alert_imported: '{n} new added, {d} duplicates skipped, {i} invalid discarded, {c} dropped due to the 30-entry cap.',
+    alert_storage_full: 'Storage full – older entries will be dropped, or this change was not saved.',
+    hist_cap_hint: 'Only the last 30 evaluated conversations are kept – export as JSON before older ones are lost.',
+    drafts_cap_hint: 'Only the last 15 paused conversations are kept – older ones will otherwise be lost.',
 
     dash_h2: 'Overview', dash_stage_h2: 'By awareness stage', dash_empty: 'No evaluated conversations yet.',
     dash_tile_total: 'Total conversations', dash_tile_avg_talk: 'Avg. talk share', dash_tile_advanced: 'Stage advanced',
@@ -1545,11 +1551,13 @@ var DEFAULT_DEVICE_PITCH_FEMALE = '1.3';
 var DEFAULT_DEVICE_RATE = '1';
 
 function loadLocal(key, fallback){ try{ var v = localStorage.getItem(key); return v === null ? fallback : v; }catch(_){ return fallback; } }
-function saveLocal(key, val){ try{ localStorage.setItem(key, val); }catch(_){} }
+// Geben true/false zurueck statt QuotaExceededError kommentarlos zu schlucken, damit Aufrufer,
+// denen ein Fehlschlag tatsaechlich Daten kostet (Verlauf/Entwuerfe), den Nutzer warnen koennen.
+function saveLocal(key, val){ try{ localStorage.setItem(key, val); return true; }catch(_){ return false; } }
 function loadHistory(){ try{ return JSON.parse(localStorage.getItem(LS_KEY_HISTORY) || '[]'); }catch(_){ return []; } }
-function saveHistory(list){ try{ localStorage.setItem(LS_KEY_HISTORY, JSON.stringify(list.slice(-30))); }catch(_){} }
+function saveHistory(list){ try{ localStorage.setItem(LS_KEY_HISTORY, JSON.stringify(list.slice(-30))); return true; }catch(_){ return false; } }
 function loadDrafts(){ try{ return JSON.parse(localStorage.getItem(LS_KEY_DRAFTS) || '[]'); }catch(_){ return []; } }
-function saveDrafts(list){ try{ localStorage.setItem(LS_KEY_DRAFTS, JSON.stringify(list.slice(-15))); }catch(_){} }
+function saveDrafts(list){ try{ localStorage.setItem(LS_KEY_DRAFTS, JSON.stringify(list.slice(-15))); return true; }catch(_){ return false; } }
 
 var apiKeyInput = document.getElementById('api-key');
 var modelInput = document.getElementById('model-id');
@@ -2348,7 +2356,7 @@ endBtn.addEventListener('click', function(){
     if (session.messages.length){
       var drafts = loadDrafts();
       drafts.push({ date: new Date().toISOString(), stageId: session.stage.id, personaId: session.persona ? session.persona.id : 'neutral', lang: session.lang || 'de', messages: session.messages.slice(), elapsedMs: (session.elapsedMs || 0) + (Date.now() - session.startedAt) });
-      saveDrafts(drafts);
+      if (!saveDrafts(drafts)) alert(t('alert_storage_full'));
       renderDrafts();
     }
     session = null;
@@ -2533,7 +2541,7 @@ function pushHistory(stage, persona, lang, data, pct, sellerWords, totalWords, t
   };
   lastEvalRecord = record;
   list.push(record);
-  saveHistory(list);
+  if (!saveHistory(list)) alert(t('alert_storage_full'));
   renderHistory();
   renderDashboard();
 }
@@ -2568,7 +2576,8 @@ function renderHistory(){
       '<td>' + escapeHtml(h.stufeHochgefuehrt ? t('hist_result_ok') : t('hist_result_bad')) + '</td></tr>';
   }).join('');
   body.innerHTML = '<div style="overflow-x:auto"><table class="hist"><thead><tr>' +
-    '<th></th><th>' + escapeHtml(t('th_wann')) + '</th><th>' + escapeHtml(t('th_stufe')) + '</th><th>' + escapeHtml(t('th_redeanteil')) + '</th><th>' + escapeHtml(t('th_ergebnis')) + '</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+    '<th></th><th>' + escapeHtml(t('th_wann')) + '</th><th>' + escapeHtml(t('th_stufe')) + '</th><th>' + escapeHtml(t('th_redeanteil')) + '</th><th>' + escapeHtml(t('th_ergebnis')) + '</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+    (list.length >= 30 ? '<p class="hint" style="margin-top:10px">' + escapeHtml(t('hist_cap_hint')) + '</p>' : '');
 }
 function updateHistToolbar(){
   var selected = selectedHistIdx !== null;
@@ -2652,7 +2661,8 @@ function renderDrafts(){
       '<button class="ghost draft-discard-btn" data-idx="' + entry.idx + '" type="button">' + escapeHtml(t('draft_discard_btn')) + '</button></div></td></tr>';
   }).join('');
   body.innerHTML = '<div style="overflow-x:auto"><table class="hist"><thead><tr>' +
-    '<th>' + escapeHtml(t('th_wann')) + '</th><th>' + escapeHtml(t('th_letzte_nachricht')) + '</th><th>' + escapeHtml(t('th_aktionen')) + '</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+    '<th>' + escapeHtml(t('th_wann')) + '</th><th>' + escapeHtml(t('th_letzte_nachricht')) + '</th><th>' + escapeHtml(t('th_aktionen')) + '</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+    (list.length >= 15 ? '<p class="hint" style="margin-top:10px">' + escapeHtml(t('drafts_cap_hint')) + '</p>' : '');
 }
 document.getElementById('drafts-body').addEventListener('click', function(e){
   var contBtn = e.target.closest ? e.target.closest('.draft-continue-btn') : null;
@@ -2950,10 +2960,11 @@ document.getElementById('upload-json-input').addEventListener('change', function
     });
     var merged = existing.concat(toAdd);
     merged.sort(function(a, b){ return new Date(a.date) - new Date(b.date); });
-    saveHistory(merged);
+    var cappedCount = Math.max(0, merged.length - 30);
+    if (!saveHistory(merged)) alert(t('alert_storage_full'));
     renderHistory();
     renderDashboard();
-    alert(t('alert_imported', { n: newCount, d: dupeCount, i: invalidCount }));
+    alert(t('alert_imported', { n: newCount, d: dupeCount, i: invalidCount, c: cappedCount }));
   };
   reader.onerror = function(){ alert(t('alert_file_read_failed')); };
   reader.readAsText(file);
