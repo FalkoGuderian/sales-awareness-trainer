@@ -469,7 +469,7 @@ footer{margin-top:40px; padding-top:18px; border-top:1px solid var(--line); font
   <div class="redeanteil-bar"><i id="pct-fill"></i></div>
   <div id="log"></div>
   <div class="mode-switch-row">
-    <button type="button" id="mode-switch-btn" data-i18n="mode_switch_to_keyboard">Tastatur verwenden</button>
+    <button type="button" id="mode-switch-btn">Tastatur verwenden</button>
   </div>
   <div class="composer" id="composer-row" style="display:none">
     <textarea id="composer-input" data-i18n-placeholder="composer_placeholder" placeholder="Deine nächste Frage oder Antwort …" rows="2"></textarea>
@@ -1977,7 +1977,7 @@ function setTextMode(v){
   voiceState.textMode = v;
   composerRow.style.display = v ? 'flex' : 'none';
   voicebar.style.display = v ? 'none' : 'flex';
-  modeSwitchBtn.textContent = v ? 'Sprachmodus verwenden' : 'Tastatur verwenden';
+  modeSwitchBtn.textContent = v ? t('mode_switch_to_voice') : t('mode_switch_to_keyboard');
   if (v) stopListening(true);
 }
 modeSwitchBtn.addEventListener('click', function(){ setTextMode(!voiceState.textMode); });
@@ -3123,6 +3123,7 @@ function setLang(lang){
   currentLang = lang;
   saveLocal(LS_KEY_LANG, lang);
   applyI18n();
+  setTextMode(voiceState.textMode);
   populateStagePersonaPicks();
   renderConfigPanel();
   renderVoiceMapping();
@@ -3138,6 +3139,7 @@ Array.prototype.forEach.call(document.querySelectorAll('.lang-switch button'), f
 });
 
 applyI18n();
+setTextMode(voiceState.textMode);
 renderConfigPanel();
 renderStufenPanel();
 renderHistory();
