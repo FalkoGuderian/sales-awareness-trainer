@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --ground:#f4f5f8; --ink:#171a24; --ink-2:#454b5c; --ink-3:#6d7488;
+    --line:#dcdfe8; --accent:#4a3bbd; --accent-soft:#ecebfa; --surface:#ffffff;
+  }
+  html,body{width:1200px;height:630px}
+  body{font-family:"Segoe UI",Arial,sans-serif;color:var(--ink);
+    background:var(--ground);position:relative;overflow:hidden}
+  .frame{position:absolute;inset:0;padding:64px 72px;display:flex;flex-direction:column;justify-content:space-between}
+  .top{display:flex;align-items:center;gap:10px}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .kicker{font-weight:700;letter-spacing:.14em;font-size:15px;color:var(--ink-3);text-transform:uppercase}
+  .hl{max-width:660px;margin-top:36px}
+  .hl .title{font-size:56px;line-height:1.08;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
+  .hl .sub{margin-top:20px;font-size:22px;line-height:1.45;font-weight:400;color:var(--ink-2);max-width:600px}
+  .badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+  .badge{font-size:13.5px;font-weight:600;color:var(--ink-2);background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:7px 14px}
+  .art{position:absolute;right:46px;top:50%;width:440px;height:440px;transform:translateY(-50%)}
+</style></head>
+<body>
+  <div class="frame">
+    <div class="top">
+      <div class="dot"></div>
+      <div class="kicker">Vertrieb &middot; &Uuml;bungstool</div>
+    </div>
+
+    <div class="hl">
+      <div class="title">Sales Awareness<br>Trainer</div>
+      <div class="sub">5 Bewusstseinsstufen. Ein KI-Interessent. Du wei&szlig;t vorher nicht, welche Stufe du vor dir hast.</div>
+      <div class="badges">
+        <div class="badge">Rollenspiel</div>
+        <div class="badge">Live-Auswertung</div>
+        <div class="badge">Sprachmodus</div>
+        <div class="badge">Kein Server, 100% lokal</div>
+      </div>
+    </div>
+  </div>
+
+  <svg class="art" viewBox="0 0 440 440" fill="none" aria-hidden="true">
+    <circle cx="220" cy="220" r="176" stroke="#4a3bbd" stroke-width="2.5" stroke-dasharray="9 13" opacity="0.35"/>
+    <!-- 5-Stufen-Fortschritt: von unbewusst (leer) bis kaufbereit (voll) -->
+    <g transform="translate(50,220)">
+      <line x1="20" y1="0" x2="340" y2="0" stroke="#dcdfe8" stroke-width="3"/>
+      <circle cx="20" cy="0" r="19" fill="#f4f5f8" stroke="#6d7488" stroke-width="2.5"/>
+      <circle cx="105" cy="0" r="19" fill="#ecebfa" stroke="#4a3bbd" stroke-width="2.5" opacity="0.55"/>
+      <circle cx="190" cy="0" r="19" fill="#ecebfa" stroke="#4a3bbd" stroke-width="2.5" opacity="0.8"/>
+      <circle cx="275" cy="0" r="19" fill="#4a3bbd" stroke="#4a3bbd" stroke-width="2.5" opacity="0.85"/>
+      <circle cx="360" cy="0" r="19" fill="#4a3bbd" stroke="#4a3bbd" stroke-width="2.5"/>
+    </g>
+    <!-- Sprechblase mit Fragezeichen ueber der Reihe: welche Stufe ist es wirklich? -->
+    <g transform="translate(148,96)">
+      <rect x="0" y="0" width="150" height="76" rx="18" fill="#ffffff" stroke="#dcdfe8" stroke-width="2"/>
+      <path d="M58 76l-10 26 30-26z" fill="#ffffff" stroke="#dcdfe8" stroke-width="2"/>
+      <text x="75" y="52" font-size="40" font-weight="700" fill="#4a3bbd" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif">?</text>
+    </g>
+  </svg>
+</body></html>

@@ -1,8 +1,8 @@
 # Sales Awareness Trainer
 
-A single-file, client-side web app for practicing sales conversations against an AI-simulated prospect at one of the **5 stages of awareness** (Eugene Schwartz, *Breakthrough Advertising*, 1966) — without knowing in advance which stage you're talking to.
+![Sales Awareness Trainer](assets/cover.png)
 
-No backend, no build step, no install. One HTML file, runs entirely in your browser.
+A single-file, client-side web app for practicing sales conversations against an AI-simulated prospect at one of the **5 stages of awareness** (Eugene Schwartz, *Breakthrough Advertising*, 1966) — without knowing in advance which stage you're talking to.
 
 **[Deutsch](#deutsch) · [English](#english)**
 
@@ -15,6 +15,19 @@ No backend, no build step, no install. One HTML file, runs entirely in your brow
 Ein Trainingstool für Verkaufs-/Sales-Gespräche: Du übst gegen einen von einer KI simulierten Interessenten, der sich zufällig (oder gezielt wählbar) auf einer von 5 Bewusstseinsstufen befindet — unbewusst, problem-bewusst, lösungs-bewusst, produkt-bewusst oder entscheidungsbereit. Die Stufe wird dir vorher nicht verraten. Deine Aufgabe: durch Fragen herausfinden, wo dein Gegenüber steht, statt zu pitchen.
 
 Nach dem Gespräch bewertet dieselbe KI dein Gespräch anhand eines Leitfadens (u. a. Redeanteil, Füllwörter, Sprechtempo, Discovery-Tiefe, Umgang mit Einwänden) und gibt dir einen konkreten nächsten Schritt.
+
+### Schnellstart
+
+<p align="center">
+  <img src="assets/screenshot-start.png" width="31%" alt="Start-Screen: Gespräch konfigurieren und starten">
+  <img src="assets/screenshot-chat.png" width="31%" alt="Laufendes Gespräch mit dem simulierten Interessenten">
+  <img src="assets/screenshot-result.png" width="31%" alt="Auswertung nach dem Gespräch">
+</p>
+
+1. `index.html` im Browser öffnen (oder per GitHub Pages hosten) — kein Server, kein Build, keine Installation.
+2. Kostenlosen [OpenRouter](https://openrouter.ai/)-API-Key anlegen und unter **Zugang** eintragen (Details unten).
+3. **Gespräch starten** klicken — die Stufe wird zufällig gewählt und bleibt verdeckt, bis du auswertest.
+4. Nach dem Gespräch auswerten lassen: Redeanteil, Füllwörter, Tempo, Discovery-Tiefe, Einwandbehandlung und ein konkreter nächster Schritt.
 
 ### Funktionen
 
@@ -61,6 +74,19 @@ Anbieter dieses Repositories: Falko Guderian. Impressum: [falkoguderian.github.i
 A training tool for sales conversations: you practice against an AI-simulated prospect who is randomly (or deliberately) placed at one of 5 stages of awareness — unaware, problem-aware, solution-aware, product-aware, or ready to decide. The stage is not revealed to you beforehand. Your task: find out through questions where your counterpart stands, instead of pitching.
 
 After the conversation, the same AI evaluates your call against a guide (talk share, filler words, pace, discovery depth, objection handling, among others) and gives you one concrete next step.
+
+### Quick Start
+
+<p align="center">
+  <img src="assets/screenshot-start.png" width="31%" alt="Start screen: configure and start a conversation">
+  <img src="assets/screenshot-chat.png" width="31%" alt="Live conversation with the simulated prospect">
+  <img src="assets/screenshot-result.png" width="31%" alt="Evaluation after the conversation">
+</p>
+
+1. Open `index.html` in your browser (or host it via GitHub Pages) — no server, no build, no install.
+2. Create a free [OpenRouter](https://openrouter.ai/) API key and enter it under **Access** (details below).
+3. Click **Start conversation** — the stage is picked at random and stays hidden until you evaluate.
+4. After the conversation, get evaluated on talk share, filler words, pace, discovery depth, objection handling, and a concrete next step.
 
 ### Features
 
