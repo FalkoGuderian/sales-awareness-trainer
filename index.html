@@ -618,11 +618,11 @@ var I18N = {
     rules_quote: '„Keine Sau will dein Produkt, sie wollen eine Lösung für ihr Problem.“',
 
     stufen_h2: 'Die 5 Bewusstseinsstufen',
-    stufen_intro: 'Das Modell, auf dem dieses Training aufbaut: jeder Interessent befindet sich gegenüber ' +
-      'seinem Problem und dessen Lösung auf einer von fünf Stufen. Zu früh pitchen (z. B. Produktdetails bei ' +
-      'einem noch unbewussten Interessenten) verpufft; zu spät (bei einem bereits kaufbereiten Interessenten ' +
-      'noch grundsätzliche Aufklärung) wirkt bevormundend und kostet Vertrauen. Die Kunst ist, die aktuelle ' +
-      'Stufe zu erkennen und genau den nächsten Schritt zu gehen.',
+    stufen_intro: 'Dieses Training geht von fünf Stufen aus, auf denen ein Interessent stehen kann, je nachdem ' +
+      'wie klar ihm Problem und Lösung sind. Wer hier zu früh mit Produktdetails kommt, redet an jemandem ' +
+      'vorbei, der noch gar kein Problem sieht. Umgekehrt verliert man einen fast kaufbereiten Interessenten, ' +
+      'wenn man ihm noch Grundlagen erklärt, das wirkt schnell von oben herab. Es kommt also darauf an, richtig ' +
+      'einzuschätzen, wo jemand steht, und dann nur den einen nächsten Schritt zu machen.',
     stufen_source: 'Quelle: Eugene Schwartz, <i>Breakthrough Advertising</i> (1966), Konzept der „Stages of Market Awareness“. ' +
       'In der Marketing-/Vertriebspraxis seither breit adaptiert (u. a. durch Eugene Schwartz\' Nachfolger wie Ryan Deiss, Justin Goff u. a.).',
     stufen_practice_label: 'In diesem Training als Rollenspiel-Szenario:',
@@ -677,9 +677,14 @@ var I18N = {
     config_field_brief: 'Fließt als Hintergrundwissen in den Rollenspiel-Prompt ein (der Interessent erwähnt es nicht ungefragt)',
     config_reset_brief_btn: 'Zurücksetzen',
     config_save_btn: 'Speichern',
-    config_reset_all_btn: 'Alles zurücksetzen (' + '' + ')',
+    config_reset_all_btn: 'Alles zurücksetzen',
     config_saved_status: 'Gespeichert.',
     confirm_reset_all: 'Wirklich alle Anpassungen für diese Sprache zurücksetzen?',
+    config_download_btn: 'Konfiguration als JSON herunterladen',
+    config_upload_btn: 'Konfiguration hochladen (JSON)',
+    confirm_config_upload: 'Konfiguration aus Datei laden? Deine aktuellen Anpassungen (DE + EN) werden dabei überschrieben.',
+    alert_config_invalid: 'Datei ist keine gültige Konfigurationsdatei.',
+    config_uploaded_status: 'Konfiguration geladen.',
 
     start_h2: 'Neues Gespräch',
     start_thesis: 'Ein Klick, die Stufe wird zufällig gewählt und bleibt verdeckt, bis du auswertest.',
@@ -803,10 +808,10 @@ var I18N = {
     rules_quote: '"Nobody wants your product, they want a solution to their problem."',
 
     stufen_h2: 'The 5 Stages of Awareness',
-    stufen_intro: 'The model this training is built on: every prospect is at one of five stages regarding ' +
-      'their problem and its solution. Pitching too early (e.g. product details to a still-unaware prospect) ' +
-      'falls flat; pitching too late (basic education for a prospect who is already ready to buy) feels ' +
-      'condescending and costs trust. The skill is recognizing the current stage and taking exactly the next step.',
+    stufen_intro: 'This training assumes five stages, depending on how clearly a prospect sees the problem and ' +
+      'the solution. Product details go nowhere with someone who does not see a problem yet. And explaining ' +
+      'basics to someone almost ready to buy comes across as patronizing and loses trust. So it comes down to ' +
+      'judging where someone stands and taking just that one next step.',
     stufen_source: 'Source: Eugene Schwartz, <i>Breakthrough Advertising</i> (1966), the "Stages of Market Awareness" concept. ' +
       'Widely adapted since in marketing/sales practice (e.g. by later writers such as Ryan Deiss, Justin Goff, and others).',
     stufen_practice_label: 'Used in this training as a roleplay scenario:',
@@ -863,6 +868,11 @@ var I18N = {
     config_save_btn: 'Save',
     config_reset_all_btn: 'Reset everything',
     config_saved_status: 'Saved.',
+    config_download_btn: 'Download configuration as JSON',
+    config_upload_btn: 'Upload configuration (JSON)',
+    confirm_config_upload: 'Load configuration from file? Your current customizations (DE + EN) will be overwritten.',
+    alert_config_invalid: 'File is not a valid configuration file.',
+    config_uploaded_status: 'Configuration loaded.',
     confirm_reset_all: 'Really reset all customizations for this language?',
 
     start_h2: 'New Conversation',
@@ -1095,18 +1105,18 @@ var STAGES_BY_LANG = {
  * -------------------------------------------------------------------------------- */
 var STAGE_EXPLAIN_BY_LANG = {
   de: [
-    { id: 'unaware', title: '1. Unbewusst (Unaware)', text: 'Der Interessent weiß nicht, dass er ein Problem hat, oder hat sich mit dem Status quo abgefunden. Klassisches Verkaufen scheitert hier, weil es nichts zu verkaufen gibt, das noch niemand vermisst. Aufgabe ist, zuerst ein Bewusstsein für Symptome zu schaffen, nicht für die Lösung oder gar das Produkt.' },
-    { id: 'problem_aware', title: '2. Problem-bewusst (Problem-Aware)', text: 'Der Interessent spürt den Schmerz (Zeitdruck, Frust, schlechte Ergebnisse), kennt aber keine Lösung oder hat mit bisherigen Versuchen schlechte Erfahrungen gemacht. Aufgabe ist, den Schmerz zu validieren und zu vertiefen, nicht das eigene Produkt zu pitchen.' },
-    { id: 'solution_aware', title: '3. Lösungs-bewusst (Solution-Aware)', text: 'Der Interessent weiß, welche Art von Lösung grundsätzlich hilft (z. B. „eine App“, „Nachhilfe“, „mehr Struktur“), kennt aber noch nicht das konkrete Produkt. Aufgabe ist, die Kriterien für die richtige Lösung zu schärfen und zu zeigen, warum diese Art Lösung überlegen ist.' },
-    { id: 'product_aware', title: '4. Produkt-bewusst (Product-Aware)', text: 'Der Interessent kennt das eigene Produkt oder direkte Wettbewerber, hat aber offene Einwände oder vergleicht aktiv. Aufgabe ist, konkrete Einwände zu entkräften und Unterscheidungsmerkmale klar zu machen, statt das Produkt von vorn zu erklären.' },
-    { id: 'brand_aware', title: '5. Entscheidungsphase (Most Aware / Brand-Aware)', text: 'Der Interessent kennt und vertraut der Marke, ist inhaltlich überzeugt und braucht nur noch den letzten Anstoß (Klarheit über den nächsten Schritt, Bestätigung). Aufgabe ist, den Abschluss zu erleichtern, nicht erneut zu überzeugen.' }
+    { id: 'unaware', title: '1. Unbewusst (Unaware)', text: 'Unaware bedeutet: Jemand hat entweder noch gar nicht bemerkt, dass etwas nicht rund läuft, oder er hat sich mit dem Status quo arrangiert. Mit klassischem Verkaufen kommt man da nicht weiter, denn vermisst wird bisher nichts. Sinnvoll ist hier nur, den Blick zuerst auf Symptome zu lenken, Lösung und Produkt bleiben außen vor.' },
+    { id: 'problem_aware', title: '2. Problem-bewusst (Problem-Aware)', text: 'Auf der Stufe problem-aware ist der Schmerz da, Zeitdruck, Frust oder schlechte Ergebnisse, aber eine Lösung ist nicht in Sicht oder frühere Versuche sind schiefgegangen. Was hier hilft, ist, diesen Schmerz ernst zu nehmen und genauer hinzuschauen. Für einen Produktpitch ist es zu früh.' },
+    { id: 'solution_aware', title: '3. Lösungs-bewusst (Solution-Aware)', text: 'Solution-aware heißt: Die Richtung steht grob fest, etwa „eine App“, „Nachhilfe“ oder „mehr Struktur“, nur das konkrete Produkt fehlt noch. An dieser Stelle geht es darum, klarer zu machen, woran man eine gute Lösung erkennt, und zu begründen, warum genau diese Art von Lösung passt.' },
+    { id: 'product_aware', title: '4. Produkt-bewusst (Product-Aware)', text: 'Wer product-aware ist, kennt das Produkt schon oder schaut sich parallel direkte Wettbewerber an, ist aber noch unentschieden und vergleicht. Statt noch einmal von vorn anzufangen, zählen hier konkrete Antworten auf Einwände und sauber herausgearbeitete Unterschiede.' },
+    { id: 'brand_aware', title: '5. Entscheidungsphase (Most Aware / Brand-Aware)', text: 'Bei brand-aware, auch Most Aware genannt, ist das Vertrauen in die Marke da und inhaltlich gibt es kaum noch Zweifel, es fehlt nur der letzte Anstoß. Oft reicht schon Klarheit über den nächsten Schritt oder eine kurze Bestätigung. Hier sollte man den Abschluss leicht machen, statt erneut zu argumentieren.' }
   ],
   en: [
-    { id: 'unaware', title: '1. Unaware', text: "The prospect doesn't know they have a problem, or has made peace with the status quo. Classic selling fails here because there's nothing to sell that nobody misses yet. The task is to first create awareness of symptoms, not of the solution or the product." },
-    { id: 'problem_aware', title: '2. Problem-Aware', text: 'The prospect feels the pain (time pressure, frustration, poor results) but knows no solution, or has had bad experiences with previous attempts. The task is to validate and deepen the pain, not to pitch your own product.' },
-    { id: 'solution_aware', title: '3. Solution-Aware', text: 'The prospect knows what type of solution generally helps (e.g. "an app", "tutoring", "more structure"), but not yet the specific product. The task is to sharpen the criteria for the right solution and show why this type of solution is superior.' },
-    { id: 'product_aware', title: '4. Product-Aware', text: 'The prospect knows your product or direct competitors, but has open objections or is actively comparing. The task is to defuse concrete objections and clarify differentiators, instead of explaining the product from scratch.' },
-    { id: 'brand_aware', title: '5. Most Aware / Brand-Aware', text: 'The prospect knows and trusts the brand, is convinced in substance, and just needs the final nudge (clarity on the next step, reassurance). The task is to ease the close, not to persuade again.' }
+    { id: 'unaware', title: '1. Unaware', text: 'Unaware means the prospect either has not noticed a problem at all or has settled into the status quo. Classic selling gets nowhere at this point because nobody misses what they have not noticed. All you can do here is draw attention to symptoms first, with solution and product left aside.' },
+    { id: 'problem_aware', title: '2. Problem-Aware', text: 'At the problem-aware stage the pain is real, time pressure, frustration or poor results, but no solution is in sight or earlier attempts went badly. What helps now is taking that pain seriously and looking closer at it. A product pitch would come too early.' },
+    { id: 'solution_aware', title: '3. Solution-Aware', text: 'Solution-aware means the general direction is set, something like "an app", "tutoring" or "more structure", while the specific product is still open. At this point the job is to clarify what marks a good solution and to explain why this kind of solution fits.' },
+    { id: 'product_aware', title: '4. Product-Aware', text: 'A product-aware prospect already knows the product or is looking at direct competitors in parallel, but still has objections and keeps comparing. Rather than starting from the beginning again, this is about answering objections directly and working out the differences cleanly.' },
+    { id: 'brand_aware', title: '5. Most Aware / Brand-Aware', text: 'At the brand-aware stage, also called Most Aware, trust in the brand is there and there is little doubt left on substance, only the final nudge is missing. Often clarity about the next step or brief reassurance is enough. Here the close should be made easy instead of arguing the case again.' }
   ]
 };
 
@@ -2819,13 +2829,69 @@ function renderConfigPanel(){
   html += '<section class="card"><div class="btn-row" style="margin-top:0">' +
     '<button class="primary" id="config-save-btn" type="button">' + escapeHtml(t('config_save_btn')) + '</button>' +
     '<button class="ghost" id="config-reset-all-btn" type="button">' + escapeHtml(t('config_reset_all_btn')) + '</button>' +
-    '</div><p class="hint" id="config-status"></p></section>';
+    '</div>' +
+    '<div class="btn-row">' +
+    '<button class="ghost" id="config-download-btn" type="button">' + escapeHtml(t('config_download_btn')) + '</button>' +
+    '<input type="file" id="config-upload-input" accept="application/json" style="display:none">' +
+    '<button class="ghost" id="config-upload-btn" type="button">' + escapeHtml(t('config_upload_btn')) + '</button>' +
+    '</div>' +
+    '<p class="hint" id="config-status"></p></section>';
 
   configPanelEl.innerHTML = html;
   wireConfigPanel();
 }
+// Export/Import der Konfiguration ueber beide Sprachen hinweg (nicht nur die aktuell
+// gewaehlte), damit eine exportierte Datei ein vollstaendiges Produkt-Profil ist.
+function exportConfigData(){
+  var data = { version: 1 };
+  ['de', 'en'].forEach(function(lang){
+    data[lang] = {
+      stages: loadStageOverrides(lang),
+      personas: loadPersonaOverrides(lang),
+      brief: loadBriefOverride(lang)
+    };
+  });
+  return data;
+}
+function applyConfigData(data){
+  ['de', 'en'].forEach(function(lang){
+    var entry = data[lang];
+    if (!entry || typeof entry !== 'object') return;
+    if (entry.stages && typeof entry.stages === 'object') saveStageOverrides(lang, entry.stages);
+    if (entry.personas && typeof entry.personas === 'object') savePersonaOverrides(lang, entry.personas);
+    if (typeof entry.brief === 'string') saveBriefOverride(lang, entry.brief);
+  });
+}
 function wireConfigPanel(){
   var lang = currentLang;
+  var downloadBtn = document.getElementById('config-download-btn');
+  if (downloadBtn) downloadBtn.addEventListener('click', function(){
+    triggerDownload('sales-awareness-trainer-konfiguration.json', JSON.stringify(exportConfigData(), null, 2), 'application/json;charset=utf-8');
+  });
+  var uploadBtn = document.getElementById('config-upload-btn');
+  var uploadInput = document.getElementById('config-upload-input');
+  if (uploadBtn && uploadInput){
+    uploadBtn.addEventListener('click', function(){ uploadInput.click(); });
+    uploadInput.addEventListener('change', function(e){
+      var file = e.target.files && e.target.files[0];
+      e.target.value = '';
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function(){
+        var parsed;
+        try{ parsed = JSON.parse(reader.result); }catch(_){ alert(t('alert_config_invalid')); return; }
+        if (!parsed || typeof parsed !== 'object' || (!parsed.de && !parsed.en)){ alert(t('alert_config_invalid')); return; }
+        if (!confirm(t('confirm_config_upload'))) return;
+        applyConfigData(parsed);
+        renderConfigPanel();
+        populateStagePersonaPicks();
+        var status = document.getElementById('config-status');
+        if (status) status.textContent = t('config_uploaded_status');
+      };
+      reader.onerror = function(){ alert(t('alert_file_read_failed')); };
+      reader.readAsText(file);
+    });
+  }
   Array.prototype.forEach.call(configPanelEl.querySelectorAll('.config-reset-stage-btn'), function(btn){
     btn.addEventListener('click', function(){
       var id = btn.dataset.stageId;
