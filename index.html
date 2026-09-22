@@ -2015,7 +2015,7 @@ function setTextMode(v){
 modeSwitchBtn.addEventListener('click', function(){ setTextMode(!voiceState.textMode); });
 
 function startSession(stage, persona, useVoice){
-  session = { stage: stage, persona: persona, lang: currentLang, messages: [], startedAt: Date.now(), elapsedMs: 0 };
+  session = { stage: stage, persona: persona, lang: currentLang, messages: [], startedAt: Date.now(), elapsedMs: 0, historyIdx: null };
   logEl.innerHTML = '';
   startSection.style.display = 'none';
   resultSection.style.display = 'none';
@@ -2396,7 +2396,7 @@ endBtn.addEventListener('click', function(){
       if (session !== mySession) return; // waehrend der Auswertung verworfen
       var data = parseJsonLoose(raw);
       showResult(mySession.stage, mySession.persona, data, pct, behavioral);
-      pushHistory(mySession.stage, mySession.persona, sessionLang, data, pct, sellerWords, totalWords, transcriptText, behavioral, mySession.messages);
+      mySession.historyIdx = pushHistory(mySession.stage, mySession.persona, sessionLang, data, pct, sellerWords, totalWords, transcriptText, behavioral, mySession.messages, mySession.historyIdx);
       setBusy(false);
     }).catch(function(e){
       if (session !== mySession) return; // waehrend der Auswertung verworfen
@@ -2490,7 +2490,7 @@ document.getElementById('continue-btn').addEventListener('click', function(){
 // Download tatsaechlich fuer eine weitere Auswertung taugt: komplette Auswertung inkl.
 // Kommentare/Staerken/Verbesserungen sowie das Transkript.
 var lastEvalRecord = null;
-function pushHistory(stage, persona, lang, data, pct, sellerWords, totalWords, transcriptText, behavioral, messages){
+function pushHistory(stage, persona, lang, data, pct, sellerWords, totalWords, transcriptText, behavioral, messages, historyIdx){
   var list = loadHistory();
   var record = {
     date: new Date().toISOString(),
@@ -2531,10 +2531,21 @@ function pushHistory(stage, persona, lang, data, pct, sellerWords, totalWords, t
     transcript: transcriptText || ''
   };
   lastEvalRecord = record;
-  list.push(record);
+  // Erneute Auswertung eines fortgesetzten Gespraechs (historyIdx gesetzt) ersetzt den
+  // bestehenden Eintrag statt einen zweiten fuer dieselbe Unterhaltung anzulegen (sonst
+  // zaehlt das Dashboard doppelt, siehe session.historyIdx in continueFromHistory()).
+  var idx;
+  if (historyIdx != null && list[historyIdx]){
+    list[historyIdx] = record;
+    idx = historyIdx;
+  } else {
+    list.push(record);
+    idx = list.length - 1;
+  }
   if (!saveHistory(list)) alert(t('alert_storage_full'));
   renderHistory();
   renderDashboard();
+  return idx;
 }
 // Statt vier Buttons pro Zeile: eine Checkbox pro Zeile (Einfachauswahl wie bei Radios,
 // nur eben als Checkbox umgesetzt) plus eine feste Button-Leiste (hist-select-toolbar),
@@ -2617,7 +2628,7 @@ function continueFromHistory(idx){
   if (!stage) return;
   var persona = personasForLang(entryLang).filter(function(p){ return p.id === entry.personaId; })[0] || personasForLang(entryLang)[0];
   if (timerHandle) clearInterval(timerHandle);
-  session = { stage: stage, persona: persona, lang: entryLang, messages: entry.messages.slice(), startedAt: Date.now(), elapsedMs: entry.elapsedMs || 0 };
+  session = { stage: stage, persona: persona, lang: entryLang, messages: entry.messages.slice(), startedAt: Date.now(), elapsedMs: entry.elapsedMs || 0, historyIdx: idx };
   logEl.innerHTML = '';
   session.messages.forEach(function(m){ addBubble(m.role, m.text); });
   showPanel('neues-gespraech');
@@ -2679,7 +2690,7 @@ function continueFromDraft(idx){
   saveDrafts(list);
   renderDrafts();
   if (timerHandle) clearInterval(timerHandle);
-  session = { stage: stage, persona: persona, lang: entryLang, messages: entry.messages.slice(), startedAt: Date.now(), elapsedMs: entry.elapsedMs || 0 };
+  session = { stage: stage, persona: persona, lang: entryLang, messages: entry.messages.slice(), startedAt: Date.now(), elapsedMs: entry.elapsedMs || 0, historyIdx: null };
   logEl.innerHTML = '';
   session.messages.forEach(function(m){ addBubble(m.role, m.text); });
   showPanel('neues-gespraech');
