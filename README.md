@@ -24,7 +24,7 @@ After the conversation, the same AI evaluates your call against a guide (talk sh
   <img src="assets/screenshot-result-en.png" width="31%" alt="Evaluation after the conversation">
 </p>
 
-1. Open `index.html` in your browser (or host it via [GitHub Pages](https://pages.github.com/)) — no server, no build, no install.
+1. Open `index.html` in your browser (or host it via [GitHub Pages](https://falkoguderian.github.io/sales-awareness-trainer/)) — no server, no build, no install.
 2. Create a free [OpenRouter](https://openrouter.ai/) API key and enter it under **Access** (details below).
 3. Click **Start conversation** — the stage is picked at random and stays hidden until you evaluate.
 4. After the conversation, get evaluated on talk share, filler words, pace, discovery depth, objection handling, and a concrete next step.
@@ -51,7 +51,7 @@ OpenRouter bills usage pay-as-you-go directly to your account (typical cost per 
 
 ### Usage
 
-Just open `index.html` in a browser (double-click, or host it via [GitHub Pages](https://pages.github.com/)). No server, no build, no install required.
+Just open `index.html` in a browser (double-click, or host it via [GitHub Pages](https://falkoguderian.github.io/sales-awareness-trainer/)). No server, no build, no install required.
 
 ### Privacy
 
@@ -83,7 +83,7 @@ Nach dem Gespräch bewertet dieselbe KI dein Gespräch anhand eines Leitfadens (
   <img src="assets/screenshot-result.png" width="31%" alt="Auswertung nach dem Gespräch">
 </p>
 
-1. `index.html` im Browser öffnen (oder per [GitHub Pages](https://pages.github.com/) hosten) — kein Server, kein Build, keine Installation.
+1. `index.html` im Browser öffnen (oder per [GitHub Pages](https://falkoguderian.github.io/sales-awareness-trainer/) hosten) — kein Server, kein Build, keine Installation.
 2. Kostenlosen [OpenRouter](https://openrouter.ai/)-API-Key anlegen und unter **Zugang** eintragen (Details unten).
 3. **Gespräch starten** klicken — die Stufe wird zufällig gewählt und bleibt verdeckt, bis du auswertest.
 4. Nach dem Gespräch auswerten lassen: Redeanteil, Füllwörter, Tempo, Discovery-Tiefe, Einwandbehandlung und ein konkreter nächster Schritt.
@@ -110,7 +110,7 @@ OpenRouter berechnet die Nutzung pay-as-you-go direkt über deinen Account (übl
 
 ### Nutzung
 
-Einfach `index.html` im Browser öffnen (Doppelklick oder per [GitHub Pages](https://pages.github.com/) hosten). Kein Server, kein Build, keine Installation nötig.
+Einfach `index.html` im Browser öffnen (Doppelklick oder per [GitHub Pages](https://falkoguderian.github.io/sales-awareness-trainer/) hosten). Kein Server, kein Build, keine Installation nötig.
 
 ### Datenschutz
 
