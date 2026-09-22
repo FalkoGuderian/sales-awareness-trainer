@@ -785,7 +785,7 @@ var I18N = {
     alert_invalid_json: 'Datei ist kein gültiges JSON.',
     alert_expected_list: 'Erwartet wird eine JSON-Liste, wie sie "Als JSON herunterladen" erzeugt.',
     alert_file_read_failed: 'Datei konnte nicht gelesen werden.',
-    alert_imported: '{n} Eintrag/Einträge aus der Datei hinzugefügt.',
+    alert_imported: '{n} neu hinzugefügt, {d} Duplikate übersprungen, {i} ungültig verworfen.',
 
     dash_h2: 'Überblick', dash_stage_h2: 'Pro Bewusstseinsstufe', dash_empty: 'Noch keine ausgewerteten Gespräche.',
     dash_tile_total: 'Gespräche gesamt', dash_tile_avg_talk: 'Ø Redeanteil', dash_tile_advanced: 'Stufe weitergebracht',
@@ -983,7 +983,7 @@ var I18N = {
     alert_invalid_json: 'File is not valid JSON.',
     alert_expected_list: 'A JSON list is expected, as produced by "Download as JSON".',
     alert_file_read_failed: 'File could not be read.',
-    alert_imported: '{n} entry/entries added from the file.',
+    alert_imported: '{n} new added, {d} duplicates skipped, {i} invalid discarded.',
 
     dash_h2: 'Overview', dash_stage_h2: 'By awareness stage', dash_empty: 'No evaluated conversations yet.',
     dash_tile_total: 'Total conversations', dash_tile_avg_talk: 'Avg. talk share', dash_tile_advanced: 'Stage advanced',
@@ -2921,6 +2921,11 @@ document.getElementById('download-json-btn').addEventListener('click', function(
 document.getElementById('upload-json-btn').addEventListener('click', function(){
   document.getElementById('upload-json-input').click();
 });
+// Ein Eintrag gilt nur als importierbar, wenn er die Mindestfelder hat, die renderHistory()/
+// buildPrintHtml() etc. voraussetzen - sonst entstehen "Invalid Date" in der Tabelle oder
+// Abstuerze beim Rendern.
+function isValidHistEntry(e){ return !!(e && typeof e === 'object' && typeof e.date === 'string' && !isNaN(new Date(e.date)) && Array.isArray(e.messages)); }
+function histEntryDedupeKey(e){ return e.date + '|' + (e.stageId || '') + '|' + (e.transcript || ''); }
 document.getElementById('upload-json-input').addEventListener('change', function(e){
   var file = e.target.files && e.target.files[0];
   e.target.value = '';
@@ -2930,12 +2935,25 @@ document.getElementById('upload-json-input').addEventListener('change', function
     var imported;
     try{ imported = JSON.parse(reader.result); }catch(_){ alert(t('alert_invalid_json')); return; }
     if (!Array.isArray(imported)){ alert(t('alert_expected_list')); return; }
-    var merged = loadHistory().concat(imported);
+    var existing = loadHistory();
+    var existingKeys = {};
+    existing.forEach(function(e2){ existingKeys[histEntryDedupeKey(e2)] = true; });
+    var invalidCount = 0, dupeCount = 0, newCount = 0;
+    var toAdd = [];
+    imported.forEach(function(e2){
+      if (!isValidHistEntry(e2)){ invalidCount++; return; }
+      var key = histEntryDedupeKey(e2);
+      if (existingKeys[key]){ dupeCount++; return; }
+      existingKeys[key] = true;
+      toAdd.push(e2);
+      newCount++;
+    });
+    var merged = existing.concat(toAdd);
     merged.sort(function(a, b){ return new Date(a.date) - new Date(b.date); });
     saveHistory(merged);
     renderHistory();
     renderDashboard();
-    alert(t('alert_imported', { n: imported.length }));
+    alert(t('alert_imported', { n: newCount, d: dupeCount, i: invalidCount }));
   };
   reader.onerror = function(){ alert(t('alert_file_read_failed')); };
   reader.readAsText(file);
