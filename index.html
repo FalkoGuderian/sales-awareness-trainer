@@ -363,7 +363,11 @@ footer{margin-top:40px; padding-top:18px; border-top:1px solid var(--line); font
     </div>
   </div>
   <p class="hint" data-i18n="trans_model_hint">Das Transkriptionsmodell muss Audio nativ verstehen (wie das voreingestellte Gemini-Modell) – reine Text-Modelle oder „kostenlose“ Alias-Modelle (z. B. openrouter/free) scheitern meist mit einem Dekodierungsfehler.</p>
-  <p class="hint" data-i18n="tts_model_hint">Bei einem anderen TTS-Modell als dem voreingestellten Grok-TTS scheitert die Sprachausgabe mit „Unknown voice“, weil die Stimmennamen (Rex/Sal/Eve/Leo/Ara) modellspezifisch sind – im Tab „Konfiguration“ lassen sich die Stimmennamen pro Stufe anpassen.</p>
+  <p class="hint" data-i18n="tts_model_hint">Bei einem anderen TTS-Modell als dem voreingestellten Grok-TTS scheitert die Sprachausgabe mit „Unknown voice“, weil die Stimmennamen (Rex/Sal/Eve/Leo/Ara) modellspezifisch sind – unten die dort gültigen Stimmennamen eintragen.</p>
+  <div class="field">
+    <label data-i18n="voice_mapping_label">Stimmen pro Stufe</label>
+    <div class="row-inline" id="voice-mapping-list"></div>
+  </div>
   <div class="field">
     <label for="audio-source" data-i18n="audio_source_label">Audioquelle (Sprachausgabe)</label>
     <select id="audio-source">
@@ -646,7 +650,8 @@ var I18N = {
     tts_model_label: 'Modell (TTS, Sprachausgabe)',
     trans_model_label: 'Modell (Transkription, Spracherkennung)',
     trans_model_hint: 'Das Transkriptionsmodell muss Audio nativ verstehen (wie das voreingestellte Gemini-Modell) – reine Text-Modelle oder „kostenlose“ Alias-Modelle (z. B. openrouter/free) scheitern meist mit einem Dekodierungsfehler.',
-    tts_model_hint: 'Bei einem anderen TTS-Modell als dem voreingestellten Grok-TTS scheitert die Sprachausgabe mit „Unknown voice“, weil die Stimmennamen (Rex/Sal/Eve/Leo/Ara) modellspezifisch sind – im Tab „Konfiguration“ lassen sich die Stimmennamen pro Stufe anpassen.',
+    tts_model_hint: 'Bei einem anderen TTS-Modell als dem voreingestellten Grok-TTS scheitert die Sprachausgabe mit „Unknown voice“, weil die Stimmennamen (Rex/Sal/Eve/Leo/Ara) modellspezifisch sind – unten die dort gültigen Stimmennamen eintragen.',
+    voice_mapping_label: 'Stimmen pro Stufe',
     audio_source_label: 'Audioquelle (Sprachausgabe)',
     audio_source_opt_gpt: 'KI Stimme (obiges TTS-Modell, kostenpflichtig über OpenRouter)',
     audio_source_opt_browser: 'Gerät (kostenlose Sprachausgabe des Browsers/Betriebssystems)',
@@ -680,8 +685,6 @@ var I18N = {
     config_stages_h3: 'Bewusstseinsstufen (Rollenspiel-Inhalt)',
     config_field_name: 'Name',
     config_field_label: 'Kurzbezeichnung',
-    config_field_voice: 'Stimme',
-    config_field_voice_hint: 'Die Stimmennamen sind auf das gewählte TTS-Modell abgestimmt (Standard: Grok-TTS mit Rex/Sal/Eve/Leo/Ara). Bei einem anderen TTS-Modell hier die dort gültigen Stimmennamen eintragen, sonst schlägt die Sprachausgabe mit „Unknown voice“ fehl.',
     config_field_zustand: 'Zustand des Interessenten',
     config_field_rolle: 'Rolle (wer spielt das simulierte Gegenüber)',
     config_field_verhalten: 'Verhalten im Gespräch',
@@ -845,7 +848,8 @@ var I18N = {
     tts_model_label: 'Model (TTS, voice output)',
     trans_model_label: 'Model (transcription, speech recognition)',
     trans_model_hint: 'The transcription model must understand audio natively (like the pre-filled Gemini model) – text-only models or "free" alias models (e.g. openrouter/free) usually fail with a decoding error.',
-    tts_model_hint: 'With a TTS model other than the pre-filled Grok TTS, voice output fails with "Unknown voice" because the voice names (Rex/Sal/Eve/Leo/Ara) are model-specific – the voice name per stage can be adjusted in the "Konfiguration" tab.',
+    tts_model_hint: 'With a TTS model other than the pre-filled Grok TTS, voice output fails with "Unknown voice" because the voice names (Rex/Sal/Eve/Leo/Ara) are model-specific – enter the names valid for that model below.',
+    voice_mapping_label: 'Voices per stage',
     audio_source_label: 'Audio source (voice output)',
     audio_source_opt_gpt: 'AI voice (TTS model above, paid via OpenRouter)',
     audio_source_opt_browser: 'Device (free browser/OS text-to-speech)',
@@ -879,8 +883,6 @@ var I18N = {
     config_stages_h3: 'Awareness stages (roleplay content)',
     config_field_name: 'Name',
     config_field_label: 'Short label',
-    config_field_voice: 'Voice',
-    config_field_voice_hint: 'Voice names are tied to the selected TTS model (default: Grok TTS with Rex/Sal/Eve/Leo/Ara). With a different TTS model, enter the voice names valid for that model here, otherwise voice output fails with "Unknown voice".',
     config_field_zustand: "Prospect's state",
     config_field_rolle: 'Role (who the simulated counterpart plays)',
     config_field_verhalten: 'Behavior in the conversation',
@@ -1563,12 +1565,46 @@ function updateSetupStatus(){
   setupStatus.textContent = apiKeyInput.value.trim() ? t('setup_status_saved') : t('setup_status_missing');
 }
 
+// Stimmen pro Stufe leben unter KI-Modelle (nicht in der Konfiguration), weil sie am
+// gewaehlten TTS-Modell haengen, nicht am Rollenspiel-Inhalt. Gespeichert wird trotzdem im
+// selben Stage-Override-Objekt (loadStageOverrides/saveStageOverrides), per Merge (siehe
+// saveVoiceMapping()), damit ein Konfiguration-Save hier gesetzte Stimmen nicht loescht.
+function renderVoiceMapping(){
+  var container = document.getElementById('voice-mapping-list');
+  if (!container) return;
+  container.innerHTML = currentStages().map(function(s){
+    return '<div class="field" style="min-width:140px; margin-bottom:0">' +
+      '<label style="font-weight:400; font-size:11.5px">' + escapeHtml(s.num + '. ' + s.name) + '</label>' +
+      '<input type="text" data-stage-id="' + escapeHtml(s.id) + '" value="' + escapeHtml(s.voice) + '">' +
+      '</div>';
+  }).join('');
+}
+function saveVoiceMapping(){
+  var overrides = loadStageOverrides(currentLang);
+  Array.prototype.forEach.call(document.querySelectorAll('#voice-mapping-list input[data-stage-id]'), function(input){
+    var id = input.dataset.stageId;
+    var val = input.value.trim();
+    var o = Object.assign({}, overrides[id] || {});
+    if (val) o.voice = val; else delete o.voice;
+    overrides[id] = o;
+  });
+  saveStageOverrides(currentLang, overrides);
+}
+function resetVoiceMapping(){
+  var overrides = loadStageOverrides(currentLang);
+  Object.keys(overrides).forEach(function(id){ delete overrides[id].voice; });
+  saveStageOverrides(currentLang, overrides);
+  renderVoiceMapping();
+}
+renderVoiceMapping();
+
 var modelsStatus = document.getElementById('models-status');
 document.getElementById('save-models-btn').addEventListener('click', function(){
   saveLocal(LS_KEY_MODEL, modelInput.value.trim() || DEFAULT_MODEL);
   saveLocal(LS_KEY_TTS_MODEL, ttsModelInput.value.trim() || DEFAULT_TTS_MODEL);
   saveLocal(LS_KEY_TRANS_MODEL, transModelInput.value.trim() || DEFAULT_TRANS_MODEL);
   saveLocal(LS_KEY_AUDIO_SOURCE, audioSourceSelect.value);
+  saveVoiceMapping();
   modelsStatus.textContent = t('models_saved_status');
 });
 document.getElementById('reset-models-btn').addEventListener('click', function(){
@@ -1598,6 +1634,7 @@ document.getElementById('reset-models-btn').addEventListener('click', function()
   saveLocal(LS_KEY_DEVICE_PITCH_FEMALE, DEFAULT_DEVICE_PITCH_FEMALE);
   saveLocal(LS_KEY_DEVICE_RATE_MALE, DEFAULT_DEVICE_RATE);
   saveLocal(LS_KEY_DEVICE_RATE_FEMALE, DEFAULT_DEVICE_RATE);
+  resetVoiceMapping();
   modelsStatus.textContent = t('reset_models_status');
 });
 
@@ -2884,13 +2921,11 @@ function renderConfigPanel(){
   var html = '<section class="card"><h2>' + escapeHtml(t('config_h2')) + '</h2>' +
     '<p class="thesis" style="max-width:none">' + escapeHtml(t('config_intro')) + '</p></section>';
 
-  html += '<section class="card"><h2>' + escapeHtml(t('config_stages_h3')) + '</h2>' +
-    '<p class="hint" style="margin:-4px 0 12px">' + escapeHtml(t('config_field_voice_hint')) + '</p>';
+  html += '<section class="card"><h2>' + escapeHtml(t('config_stages_h3')) + '</h2>';
   stages.forEach(function(s){
     html += '<div class="config-stage-card" data-stage-id="' + escapeHtml(s.id) + '"><h3>' + s.num + '. ' + escapeHtml(s.name) + ' (' + escapeHtml(s.label) + ')</h3>' +
       configField('config_field_name', s.name, 'input', 'data-field="name"') +
       configField('config_field_label', s.label, 'input', 'data-field="label"') +
-      configField('config_field_voice', s.voice, 'input', 'data-field="voice"') +
       configField('config_field_zustand', s.zustand, 'textarea', 'data-field="zustand"') +
       configField('config_field_rolle', s.rolle, 'textarea', 'data-field="rolle"') +
       configField('config_field_verhalten', s.verhalten, 'textarea', 'data-field="verhalten"') +
@@ -2940,7 +2975,7 @@ function exportConfigData(){
   ['de', 'en'].forEach(function(lang){
     var stagesObj = {};
     stagesForLang(lang).forEach(function(s){
-      stagesObj[s.id] = { name: s.name, label: s.label, zustand: s.zustand, rolle: s.rolle, verhalten: s.verhalten, aufgabe: s.aufgabe, einstieg: s.einstieg };
+      stagesObj[s.id] = { name: s.name, label: s.label, voice: s.voice, zustand: s.zustand, rolle: s.rolle, verhalten: s.verhalten, aufgabe: s.aufgabe, einstieg: s.einstieg };
     });
     var personasObj = {};
     personasForLang(lang).filter(function(p){ return p.id !== 'neutral'; }).forEach(function(p){
@@ -2982,6 +3017,7 @@ function wireConfigPanel(){
         applyConfigData(parsed);
         renderConfigPanel();
         populateStagePersonaPicks();
+        renderVoiceMapping();
         var status = document.getElementById('config-status');
         if (status) status.textContent = t('config_uploaded_status');
       };
@@ -2997,6 +3033,7 @@ function wireConfigPanel(){
       saveStageOverrides(lang, overrides);
       renderConfigPanel();
       populateStagePersonaPicks();
+      renderVoiceMapping();
     });
   });
   Array.prototype.forEach.call(configPanelEl.querySelectorAll('.config-reset-persona-btn'), function(btn){
@@ -3016,10 +3053,14 @@ function wireConfigPanel(){
   });
   var saveBtn = document.getElementById('config-save-btn');
   if (saveBtn) saveBtn.addEventListener('click', function(){
+    // Bestehende Overrides als Basis nehmen (nicht ersetzen): "voice" wird inzwischen unter
+    // KI-Modelle gepflegt und hat hier keine Eingabe mehr - ohne Merge wuerde Speichern hier
+    // eine dort gesetzte Stimme loeschen.
+    var existingStageOverrides = loadStageOverrides(lang);
     var stageOverrides = {};
     Array.prototype.forEach.call(configPanelEl.querySelectorAll('.config-stage-card'), function(card){
       var id = card.dataset.stageId;
-      var o = {};
+      var o = Object.assign({}, existingStageOverrides[id] || {});
       Array.prototype.forEach.call(card.querySelectorAll('[data-field]'), function(el){ o[el.dataset.field] = el.value; });
       stageOverrides[id] = o;
     });
@@ -3049,6 +3090,7 @@ function wireConfigPanel(){
     saveBriefOverride(lang, '');
     renderConfigPanel();
     populateStagePersonaPicks();
+    renderVoiceMapping();
   });
 }
 
@@ -3083,6 +3125,7 @@ function setLang(lang){
   applyI18n();
   populateStagePersonaPicks();
   renderConfigPanel();
+  renderVoiceMapping();
   renderStufenPanel();
   renderHistory();
   renderDrafts();
